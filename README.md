@@ -1,3 +1,5 @@
+[![build status](https://gitlab.uni-oldenburg.de/transportsysteme-semesteraufgabe/Optimizer/badges/master/build.svg)](https://gitlab.uni-oldenburg.de/transportsysteme-semesteraufgabe/Optimizer/commits/master) [![coverage report](https://gitlab.uni-oldenburg.de/transportsysteme-semesteraufgabe/Optimizer/badges/master/coverage.svg)](https://gitlab.uni-oldenburg.de/transportsysteme-semesteraufgabe/Optimizer/commits/master)
+
 # Transport Systems Optimizer
 The fabulous transport systems optimizer
 
