@@ -2,8 +2,6 @@ package de.uni_oldenburg.transport;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Tests {@link AppStarter}
  */
