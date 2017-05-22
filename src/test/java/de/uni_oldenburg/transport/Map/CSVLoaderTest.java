@@ -21,7 +21,7 @@ public class CSVLoaderTest {
 
 	@After
 	public void cleanup() {
-		// nothing to do ...
+		CSVLoader.setResources("src/main/resources/");
 	}
 
 	// Constructor:
