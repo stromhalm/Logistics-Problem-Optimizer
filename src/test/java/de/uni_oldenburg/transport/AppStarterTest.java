@@ -3,7 +3,7 @@ package de.uni_oldenburg.transport;
 import org.junit.Test;
 
 /**
- * Tests {@link AppStarter}
+ * Tests {@link AppStarter}.
  */
 public class AppStarterTest {
 
