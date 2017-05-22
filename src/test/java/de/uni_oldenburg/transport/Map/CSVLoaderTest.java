@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 /**
@@ -25,8 +25,8 @@ public class CSVLoaderTest {
 	}
 
 	// Constructor:
-	@Test(expected = IOException.class)
-	public void CSVLoader_passInvalidFile_throwsIOException() throws IOException {
+	@Test(expected = FileNotFoundException.class)
+	public void CSVLoader_passInvalidFile_throwsIOException() throws FileNotFoundException {
 		String file = "invalid.csv";
 		this.instance = new CSVLoader(file) {
 			@Override
@@ -36,9 +36,10 @@ public class CSVLoaderTest {
 		};
 	}
 
-	@Test(expected = IOException.class)
-	public void CSVLoader_passValidFile_throwsNoIOException() throws IOException {
-		String file = "Liefer.csv";
+	@Test
+	public void CSVLoader_passValidFile_throwsNoIOException() throws Exception {
+		CSVLoader.setResources("src/test/resources/");
+		String file = "test.csv";
 		this.instance = new CSVLoader(file) {
 			@Override
 			public HashMap toMap() {

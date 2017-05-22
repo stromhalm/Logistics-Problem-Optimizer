@@ -12,7 +12,7 @@ public class LogisticsNetworkCSVLoaderTest {
 	private CSVLoader instance;
 
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		instance = new LogisticsNetworkCSVLoader("Logistiknetz.csv");
 	}
 
@@ -22,8 +22,8 @@ public class LogisticsNetworkCSVLoaderTest {
 	}
 
 	// toMap():
-	@Test(expected = Exception.class)
-	public void toMap_passCorruptedFile_throwsException() throws Exception {
+	@Test
+	public void toMap_passCorruptedFile_returnsNull() throws Exception {
 		// TODO implement
 	}
 
