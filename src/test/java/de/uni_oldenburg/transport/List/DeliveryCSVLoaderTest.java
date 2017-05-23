@@ -19,7 +19,7 @@ public class DeliveryCSVLoaderTest {
 	@Before
 	public void setup() throws Exception {
 		CSVLoader.setResources("src/test/resources/");
-		instance = new DeliveryCSVLoader("shortenedLieferliste.csv");
+		instance = new DeliveryCSVLoader("Lieferliste.csv");
 	}
 
 	@After
@@ -37,17 +37,23 @@ public class DeliveryCSVLoaderTest {
 
 	@Test
 	public void toList_readCorrectDeliveryFile_confirms() throws Exception {
-		String expectedName = "Oldenburg";
-		int expectedAmount = 40;
+		String expectedName1 = "Oldenburg";
+		int expectedAmount1 = 40;
+
+		String expectedName2 = "Bremen";
+		int expectedAmount2 = 60;
 
 		ArrayList<Location> deliveryList = instance.toList();
 
-		assertEquals("The deliveryList must contain only one element.", 1, deliveryList.size());
+		assertEquals("The deliveryList must contain only two elements.", 2, deliveryList.size());
 
-		for (Location location : deliveryList) {
-			assertEquals("The actual location name must met the expected one.", expectedName, location.getName());
-			assertEquals("The actual locations amount must met the expected one.", expectedAmount, location.getAmount());
-			assertEquals("The actual locations neighbouring locations must be empty and therefore true.", true, location.getNeighbouringLocations().isEmpty());
-		}
+		assertEquals("The actual location name must met the expected one.", expectedName1, deliveryList.get(0).getName());
+		assertEquals("The actual locations amount must met the expected one.", expectedAmount1, deliveryList.get(0).getAmount());
+		assertEquals("The actual locations neighbouring locations must be empty and therefore true.", true, deliveryList.get(0).getNeighbouringLocations().isEmpty());
+
+		assertEquals("The actual location name must met the expected one.", expectedName2, deliveryList.get(1).getName());
+		assertEquals("The actual locations amount must met the expected one.", expectedAmount2, deliveryList.get(1).getAmount());
+		assertEquals("The actual locations neighbouring locations must be empty and therefore true.", true, deliveryList.get(1).getNeighbouringLocations().isEmpty());
+
 	}
 }
