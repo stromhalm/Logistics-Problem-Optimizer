@@ -1,11 +1,12 @@
-package de.uni_oldenburg.transport.Map;
+package de.uni_oldenburg.transport.List;
 
+import de.uni_oldenburg.transport.Location;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Tests {@link CSVLoader}.
@@ -30,7 +31,7 @@ public class CSVLoaderTest {
 		String file = "invalid.csv";
 		this.instance = new CSVLoader(file) {
 			@Override
-			public HashMap toMap() {
+			public ArrayList<Location> toList() {
 				return null;
 			}
 		};
@@ -42,7 +43,7 @@ public class CSVLoaderTest {
 		String file = "test.csv";
 		this.instance = new CSVLoader(file) {
 			@Override
-			public HashMap toMap() {
+			public ArrayList<Location> toList() {
 				return null;
 			}
 		};
