@@ -11,7 +11,12 @@ public class Location {
 	/**
 	 * Is the name of the location on the map.
 	 */
-	private String name;
+	private final String name;
+
+	/**
+	 * Is the amount of units to be delivered to this location.
+	 */
+	private final int amount;
 	/**
 	 * Is a map of neighbouring locations with a expense indicator as kilometers.
 	 */
@@ -19,13 +24,16 @@ public class Location {
 
 	/**
 	 * @param name                  Is the name of the location on the map.
+	 * @param amount                Is the amount of units to be delivered to this location. The amount can be zero.
 	 * @param neighbouringLocations Is a map of neighbouring locations with a expense indicator as kilometers.
 	 * @throws Exception Is thrown if name is either empty or null or if neighbouringLocations is null.
 	 */
-	public Location(String name, HashMap neighbouringLocations) throws Exception {
+	public Location(final String name, final int amount, HashMap neighbouringLocations) throws Exception {
 		if (neighbouringLocations == null) throw new Exception("The neighbouringLocations map must not be null.");
 		if (name == null || name.isEmpty()) throw new Exception("The name of the location must not be null or empty.");
+		if (amount < 0) throw new Exception("The amount must not be negative.");
 		this.name = name;
+		this.amount = amount;
 		this.neighbouringLocations = neighbouringLocations;
 	}
 
@@ -51,6 +59,15 @@ public class Location {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Returns the amount needed by this location.
+	 *
+	 * @return The amount needed by this location as {@link Integer}.
+	 */
+	public int getAmount() {
+		return amount;
 	}
 
 	/**
