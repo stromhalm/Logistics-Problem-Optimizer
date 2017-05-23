@@ -44,6 +44,9 @@ public class LogisticsNetworkCSVLoader extends CSVLoader {
 				}
 			}
 			// now we have found the edge between both locations and set them to both again using the reference.
+			if (destination == null || start == null) {
+				System.out.println("Idiots!");
+			}
 			start.addNeighbouringLocation(destination, Integer.parseInt(entrySet[2]));
 			destination.addNeighbouringLocation(start, Integer.parseInt(entrySet[2]));
 		}

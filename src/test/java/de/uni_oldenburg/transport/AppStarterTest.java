@@ -7,10 +7,20 @@ import org.junit.Test;
  */
 public class AppStarterTest {
 
-	AppStarter appStarter = new AppStarter();
+	@Test
+	public void AppStarter_testDefaultConstructor_throwsNoError() {
+		// Is a test to get the code coverage for the class line.
+		new AppStarter();
+	}
 
 	@Test
 	public void main() throws Exception {
-		appStarter.main(new String[0]);
+		String[] args = {"Logistiknetz.csv"};
+		AppStarter.main(args);
+	}
+
+	@Test
+	public void main_passInvalidFileName_throwsCatchedException() throws Exception {
+		AppStarter.main(new String[1]);
 	}
 }
