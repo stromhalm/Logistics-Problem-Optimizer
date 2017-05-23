@@ -33,7 +33,7 @@ public class DeliveryCSVLoader extends CSVLoader {
 
 			// create the Location and add to the list.
 			Location location = new Location(entrySet[0], Integer.parseInt(entrySet[1]), new HashMap());
-			deliveryList.add(deliveryList.size() + 1, location);
+			deliveryList.add(location);
 		}
 		return deliveryList;
 	}
