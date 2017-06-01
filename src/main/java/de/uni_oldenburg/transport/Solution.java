@@ -81,8 +81,8 @@ public class Solution {
 			for (TourDestination tourDestination : tour.getTourDestinations()) {
 				output += "Drive to " + tourDestination.getDestination().getName() + " and deliver " + tourDestination.getUnload() + "\n";
 			}
-			output += "Total consumption: "; // TODO
 		}
+		output += "Total consumption: "; // TODO
 		return output;
 	}
 }
