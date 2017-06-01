@@ -69,4 +69,13 @@ public class Solution {
 		return true;
 	}
 
+	/**
+	 * Output this solution
+	 *
+	 * @return The output as a String
+	 */
+	public String toString() {
+		// TODO: Output this solution
+		return "";
+	}
 }
