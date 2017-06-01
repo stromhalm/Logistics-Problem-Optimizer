@@ -75,7 +75,14 @@ public class Solution {
 	 * @return The output as a String
 	 */
 	public String toString() {
-		// TODO: Output this solution
-		return "";
+		String output = "";
+		for (Tour tour : truckTours) {
+			output += "Truck of type " + tour.getTruck().getClass() + ":\n";
+			for (TourDestination tourDestination : tour.getTourDestinations()) {
+				output += "Drive to " + tourDestination.getDestination().getName() + " and deliver " + tourDestination.getUnload() + "\n";
+			}
+			output += "Total consumption: "; // TODO
+		}
+		return output;
 	}
 }

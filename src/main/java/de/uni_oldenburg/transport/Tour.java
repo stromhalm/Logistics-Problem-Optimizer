@@ -22,6 +22,15 @@ public class Tour {
 	}
 
 	/**
+	 * Get the actual type of truck
+	 *
+	 * @return
+	 */
+	public AbstractTruck getTruck() {
+		return truck;
+	}
+
+	/**
 	 * Add a destination to this tour
 	 *
 	 * @param tourDestination The destination to add
