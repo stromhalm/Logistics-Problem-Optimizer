@@ -1,6 +1,6 @@
 package de.uni_oldenburg.transport;
 
-import de.uni_oldenburg.transport.List.LogisticsNetworkCSVLoader;
+import de.uni_oldenburg.transport.csv.LogisticsNetworkCSVLoader;
 
 import java.util.ArrayList;
 

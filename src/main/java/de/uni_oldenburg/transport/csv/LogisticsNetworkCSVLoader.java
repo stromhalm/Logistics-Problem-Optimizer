@@ -1,11 +1,10 @@
-package de.uni_oldenburg.transport.List;
+package de.uni_oldenburg.transport.csv;
 
 import de.uni_oldenburg.transport.Location;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Extends and implements {@link CSVLoader}.
