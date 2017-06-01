@@ -1,6 +1,7 @@
 package de.uni_oldenburg.transport;
 
-import de.uni_oldenburg.transport.csv.LogisticsNetworkCSVLoader;
+import de.uni_oldenburg.transport.csv.DeliveryCSVLoader;
+import de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader;
 
 import java.util.ArrayList;
 
@@ -18,8 +19,13 @@ public class AppStarter {
 
 		ArrayList<Location> logisticsNetworkList = null;
 		try {
-			LogisticsNetworkCSVLoader logisticsNetworkCSVLoader = new LogisticsNetworkCSVLoader(args[0] /*Reference to the logistics network file*/);
-			logisticsNetworkList = logisticsNetworkCSVLoader.toList();
+
+			TransportNetworkCSVLoader transportNetworkCSVLoader = new TransportNetworkCSVLoader(args[0] /*Reference to the logistics network file*/);
+			TransportNetwork transportNetwork = transportNetworkCSVLoader.getTransportNetwork();
+
+			DeliveryCSVLoader deliveryCSVLoader = new DeliveryCSVLoader(args[1], transportNetwork);
+			transportNetwork = deliveryCSVLoader.getTransportNetworkWithDeliveries();
+
 		} catch (Exception e) {
 			//System.exit(1); // cannot proceed
 		}

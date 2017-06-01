@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * The CSVLoader reads data from a CSV file and puts them into an appropriate {@link ArrayList<Location>}. A CSVLoader can either be a {@link DeliveryCSVLoader} or a {@link LogisticsNetworkCSVLoader}.
+ * The CSVLoader reads data from a CSV file and puts them into an appropriate {@link ArrayList<Location>}. A CSVLoader can either be a {@link DeliveryCSVLoader} or a {@link TransportNetworkCSVLoader}.
  */
 public abstract class CSVLoader {
 
@@ -14,10 +14,12 @@ public abstract class CSVLoader {
 	 * Is a standard {@link BufferedReader} to read the CSV and preserve them.
 	 */
 	protected BufferedReader bufferedReader;
+
 	/**
 	 * Defines which separator is used in the string entries.
 	 */
 	protected String csvEntrySeperator = ";";
+
 	/**
 	 * Is the path to the resources folder. This is a prefix added to the {@link FileReader}.
 	 */
@@ -36,21 +38,12 @@ public abstract class CSVLoader {
 	}
 
 	/**
-	 * Maps the read CSV entries into a {@link Location} and lists them into an {@link java.util.ArrayList}.
-	 *
-	 * @return A specific mapping of the read CSV entries into a {@link Location} which is added to the returned {@link java.util.ArrayList}.
-	 * @throws Exception The exception is thrown if the {@link BufferedReader} instance should face any error ({@link IOException}) or parsing the read Strings into its integer values throws any error ({@link java.lang.Exception}).
-	 */
-	public abstract ArrayList<Location> toList() throws Exception;
-
-	/**
 	 * Is used to reset the resources location.
 	 *
 	 * @param resources Is the path to the resource folder.
 	 */
-	public static void setResources(String resources) {
+	public static void setResourcesFolder(String resources) {
 		CSVLoader.resources = resources;
 	}
-
 
 }
