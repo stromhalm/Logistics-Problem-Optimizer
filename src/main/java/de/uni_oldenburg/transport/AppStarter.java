@@ -17,18 +17,32 @@ public class AppStarter {
 	 */
 	public static void main(String[] args) {
 
-		ArrayList<Location> logisticsNetworkList = null;
+		TransportNetwork transportNetwork = null;
+		String networkFile;
+		String deliveryFile;
+
+		if (args.length > 0) {
+			System.out.println("Using custom data files.");
+			networkFile = args[0];
+			deliveryFile = args[1];
+		} else {
+			System.out.println("No data files passed. Using default ressources.");
+			networkFile = "src/main/resources/Logistiknetz.csv";
+			deliveryFile = "src/main/resources/Lieferliste.csv";
+		}
+
 		try {
 
-			TransportNetworkCSVLoader transportNetworkCSVLoader = new TransportNetworkCSVLoader(args[0] /*Reference to the logistics network file*/);
-			TransportNetwork transportNetwork = transportNetworkCSVLoader.getTransportNetwork();
+			TransportNetworkCSVLoader transportNetworkCSVLoader = new TransportNetworkCSVLoader(networkFile);
+			transportNetwork = transportNetworkCSVLoader.getTransportNetwork();
 
-			DeliveryCSVLoader deliveryCSVLoader = new DeliveryCSVLoader(args[1], transportNetwork);
+			DeliveryCSVLoader deliveryCSVLoader = new DeliveryCSVLoader(deliveryFile, transportNetwork);
 			transportNetwork = deliveryCSVLoader.getTransportNetworkWithDeliveries();
 
 		} catch (Exception e) {
-			//System.exit(1); // cannot proceed
+			System.out.println("Error when reading the input files");
 		}
-		// TODO use the list
+
+
 	}
 }

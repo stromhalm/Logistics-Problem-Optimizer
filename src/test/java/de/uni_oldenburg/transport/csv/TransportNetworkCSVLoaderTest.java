@@ -19,8 +19,7 @@ public class TransportNetworkCSVLoaderTest {
 
 	@Before
 	public void setup() throws Exception {
-		CSVLoader.setResourcesFolder("src/test/resources/");
-		instance = new TransportNetworkCSVLoader("shortenedLogistiknetz.csv");
+		instance = new TransportNetworkCSVLoader("src/test/resources/shortenedLogistiknetz.csv");
 	}
 
 

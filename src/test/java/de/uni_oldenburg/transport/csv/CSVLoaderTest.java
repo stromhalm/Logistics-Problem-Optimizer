@@ -15,16 +15,6 @@ public class CSVLoaderTest {
 
 	private CSVLoader instance;
 
-	@Before
-	public void setup() {
-		// nothing to do ...
-	}
-
-	@After
-	public void cleanup() {
-		CSVLoader.setResourcesFolder("src/main/resources/");
-	}
-
 	// Constructor
 	@Test(expected = FileNotFoundException.class)
 	public void CSVLoader_passInvalidFile_throwsIOException() throws FileNotFoundException {
@@ -34,8 +24,7 @@ public class CSVLoaderTest {
 
 	@Test
 	public void CSVLoader_passValidFile_throwsNoIOException() throws Exception {
-		CSVLoader.setResourcesFolder("src/test/resources/");
-		String file = "test.csv";
+		String file = "src/test/resources/test.csv";
 		this.instance = new CSVLoader(file) {};
 	}
 
