@@ -15,12 +15,12 @@ public class AppStarterTest {
 
 	@Test
 	public void main() throws Exception {
-		String[] args = {"Logistiknetz.csv"};
+		String[] args = {"src/main/resources/Logistiknetz.csv", "src/main/resources/Lieferliste.csv"};
 		AppStarter.main(args);
 	}
 
 	@Test
-	public void main_passInvalidFileName_throwsCatchedException() throws Exception {
-		AppStarter.main(new String[1]);
+	public void main_passInvalidFileName_useExampleRessources() throws Exception {
+		AppStarter.main(new String[0]);
 	}
 }

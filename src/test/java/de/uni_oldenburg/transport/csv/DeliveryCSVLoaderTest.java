@@ -17,7 +17,7 @@ public class DeliveryCSVLoaderTest {
 
 	@Before
 	public void setup() throws Exception {
-		TransportNetworkCSVLoader transportNetworkCSVLoader = new TransportNetworkCSVLoader("shortenedLogistiknetz.csv");
+		TransportNetworkCSVLoader transportNetworkCSVLoader = new TransportNetworkCSVLoader("src/test/resources/shortenedLogistiknetz.csv");
 		transportNetwork = transportNetworkCSVLoader.getTransportNetwork();
 		instance = new DeliveryCSVLoader("src/test/resources/Lieferliste.csv", transportNetwork);
 	}
@@ -25,7 +25,7 @@ public class DeliveryCSVLoaderTest {
 	// getTransportNetworkWithDeliveries():
 	@Test(expected = Exception.class)
 	public void toList_passCorruptedFile_returnsNull() throws Exception {
-		instance = new DeliveryCSVLoader("test.csv", transportNetwork);
+		instance = new DeliveryCSVLoader("src/test/resources/test.csv", transportNetwork);
 		instance.getTransportNetworkWithDeliveries();
 	}
 
