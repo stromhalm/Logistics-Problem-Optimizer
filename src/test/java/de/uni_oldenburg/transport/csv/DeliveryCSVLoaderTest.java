@@ -24,7 +24,7 @@ public class DeliveryCSVLoaderTest {
 		instance = new DeliveryCSVLoader("Lieferliste.csv", transportNetwork);
 	}
 
-	// toList():
+	// getTransportNetworkWithDeliveries():
 	@Test(expected = Exception.class)
 	public void toList_passCorruptedFile_returnsNull() throws Exception {
 		instance = new DeliveryCSVLoader("test.csv", transportNetwork);
