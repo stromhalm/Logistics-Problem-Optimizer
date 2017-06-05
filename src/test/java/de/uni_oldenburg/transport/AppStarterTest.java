@@ -14,13 +14,20 @@ public class AppStarterTest {
 	}
 
 	@Test
-	public void main() throws Exception {
-		String[] args = {"Logistiknetz.csv"};
+	public void main_chooseOptimzerAndFiles() throws Exception {
+		String[] args = {"0", "src/main/resources/Logistiknetz.csv", "src/main/resources/Lieferliste.csv"};
 		AppStarter.main(args);
 	}
 
 	@Test
-	public void main_passInvalidFileName_throwsCatchedException() throws Exception {
-		AppStarter.main(new String[1]);
+	public void main_chooseOptimzer() throws Exception {
+		String[] args = {"0"};
+		AppStarter.main(args);
 	}
+
+	@Test
+	public void main_noArgs() throws Exception {
+		AppStarter.main(new String[0]);
+	}
+
 }

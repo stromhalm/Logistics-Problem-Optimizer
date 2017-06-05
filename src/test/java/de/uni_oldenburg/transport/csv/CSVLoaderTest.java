@@ -1,4 +1,4 @@
-package de.uni_oldenburg.transport.List;
+package de.uni_oldenburg.transport.csv;
 
 import de.uni_oldenburg.transport.Location;
 import org.junit.After;
@@ -15,38 +15,17 @@ public class CSVLoaderTest {
 
 	private CSVLoader instance;
 
-	@Before
-	public void setup() {
-		// nothing to do ...
-	}
-
-	@After
-	public void cleanup() {
-		CSVLoader.setResources("src/main/resources/");
-	}
-
-	// Constructor:
+	// Constructor
 	@Test(expected = FileNotFoundException.class)
 	public void CSVLoader_passInvalidFile_throwsIOException() throws FileNotFoundException {
 		String file = "invalid.csv";
-		this.instance = new CSVLoader(file) {
-			@Override
-			public ArrayList<Location> toList() {
-				return null;
-			}
-		};
+		this.instance = new CSVLoader(file) {};
 	}
 
 	@Test
 	public void CSVLoader_passValidFile_throwsNoIOException() throws Exception {
-		CSVLoader.setResources("src/test/resources/");
-		String file = "test.csv";
-		this.instance = new CSVLoader(file) {
-			@Override
-			public ArrayList<Location> toList() {
-				return null;
-			}
-		};
+		String file = "src/test/resources/test.csv";
+		this.instance = new CSVLoader(file) {};
 	}
 
 }
