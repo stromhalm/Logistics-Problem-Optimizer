@@ -4,10 +4,14 @@ import de.uni_oldenburg.transport.Solution;
 import de.uni_oldenburg.transport.TransportNetwork;
 
 /**
- * The interface for all our optimizers
+ * The interface for all our optimizers.
  */
 public interface Optimizer {
 
+	/**
+	 * @param transportNetwork A transport network for which the transport problem has to optimized.
+	 * @return The best {@link Solution} found by the implementing Optimizer.
+	 */
 	Solution optimizeTransportNetwork(TransportNetwork transportNetwork);
 
 }

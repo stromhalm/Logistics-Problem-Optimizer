@@ -2,6 +2,7 @@ package de.uni_oldenburg.transport;
 
 import de.uni_oldenburg.transport.csv.DeliveryCSVLoader;
 import de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader;
+import de.uni_oldenburg.transport.optimizers.BruteForceOptimizer;
 import de.uni_oldenburg.transport.optimizers.GeneticOptimizer;
 import de.uni_oldenburg.transport.optimizers.NearestNeighborOptimizer;
 import de.uni_oldenburg.transport.optimizers.Optimizer;
@@ -27,6 +28,7 @@ public class AppStarter {
 		if (args.length > 0) {
 			optimizerId = Integer.parseInt(args[0]);
 		} else {
+			System.out.println("No optimizer Id passed. Using default .");
 			optimizerId = 0;
 		}
 
@@ -35,7 +37,7 @@ public class AppStarter {
 			networkFile = args[1];
 			deliveryFile = args[2];
 		} else {
-			System.out.println("No data files passed. Using default ressources.");
+			System.out.println("No data files passed. Using default resources.");
 			networkFile = "src/main/resources/Logistiknetz.csv";
 			deliveryFile = "src/main/resources/Lieferliste.csv";
 		}
@@ -62,6 +64,9 @@ public class AppStarter {
 				optimizer = new NearestNeighborOptimizer();
 				break;
 
+			case 2:
+				optimizer = new BruteForceOptimizer();
+				break;
 			default:
 				optimizer = new GeneticOptimizer();
 				System.out.println("Optimizer not found");
