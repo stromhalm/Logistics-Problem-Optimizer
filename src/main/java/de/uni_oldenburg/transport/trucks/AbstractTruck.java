@@ -11,10 +11,10 @@ public abstract class AbstractTruck {
 	/**
 	 * Basic constructor
 	 *
-	 * @param capacity The trucks maximum capacity
+	 * @param capacity    The trucks maximum capacity
 	 * @param consumption The trucks consumption in litres per 100km
 	 */
-	AbstractTruck(int capacity, int consumption) {
+	public AbstractTruck(int capacity, int consumption) {
 		this.capacity = capacity;
 		this.consumption = consumption;
 	}
@@ -30,6 +30,7 @@ public abstract class AbstractTruck {
 
 	/**
 	 * Get the trucks consumption per 100km
+	 *
 	 * @return
 	 */
 	public int getConsumption() {

@@ -11,6 +11,7 @@ public class Tour {
 
 	private final AbstractTruck truck;
 	private ArrayList<TourDestination> destinations;
+	private int consumption;
 
 	/**
 	 * Constructor
@@ -19,6 +20,8 @@ public class Tour {
 	 */
 	public Tour(final AbstractTruck truck) {
 		this.truck = truck;
+		this.destinations = new ArrayList<>();
+		consumption = 0;
 	}
 
 	/**
@@ -34,18 +37,22 @@ public class Tour {
 	 * Add a destination to this tour
 	 *
 	 * @param tourDestination The destination to add
+	 * @param expense         The expense to the location.
 	 */
-	public void addDestination(TourDestination tourDestination) {
+	public void addDestination(TourDestination tourDestination, int expense) {
 		destinations.add(tourDestination);
+		addConsumption(expense);
 	}
 
 	/**
 	 * Remove a destination from this tour
 	 *
 	 * @param tourDestination The destination to remove
+	 * @param expense         The expense to the location.
 	 * @return False if tour was not found
 	 */
-	public boolean removeTourDestination(TourDestination tourDestination) {
+	public boolean removeTourDestination(TourDestination tourDestination, int expense) {
+		subtractConsumption(expense);
 		return destinations.remove(tourDestination);
 	}
 
@@ -73,4 +80,15 @@ public class Tour {
 		return (load <= truck.getCapacity());
 	}
 
+	private void addConsumption(int expense) {
+		this.consumption += truck.getConsumption() * expense;
+	}
+
+	private void subtractConsumption(int expense) {
+		this.consumption -= truck.getConsumption() * expense;
+	}
+
+	public int getConsumption() {
+		return consumption;
+	}
 }

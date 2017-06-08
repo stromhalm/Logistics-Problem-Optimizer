@@ -41,7 +41,8 @@ public class Solution {
 	}
 
 	/**
-	 * Checks if all delivery targets have been fulfilled and no
+	 * Checks if all delivery targets have been fulfilled and is omitted.
+	 *
 	 * @return
 	 */
 	public boolean isValid() {
@@ -56,7 +57,7 @@ public class Solution {
 
 			for (TourDestination tourDestination : tour.getTourDestinations()) {
 				if (deliveries.containsKey(tourDestination.getDestination())) {
-					deliveries.put(tourDestination.getDestination(), deliveries.get(tourDestination.getDestination())+tourDestination.getUnload());
+					deliveries.put(tourDestination.getDestination(), deliveries.get(tourDestination.getDestination()) + tourDestination.getUnload());
 				} else {
 					deliveries.put(tourDestination.getDestination(), tourDestination.getUnload());
 				}
@@ -76,13 +77,19 @@ public class Solution {
 	 */
 	public String toString() {
 		String output = "";
+		int consumption = 0;
 		for (Tour tour : truckTours) {
+			consumption += tour.getConsumption();
 			output += "Truck of type " + tour.getTruck().getClass() + ":\n";
 			for (TourDestination tourDestination : tour.getTourDestinations()) {
 				output += "Drive to " + tourDestination.getDestination().getName() + " and deliver " + tourDestination.getUnload() + "\n";
 			}
 		}
-		output += "Total consumption: "; // TODO
+		output += "Total consumption: " + consumption;
 		return output;
+	}
+
+	public ArrayList<Tour> getTruckTours() {
+		return truckTours;
 	}
 }

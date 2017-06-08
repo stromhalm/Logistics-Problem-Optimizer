@@ -8,7 +8,7 @@ public class LargeTruck extends AbstractTruck {
 	/**
 	 * Basic constructor
 	 */
-	LargeTruck() {
+	public LargeTruck() {
 		super(70, 35);
 	}
 

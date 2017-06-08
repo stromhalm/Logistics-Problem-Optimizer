@@ -25,6 +25,7 @@ public class Location {
 
 	/**
 	 * Create a simple location without neighbors and zero amount
+	 *
 	 * @param name The locations name
 	 */
 	public Location(final String name) {
@@ -81,6 +82,16 @@ public class Location {
 	 */
 	public HashMap<Location, Integer> getNeighbouringLocations() {
 		return neighbouringLocations;
+	}
+
+	/**
+	 * Decides whether this location has a neighbouring location equally to the passes location.
+	 *
+	 * @param location The location to check for neighbourhood.
+	 * @return Boolean value whether the location is a neighbour or not.
+	 */
+	public boolean hasNeigbouringLocationLocation(Location location) {
+		return getNeighbouringLocations().containsKey(location);
 	}
 
 }
