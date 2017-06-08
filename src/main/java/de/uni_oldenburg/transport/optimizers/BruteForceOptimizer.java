@@ -25,8 +25,7 @@ public class BruteForceOptimizer implements Optimizer {
 				Tour tour = new Tour(truck);
 				if (!checkForLocationAlreadyServed(solution, destination)) {
 					TourDestination tourDestination = new TourDestination(destination, destination.getAmount());
-					tour.addDestination(tourDestination, computeExpense(start, destination));
-					break;
+					tour.addDestination(tourDestination, computeExpense(start, destination, 0));
 				}
 				solution.addTour(tour);
 			}
@@ -39,23 +38,28 @@ public class BruteForceOptimizer implements Optimizer {
 	/**
 	 * Computes the shortest way to the destination form the start location.
 	 *
-	 * @param start       Location to startt at.
-	 * @param destination Location to stop at.
+	 * @param start         Location to startt at.
+	 * @param destination   Location to stop at.
+	 * @param recursionDeep Is the deep of the recursion
 	 * @return The expense to get to the destinations location.
 	 */
-	private int computeExpense(Location start, Location destination) {
+	private int computeExpense(Location start, Location destination, int recursionDeep) {
 		int expense = 0;
-		Location lastTriedLocation = null;
-		for (Map.Entry<Location, Integer> entry : start.getNeighbouringLocations().entrySet()) {
-			Location location = entry.getKey();
-			if (location.hasNeigbouringLocationLocation(destination)) {
-				return entry.getValue();
+		if (recursionDeep == 100) return -1;
+		/*if (start.hasNeigbouringLocationLocation(destination)) {
+			return start.getNeighbouringLocations().get(destination); // is the expense
+		} else {
+			for (Map.Entry<Location, Integer> entry : start.getNeighbouringLocations().entrySet()) {
+				Location location = entry.getKey();
+
+				int returnVL = computeExpense(location, destination, recursionDeep + 1);
+				if (returnVL > 0) {
+					break;
+				}
 			}
-			lastTriedLocation = location;
-		}
-		if (expense == 0) {
-			expense += computeExpense(lastTriedLocation, destination);
-		}
+		}*/
+		// TODO implement
+		expense = 10; // TODO remove
 		return expense;
 	}
 

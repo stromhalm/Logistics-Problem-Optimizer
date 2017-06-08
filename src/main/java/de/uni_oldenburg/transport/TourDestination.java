@@ -10,7 +10,7 @@ public class TourDestination {
 
 	public TourDestination(Location destination, int unload) {
 		this.destination = destination;
-		this.unload = 0;
+		this.unload = unload;
 	}
 
 	/**
