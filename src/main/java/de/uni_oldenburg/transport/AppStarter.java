@@ -2,10 +2,7 @@ package de.uni_oldenburg.transport;
 
 import de.uni_oldenburg.transport.csv.DeliveryCSVLoader;
 import de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader;
-import de.uni_oldenburg.transport.optimizers.BruteForceOptimizer;
-import de.uni_oldenburg.transport.optimizers.GeneticOptimizer;
-import de.uni_oldenburg.transport.optimizers.NearestNeighborOptimizer;
-import de.uni_oldenburg.transport.optimizers.Optimizer;
+import de.uni_oldenburg.transport.optimizers.*;
 
 /**
  * This class is the entry point to our optimizers
@@ -66,6 +63,12 @@ public class AppStarter {
 
 			case 2:
 				optimizer = new BruteForceOptimizer();
+				break;
+			case 3:
+				optimizer = new NorthWestCornerOptimizer();
+				break;
+			case 4:
+				optimizer = new SweepLineOptimizer();
 				break;
 			default:
 				optimizer = new GeneticOptimizer();
