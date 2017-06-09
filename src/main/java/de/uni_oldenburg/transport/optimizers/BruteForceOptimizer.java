@@ -22,10 +22,14 @@ public class BruteForceOptimizer implements Optimizer {
 		for (Location destination : transportNetwork.getLocations()) {
 			if (!destination.equals(start)) { // prevent Hamburg from being added.
 				AbstractTruck truck = new LargeTruck();
-				Tour tour = new Tour(truck);
+				Tour tour = new Tour(truck, start);
 				if (!checkForLocationAlreadyServed(solution, destination)) {
 					TourDestination tourDestination = new TourDestination(destination, destination.getAmount());
-					tour.addDestination(tourDestination, computeExpense(start, destination, 0));
+					ArrayList<Location> alreadyVisited = new ArrayList<>();
+					System.out.println("From Hamburg \n");
+					int expense = computeExpense(start, destination, 0, alreadyVisited);
+					tour.addDestination(tourDestination, expense);
+					System.out.println("With " + expense + " kilometers to drive.\n\n");
 				}
 				solution.addTour(tour);
 			}
@@ -43,23 +47,30 @@ public class BruteForceOptimizer implements Optimizer {
 	 * @param recursionDeep Is the deep of the recursion
 	 * @return The expense to get to the destinations location.
 	 */
-	private int computeExpense(Location start, Location destination, int recursionDeep) {
+	private int computeExpense(Location start, Location destination, int recursionDeep, ArrayList<Location> alreadyVisited) {
 		int expense = 0;
-		if (recursionDeep == 100) return -1;
-		/*if (start.hasNeigbouringLocationLocation(destination)) {
+		for (Location location : alreadyVisited) {
+			if (location.equals(start)) return -1; // break
+		}
+		alreadyVisited.add(start);
+		if (start.hasNeigbouringLocationLocation(destination)) {
 			return start.getNeighbouringLocations().get(destination); // is the expense
 		} else {
 			for (Map.Entry<Location, Integer> entry : start.getNeighbouringLocations().entrySet()) {
 				Location location = entry.getKey();
-
-				int returnVL = computeExpense(location, destination, recursionDeep + 1);
+				expense = entry.getValue();
+				int returnVL = computeExpense(location, destination, recursionDeep + 1, alreadyVisited);
 				if (returnVL > 0) {
+					System.out.println(" to " + location.getName());
+					expense += returnVL;
 					break;
 				}
 			}
-		}*/
+		}
 		// TODO implement
-		expense = 10; // TODO remove
+		if (expense == 0) {
+			return -1;
+		}
 		return expense;
 	}
 

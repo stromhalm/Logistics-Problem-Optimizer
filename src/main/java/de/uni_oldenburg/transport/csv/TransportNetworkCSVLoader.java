@@ -47,7 +47,7 @@ public class TransportNetworkCSVLoader extends CSVLoader {
 			} else if (locationHashMap.containsKey(locationName2) && !locationHashMap.containsKey(locationName1)) {
 				// create new start
 				locationHashMap.put(locationName1, new Location(locationName1));
-			} else {
+			} else if ( !locationHashMap.containsKey(locationName1) && !locationHashMap.containsKey(locationName2)){
 				// create new start
 				locationHashMap.put(locationName1, new Location(locationName1));
 				// create new destination

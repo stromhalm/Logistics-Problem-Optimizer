@@ -13,15 +13,18 @@ public class Tour {
 	private ArrayList<TourDestination> destinations;
 	private int consumption;
 
+	private final Location startLocation;
+
 	/**
 	 * Constructor
 	 *
 	 * @param truck The truck to be used in this tour
 	 */
-	public Tour(final AbstractTruck truck) {
+	public Tour(final AbstractTruck truck, final Location startLocation) {
 		this.truck = truck;
 		this.destinations = new ArrayList<>();
 		consumption = 0;
+		this.startLocation = startLocation;
 	}
 
 	/**
@@ -90,5 +93,9 @@ public class Tour {
 
 	public int getConsumption() {
 		return consumption;
+	}
+
+	public Location getStartLocation() {
+		return startLocation;
 	}
 }

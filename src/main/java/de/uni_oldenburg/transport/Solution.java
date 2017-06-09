@@ -80,9 +80,9 @@ public class Solution {
 		int consumption = 0;
 		for (Tour tour : truckTours) {
 			consumption += tour.getConsumption();
-			output += "Truck of type " + tour.getTruck().getClass() + ":\n";
+			output += "\nTruck of type " + tour.getTruck().getClass().getSimpleName() + "consumed " + tour.getConsumption() + " while driving from " + tour.getStartLocation().getName() + "...\n";
 			for (TourDestination tourDestination : tour.getTourDestinations()) {
-				output += "Drive to " + tourDestination.getDestination().getName() + " and deliver " + tourDestination.getUnload() + "\n";
+				output += "    to " + tourDestination.getDestination().getName() + " and deliver " + tourDestination.getUnload() + "\n";
 			}
 		}
 		output += "Total consumption: " + consumption;
