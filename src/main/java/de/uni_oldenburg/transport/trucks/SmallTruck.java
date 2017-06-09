@@ -5,11 +5,13 @@ package de.uni_oldenburg.transport.trucks;
  */
 public class SmallTruck extends AbstractTruck {
 
+	public static final int CAPACITY = 20;
+
 	/**
 	 * Basic constructor
 	 */
 	public SmallTruck() {
-		super(20, 15);
+		super(CAPACITY, 15);
 	}
 
 }
