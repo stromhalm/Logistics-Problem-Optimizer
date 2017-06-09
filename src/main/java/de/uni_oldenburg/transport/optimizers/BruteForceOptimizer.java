@@ -1,12 +1,10 @@
 package de.uni_oldenburg.transport.optimizers;
 
 import de.uni_oldenburg.transport.*;
-import de.uni_oldenburg.transport.trucks.AbstractTruck;
 import de.uni_oldenburg.transport.trucks.LargeTruck;
 import de.uni_oldenburg.transport.trucks.MediumTruck;
 import de.uni_oldenburg.transport.trucks.SmallTruck;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -67,25 +65,35 @@ public class BruteForceOptimizer implements Optimizer {
 		int amountPossible = tours.get(x).getTruck().getCapacity();
 		Tour tour = tours.get(x);
 
+		Location startTourLocation = start;
 		for (int i = 0; i < visitedLocations.size(); i++) {
 			Location location = visitedLocations.get(visitedLocations.size() - 1 - i);
+			int expense = computeExpense(startTourLocation, location, new ArrayList<>());
 			if (!checkForLocationAlreadyServed(solution, location)) {
-				System.out.println("LKW " + x + " drives to " + location.getName() + " and unloads " + location.getAmount() + " at tour number " + x);
 
 				TourDestination tourDestination = new TourDestination(location, location.getAmount());
-				// todo compute expense again
-				tour.addDestination(tourDestination, 10);
+				tour.addDestination(tourDestination, expense);
 				amountPossible -= location.getAmount();
+
+				System.out.println("LKW " + x + " drives " + expense + " kilometers from " + startTourLocation.getName() + " to " + location.getName() + " and unloads " + location.getAmount() + " at tour number " + x);
+
+				startTourLocation = location;
 				if (amountPossible <= 0 && i != visitedLocations.size() - 1 || visitedLocations.size() - 2 - i >= 0 && amountPossible < visitedLocations.get(visitedLocations.size() - 2 - i).getAmount()) {
 					tour = tours.get(++x);
 					amountPossible = tours.get(x).getTruck().getCapacity();
+					startTourLocation = start; // restart at hamburg
 				}
 			} else {
-				// TODO compute the expense nonetheless
+				// compute the expense nonetheless
+				tour.addConsumption(expense);
+				startTourLocation = location;
 			}
 		}
-		System.out.println("With " + 10 + " kilometers to drive.\n\n");
-
+		int i = 0;
+		for (Tour tour2 : tours) {
+			System.out.println("Tour " + i++ + " has " + tour2.getKilometersToDrive() + " kilometers to drive with an overall fuel expense of " + tour2.getConsumption() + ".");
+		}
+		System.out.println();
 	}
 
 	private boolean computeGeneralTourToDestination(ArrayList<Location> visitedLocations, ArrayList<Location> alreadyVisited, Location start, Location destination) {
@@ -112,37 +120,31 @@ public class BruteForceOptimizer implements Optimizer {
 	/**
 	 * Computes the shortest way to the destination form the start location.
 	 *
-	 * @param start            Location to startt at.
-	 * @param destination      Location to stop at.
-	 * @param alreadyVisited   The list of already visited location in the recursion process.
-	 * @param visitedLocations The list of already unloaded locations.
+	 * @param start          Location to startt at.
+	 * @param destination    Location to stop at.
+	 * @param alreadyVisited Already visited locations in the recursion process.
 	 * @return The expense to get to the destinations location.
 	 */
-	private int computeExpense(Location start, Location destination, ArrayList<Location> alreadyVisited, ArrayList<Location> visitedLocations) {
+	private int computeExpense(Location start, Location destination, ArrayList<Location> alreadyVisited) {
 		int expense = 0;
 		for (Location location : alreadyVisited) {
 			if (location.equals(start)) return -1; // break
 		}
 		alreadyVisited.add(start);
 		if (start.hasNeigbouringLocationLocation(destination)) {
-			visitedLocations.add(destination);
-			return start.getNeighbouringLocations().get(destination); // is the expense
+			return start.getNeighbouringLocations().get(destination);
 		} else {
 			for (Map.Entry<Location, Integer> entry : start.getNeighbouringLocations().entrySet()) {
 				Location location = entry.getKey();
-				expense = entry.getValue();
-				int returnVL = computeExpense(location, destination, alreadyVisited, visitedLocations);
-				if (returnVL > 0) {
-					visitedLocations.add(location);
-					expense += returnVL;
-					break;
+				int returnValue = computeExpense(location, destination, alreadyVisited);
+				if (returnValue > 0) {
+					expense += returnValue + start.getNeighbouringLocations().get(location);
+					return expense;
 				}
 			}
 		}
-		if (expense == 0) {
-			return -1;
-		}
-		return expense;
+
+		return -1;
 	}
 
 	/**

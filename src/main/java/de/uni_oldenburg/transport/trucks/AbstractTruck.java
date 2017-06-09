@@ -36,16 +36,4 @@ public abstract class AbstractTruck {
 	public int getConsumption() {
 		return consumption;
 	}
-
-	public void subtractCapacity(int capacity) {
-		this.capacity -= capacity;
-	}
-
-	public void addCapacity(int capacity) {
-		this.capacity += capacity;
-	}
-
-	public int getCapacityLeft() {
-		return capacity;
-	}
 }
