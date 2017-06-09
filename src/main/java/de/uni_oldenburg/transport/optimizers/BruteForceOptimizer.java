@@ -18,11 +18,12 @@ public class BruteForceOptimizer implements Optimizer {
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
 		Solution solution = new Solution(transportNetwork);
 
-		Location start = transportNetwork.getLocationByName("Hamburg");
+		Location start = transportNetwork.getStartLocation();
 		// iterate through transport network
 		for (Location destination : transportNetwork.getLocations()) {
 			if (!destination.equals(start)) { // prevent Hamburg from being added.
 				ArrayList<Tour> tours = new ArrayList<>();
+
 				if (!checkForLocationAlreadyServed(solution, destination)) {
 					getPathAndExpenseToDestination(solution, tours, start, destination);
 				}
@@ -161,11 +162,10 @@ public class BruteForceOptimizer implements Optimizer {
 					if (tourDestination.getUnload() == tourDestination.getDestination().getAmount()) {
 						return true;
 					}
-
 				}
 			}
+			// TODO modify the method to return the tour that serves the location and whether the tour serves the location in full.
 		}
 		return false;
-		// TODO modify the method to return the tour that serves the location and whether the tour serves the location in full.
 	}
 }
