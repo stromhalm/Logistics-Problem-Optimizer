@@ -39,14 +39,23 @@ public class TransportNetworkCSVLoader extends CSVLoader {
 			String distanceValue = entrySet[2];
 
 			// create the Location and add to the list.
-			Location start = new Location(locationName1);
-			Location destination = new Location(locationName2);
 			int distance = Integer.parseInt(distanceValue);
 
-			if (!locationHashMap.containsKey(locationName1)) locationHashMap.put(locationName1, start);
-			if (!locationHashMap.containsKey(locationName2)) locationHashMap.put(locationName2, destination);
-			locationHashMap.get(locationName1).addNeighbouringLocation(destination, distance);
-			locationHashMap.get(locationName2).addNeighbouringLocation(start, distance);
+			if (locationHashMap.containsKey(locationName1) && !locationHashMap.containsKey(locationName2)) {
+				// create new destination
+				locationHashMap.put(locationName2, new Location(locationName2));
+			} else if (locationHashMap.containsKey(locationName2) && !locationHashMap.containsKey(locationName1)) {
+				// create new start
+				locationHashMap.put(locationName1, new Location(locationName1));
+			} else if ( !locationHashMap.containsKey(locationName1) && !locationHashMap.containsKey(locationName2)){
+				// create new start
+				locationHashMap.put(locationName1, new Location(locationName1));
+				// create new destination
+				locationHashMap.put(locationName2, new Location(locationName2));
+			}
+
+			locationHashMap.get(locationName1).addNeighbouringLocation(locationHashMap.get(locationName2), distance);
+			locationHashMap.get(locationName2).addNeighbouringLocation(locationHashMap.get(locationName1), distance);
 		}
 
 		TransportNetwork transportNetwork = new TransportNetwork(locationHashMap.values().toArray(new Location[0]));

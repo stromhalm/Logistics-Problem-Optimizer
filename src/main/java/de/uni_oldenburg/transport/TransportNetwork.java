@@ -31,7 +31,28 @@ public class TransportNetwork {
 		return null;
 	}
 
+	/**
+	 * Get all locations in the network
+	 *
+	 * @return Array of all the locations
+	 */
 	public Location[] getLocations() {
 		return network;
+	}
+
+	/**
+	 * Get the start location. It is the first with zero amount in the network
+	 *
+	 * @return The start location
+	 */
+	public Location getStartLocation() {
+
+		// The start location is the one with zero amount
+		for (Location location : network) {
+			if (location.getAmount() == 0) {
+				return location;
+			}
+		}
+		return null;
 	}
 }

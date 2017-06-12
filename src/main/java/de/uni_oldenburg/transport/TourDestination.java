@@ -1,7 +1,5 @@
 package de.uni_oldenburg.transport;
 
-import de.uni_oldenburg.transport.Location;
-
 /**
  * A single destination that is part of a truck tour
  */
@@ -10,9 +8,9 @@ public class TourDestination {
 	private Location destination;
 	private int unload;
 
-	TourDestination(Location destination, int unload) {
+	public TourDestination(Location destination, int unload) {
 		this.destination = destination;
-		this.unload = 0;
+		this.unload = unload;
 	}
 
 	/**

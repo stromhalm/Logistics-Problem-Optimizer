@@ -11,14 +11,22 @@ public class Tour {
 
 	private final AbstractTruck truck;
 	private ArrayList<TourDestination> destinations;
+	private int consumption;
+	private int kilometersToDrive;
+
+	private final Location startLocation;
 
 	/**
 	 * Constructor
 	 *
 	 * @param truck The truck to be used in this tour
 	 */
-	public Tour(final AbstractTruck truck) {
+	public Tour(final AbstractTruck truck, final Location startLocation) {
 		this.truck = truck;
+		this.destinations = new ArrayList<>();
+		consumption = 0;
+		kilometersToDrive = 0;
+		this.startLocation = startLocation;
 	}
 
 	/**
@@ -34,18 +42,24 @@ public class Tour {
 	 * Add a destination to this tour
 	 *
 	 * @param tourDestination The destination to add
+	 * @param expense         The expense to the location.
 	 */
-	public void addDestination(TourDestination tourDestination) {
+	public void addDestination(TourDestination tourDestination, int expense) {
 		destinations.add(tourDestination);
+		kilometersToDrive += expense;
+		addConsumption(expense);
 	}
 
 	/**
 	 * Remove a destination from this tour
 	 *
 	 * @param tourDestination The destination to remove
+	 * @param expense         The expense to the location.
 	 * @return False if tour was not found
 	 */
-	public boolean removeTourDestination(TourDestination tourDestination) {
+	public boolean removeTourDestination(TourDestination tourDestination, int expense) {
+		subtractConsumption(expense);
+		kilometersToDrive -= expense;
 		return destinations.remove(tourDestination);
 	}
 
@@ -73,4 +87,23 @@ public class Tour {
 		return (load <= truck.getCapacity());
 	}
 
+	public void addConsumption(int expense) {
+		this.consumption += truck.getConsumption() * expense;
+	}
+
+	public void subtractConsumption(int expense) {
+		this.consumption -= truck.getConsumption() * expense;
+	}
+
+	public int getConsumption() {
+		return consumption;
+	}
+
+	public Location getStartLocation() {
+		return startLocation;
+	}
+
+	public int getKilometersToDrive() {
+		return kilometersToDrive;
+	}
 }
