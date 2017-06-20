@@ -23,7 +23,7 @@ public class TourDestination {
 	}
 
 	/**
-	 * Set the discharge amount fpr this destination
+	 * Set the discharge amount for this destination
 	 *
 	 * @param unload Discharge amount
 	 */

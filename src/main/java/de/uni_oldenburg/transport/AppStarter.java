@@ -70,6 +70,9 @@ public class AppStarter {
 			case 4:
 				optimizer = new SweepLineOptimizer();
 				break;
+			case 5:
+				optimizer = new SavingsOptimizer();
+				break;
 			default:
 				optimizer = new GeneticOptimizer();
 				System.out.println("Optimizer not found");

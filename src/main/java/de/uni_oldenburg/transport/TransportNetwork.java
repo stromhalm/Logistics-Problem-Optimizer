@@ -36,6 +36,7 @@ public class TransportNetwork {
 	 *
 	 * @return Array of all the locations
 	 */
+
 	public Location[] getLocations() {
 		return network;
 	}
@@ -54,5 +55,9 @@ public class TransportNetwork {
 			}
 		}
 		return null;
+	}
+
+	public int getNumberOfLocations() {
+		return network.length;
 	}
 }

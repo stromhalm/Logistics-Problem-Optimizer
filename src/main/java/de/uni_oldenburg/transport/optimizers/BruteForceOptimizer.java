@@ -121,7 +121,7 @@ public class BruteForceOptimizer implements Optimizer {
 	/**
 	 * Computes the shortest way to the destination form the start location.
 	 *
-	 * @param start          Location to startt at.
+	 * @param start          Location to start at.
 	 * @param destination    Location to stop at.
 	 * @param alreadyVisited Already visited locations in the recursion process.
 	 * @return The expense to get to the destinations location.
