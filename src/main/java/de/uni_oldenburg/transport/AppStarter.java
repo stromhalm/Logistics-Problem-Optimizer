@@ -74,7 +74,7 @@ public class AppStarter {
 				optimizer = new SavingsOptimizer();
 				break;
 			default:
-				optimizer = new GeneticOptimizer();
+				optimizer = null;
 				System.out.println("Optimizer not found");
 				System.exit(1);
 		}
