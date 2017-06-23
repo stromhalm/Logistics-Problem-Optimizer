@@ -11,6 +11,8 @@ public class Vertice {
 	private Vertice parentLocation;
 	private int expenseToParentLocation;
 
+	private String name;
+
 	Location locationReference;
 
 	public Vertice(Location location, Vertice parentLocation, int expenseToParentLocation) {
@@ -18,6 +20,7 @@ public class Vertice {
 		this.parentLocation = parentLocation;
 		this.expenseToParentLocation = expenseToParentLocation;
 		this.childNodes = new ArrayList<>();
+		this.name = location.getName();
 	}
 
 	public boolean addChild(Vertice child) {
@@ -54,5 +57,13 @@ public class Vertice {
 
 	public void setLocationReference(Location locationReference) {
 		this.locationReference = locationReference;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

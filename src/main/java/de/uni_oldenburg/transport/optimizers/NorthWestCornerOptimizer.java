@@ -3,6 +3,7 @@ package de.uni_oldenburg.transport.optimizers;
 import de.uni_oldenburg.transport.Location;
 import de.uni_oldenburg.transport.Solution;
 import de.uni_oldenburg.transport.TransportNetwork;
+import de.uni_oldenburg.transport.optimizers.Graph.Kruskal;
 import de.uni_oldenburg.transport.optimizers.Graph.Vertice;
 
 import java.util.ArrayList;
@@ -22,6 +23,10 @@ public class NorthWestCornerOptimizer implements Optimizer {
 			}
 			System.out.print("\n");
 		}
+
+		Kruskal kruskal = new Kruskal(transportNetwork);
+		kruskal.findMST();
+		kruskal.getLocationsMST();
 		return null;
 	}
 
@@ -125,7 +130,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 				if (spanningNode.get(spanningNode.size() - comparedMinimum).getLocationReference().getName().equals("Hamburg")
 						&& spanningNodeAlreadyGot.get(spanningNodeAlreadyGot.size() - comparedMinimum).getLocationReference().getName().equals("Hamburg")) { // only compare paths that are of same length // TODO find a better solution to switch paths and replace parts of them
 					if (oldWeigth > newWeigth) {
-						//spanningNodes.remove(spanningNodeAlreadyGot); // TODO do not delete but adjust the path
+						spanningNodes.remove(spanningNodeAlreadyGot); // TODO do not delete but adjust the path
 						return true;
 					}
 				}
