@@ -2,10 +2,16 @@ package de.uni_oldenburg.transport.optimizers;
 
 import de.uni_oldenburg.transport.Location;
 import de.uni_oldenburg.transport.Solution;
+import de.uni_oldenburg.transport.TourDestination;
 import de.uni_oldenburg.transport.TransportNetwork;
 import de.uni_oldenburg.transport.optimizers.Graph.Kruskal;
 import de.uni_oldenburg.transport.optimizers.Graph.Vertice;
+import de.uni_oldenburg.transport.trucks.AbstractTruck;
+import de.uni_oldenburg.transport.trucks.LargeTruck;
+import de.uni_oldenburg.transport.trucks.MediumTruck;
+import de.uni_oldenburg.transport.trucks.SmallTruck;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -30,15 +36,75 @@ public class NorthWestCornerOptimizer implements Optimizer {
 		transportNetwork = kruskal.getLocationsMST();
 
 		ArrayList<ArrayList<Vertice>> minimalSpanningNetwork = getMinimalSpanningNetwork(transportNetwork.getLocations(), transportNetwork.getStartLocation());
-		for (ArrayList<Vertice> spanningNode : minimalSpanningNetwork) {
-			for (int i = 0; i < spanningNode.size(); i++) {
-				System.out.print(spanningNode.get(i).getName() + ", ");
-			}
-			// is a quite well optimized shortest path
-			System.out.print("\n");
-		}
+
+		doNorthWestCornerMethod(minimalSpanningNetwork);
 
 		return null;
+	}
+
+	public void doNorthWestCornerMethod(ArrayList<ArrayList<Vertice>> minimalSpanningNetwork) {
+		int[] kmToDriveOnRoute = new int[minimalSpanningNetwork.size()];
+		int[] amountToDeliverOnRoute = new int[minimalSpanningNetwork.size()];
+		for (int route = 0; route < minimalSpanningNetwork.size(); route++) {
+			Vertice leaf = minimalSpanningNetwork.get(route).get(minimalSpanningNetwork.get(route).size() - 1);
+
+			while (leaf.getParentLocation() != null) {
+				amountToDeliverOnRoute[route] += leaf.getLocationReference().getAmount();
+				kmToDriveOnRoute[route] += leaf.getExpenseToParentLocation();
+				leaf = leaf.getParentLocation();
+			}
+			System.out.println("Route: " + route + ": " + amountToDeliverOnRoute[route] + " (amountNeeded) and " + kmToDriveOnRoute[route] + "(kmToDrive)");
+		}
+
+		for (int route = 0; route < minimalSpanningNetwork.size(); route++) {
+			ArrayList<SmallTruck> smallTrucks = new ArrayList<>();
+			ArrayList<MediumTruck> mediumTrucks = new ArrayList<>();
+			ArrayList<LargeTruck> largeTrucks = new ArrayList<>();
+
+			ArrayList<Vertice> vertices = minimalSpanningNetwork.get(route);
+			boolean trucksConstellationPut = false;
+			do { // TODO improve
+				if (amountToDeliverOnRoute[route] <= SmallTruck.CAPACITY) {
+					smallTrucks.add(new SmallTruck());
+					trucksConstellationPut = true;
+					amountToDeliverOnRoute[route] -= SmallTruck.CAPACITY;
+				} else if (amountToDeliverOnRoute[route] > SmallTruck.CAPACITY && amountToDeliverOnRoute[route] <= MediumTruck.CAPACITY) {
+					mediumTrucks.add(new MediumTruck());
+					trucksConstellationPut = true;
+					amountToDeliverOnRoute[route] -= MediumTruck.CAPACITY;
+				} else if (amountToDeliverOnRoute[route] > MediumTruck.CAPACITY && amountToDeliverOnRoute[route] <= LargeTruck.CAPACITY) {
+					largeTrucks.add(new LargeTruck());
+					trucksConstellationPut = true;
+					amountToDeliverOnRoute[route] -= LargeTruck.CAPACITY;
+				} else {
+					largeTrucks.add(new LargeTruck());
+					amountToDeliverOnRoute[route] -= LargeTruck.CAPACITY;
+				}
+			} while (!trucksConstellationPut);
+
+			int amountTrucks = 0;
+			for (Vertice vertice : vertices) {
+				ArrayList<TourDestination> tourDestinations = new ArrayList<>();
+				while (vertice.getLocationReference().getAmount() != 0) {
+					TourDestination tourDestination = new TourDestination();
+					if (amountToDeliverOnRoute[route] <= SmallTruck.CAPACITY) {
+						smallTrucks.add(new SmallTruck());
+						trucksConstellationPut = true;
+						amountToDeliverOnRoute[route] -= SmallTruck.CAPACITY;
+					} else if (amountToDeliverOnRoute[route] > SmallTruck.CAPACITY && amountToDeliverOnRoute[route] <= MediumTruck.CAPACITY) {
+						mediumTrucks.add(new MediumTruck());
+						trucksConstellationPut = true;
+						amountToDeliverOnRoute[route] -= MediumTruck.CAPACITY;
+					} else if (amountToDeliverOnRoute[route] > MediumTruck.CAPACITY && amountToDeliverOnRoute[route] <= LargeTruck.CAPACITY) {
+						largeTrucks.add(new LargeTruck());
+						trucksConstellationPut = true;
+						amountToDeliverOnRoute[route] -= LargeTruck.CAPACITY;
+					}
+				}
+			}
+
+		}
+
 	}
 
 	private ArrayList<ArrayList<Vertice>> getMinimalSpanningNetwork(Location[] locations, Location startLocation) {
@@ -67,17 +133,17 @@ public class NorthWestCornerOptimizer implements Optimizer {
 				}
 			}
 		}
-		for (ArrayList<Vertice> spanningNode : spanningNodesOut) {
-			for (Vertice vertice : spanningNode) {
-				System.out.print(vertice.getName() + ", ");
-			}
-			System.out.println();
-		}
-
 
 		if (allVerticesGot(locations, spanningNodes)) {
 			return spanningNodesOut;
 		} else {
+			for (ArrayList<Vertice> spanningNode : spanningNodesOut) {
+				for (int i = 0; i < spanningNode.size(); i++) {
+					System.out.print(spanningNode.get(i).getName() + ", ");
+				}
+				// is a quite well optimized shortest path
+				System.out.print("\n");
+			}
 			System.out.println("Failed to get shortest paths");
 			return null;
 		}
@@ -175,8 +241,9 @@ public class NorthWestCornerOptimizer implements Optimizer {
 					break;
 				}
 			}
+
 			if (allLocationsGot) {
-				return allLocationsGot;
+				return true;
 			}
 		}
 		return false;

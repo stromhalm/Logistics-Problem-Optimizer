@@ -2,6 +2,7 @@ package de.uni_oldenburg.transport.optimizers.Graph;
 
 import de.uni_oldenburg.transport.Location;
 import de.uni_oldenburg.transport.TransportNetwork;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -34,16 +35,16 @@ public class Kruskal {
 	}
 
 	public TransportNetwork getLocationsMST() {
-		Location[] locations = new Location[vertices.size()];
 		for (Edge edge : notEdgesMST) {
-			System.out.println("Removing Edge: " + edge.getVertice1().getName() + " to " + edge.getVertice2().getName() + " with " + edge.getWeight());
+//			System.out.println("Removing Edge: " + edge.getVertice1().getName() + " to " + edge.getVertice2().getName() + " with " + edge.getWeight());
 			edge.getVertice1().getLocationReference().getNeighbouringLocations().remove(edge.getVertice2().getLocationReference(), edge.getWeight());
 			edge.getVertice2().getLocationReference().getNeighbouringLocations().remove(edge.getVertice1().getLocationReference(), edge.getWeight());
 		}
 
+		Location[] locations = new Location[vertices.size()];
+
 		for (int i = 0; i < vertices.size(); i++) {
 			locations[i] = vertices.get(i).getLocationReference();
-			System.out.println(locations[i].getName() + " with " + locations[i].getNeighbouringLocations().size() + " neighbours");
 		}
 		return new TransportNetwork(locations);
 	}
@@ -152,7 +153,11 @@ public class Kruskal {
 			Edge edge = new Edge(vertice1, vertice2, weight);
 			if (edgeDoesNotExistYet(edge)) {
 				if (weight > highestEdgeWeight) highestEdgeWeight = weight;
-				vertices.add(vertice2);
+				boolean alreadyGot = false;
+				for (Vertice vertice : vertices) {
+					if (vertice.getName().equals(vertice2.getName())) alreadyGot = true;
+				}
+				if (!alreadyGot) vertices.add(vertice2);
 				edges.add(edge);
 			}
 			fillEdgesAndVertices(vertice2, maxDeep, deep + 1, locationsCount);
