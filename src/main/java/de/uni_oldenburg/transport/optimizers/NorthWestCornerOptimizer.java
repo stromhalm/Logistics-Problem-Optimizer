@@ -19,7 +19,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 		ArrayList<ArrayList<Vertice>> minimalSpanningNetwork = getMinimalSpanningNetwork(transportNetwork.getLocations(), transportNetwork.getStartLocation());
 		for (ArrayList<Vertice> spanningNode : minimalSpanningNetwork) {
 			for (int i = 0; i < spanningNode.size(); i++) {
-				System.out.print(spanningNode.get(i).getLocationReference().getName() + ", ");
+				System.out.print(spanningNode.get(i).getName() + ", ");
 			}
 			System.out.print("\n");
 		}
@@ -71,7 +71,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 
 		int min = Math.min(spanningNode.size(), vertices.size());
 		for (int i = 0; i < min; i++) {
-			if (!spanningNode.get(i).getLocationReference().getName().equals(vertices.get(i).getLocationReference().getName())) {
+			if (!spanningNode.get(i).getName().equals(vertices.get(i).getName())) {
 				replacable = false;
 			}
 		}
@@ -92,7 +92,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 				Vertice location = new Vertice(neighbouringLocation.getKey(), startLocation, neighbouringLocation.getValue());
 				if (!alreadyVisited(location, alreadyVisitedList)) {
 
-					if (location.getLocationReference().getName().equals(hamburg)) {
+					if (location.getName().equals(hamburg)) {
 						return;
 					}
 					startLocation.addChild(location);
@@ -119,7 +119,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 			int oldWeigth = 0;
 			int newWeigth = 0;
 
-			if (spanningNode.get(spanningNode.size() - 1).getLocationReference().getName().equals(spanningNodeAlreadyGot.get(spanningNodeAlreadyGot.size() - 1).getLocationReference().getName())) {
+			if (spanningNode.get(spanningNode.size() - 1).getName().equals(spanningNodeAlreadyGot.get(spanningNodeAlreadyGot.size() - 1).getName())) {
 				matchFound = true;
 				// because all nodes start from the original start location the end specifies the node
 				int comparedMinimum = (Math.min(spanningNode.size(), spanningNodeAlreadyGot.size()) - 1);
@@ -127,8 +127,8 @@ public class NorthWestCornerOptimizer implements Optimizer {
 					newWeigth += spanningNode.get(spanningNode.size() - i).getExpenseToParentLocation();
 					oldWeigth += spanningNodeAlreadyGot.get(spanningNodeAlreadyGot.size() - i).getExpenseToParentLocation();
 				}
-				if (spanningNode.get(spanningNode.size() - comparedMinimum).getLocationReference().getName().equals("Hamburg")
-						&& spanningNodeAlreadyGot.get(spanningNodeAlreadyGot.size() - comparedMinimum).getLocationReference().getName().equals("Hamburg")) { // only compare paths that are of same length // TODO find a better solution to switch paths and replace parts of them
+				if (spanningNode.get(spanningNode.size() - comparedMinimum).getName().equals("Hamburg")
+						&& spanningNodeAlreadyGot.get(spanningNodeAlreadyGot.size() - comparedMinimum).getName().equals("Hamburg")) { // only compare paths that are of same length // TODO find a better solution to switch paths and replace parts of them
 					if (oldWeigth > newWeigth) {
 						spanningNodes.remove(spanningNodeAlreadyGot); // TODO do not delete but adjust the path
 						return true;
@@ -145,7 +145,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 		for (ArrayList<Vertice> nodes : spanningNodes) {
 			for (Vertice location : nodes) {
 				for (int i = 0; i < locations.length; i++) {
-					if (locations[i].getName().equals(location.getLocationReference().getName())) {
+					if (locations[i].getName().equals(location.getName())) {
 						locationsGot[i] = true;
 						break;
 					}
@@ -167,7 +167,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 
 	private boolean alreadyVisited(Vertice location, ArrayList<Vertice> alreadyVisitedList) {
 		for (Vertice vertice : alreadyVisitedList) {
-			if (location.getLocationReference().getName().equals(vertice.getLocationReference().getName())) {
+			if (location.getName().equals(vertice.getName())) {
 				return true;
 			}
 		}

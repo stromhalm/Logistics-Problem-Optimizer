@@ -9,33 +9,35 @@ import java.util.Map;
 
 public class Kruskal {
 
+	private int highestEdgeWeight;
+
 	private ArrayList<Vertice> vertices;
 	private ArrayList<Edge> edges;
 
-	private int highestEdgeWeight;
-
 	private ArrayList<Edge> edgesMST;
+
+	private ArrayList<ArrayList<Edge>> subGraphEdges;
 
 	public Kruskal(TransportNetwork transportNetwork) {
 		Location[] locations = transportNetwork.getLocations();
 		vertices = new ArrayList<>();
 		edges = new ArrayList<>();
 		highestEdgeWeight = 0;
+		edgesMST = new ArrayList<>();
+		subGraphEdges = new ArrayList<>();
 
 		Vertice vertice = new Vertice(transportNetwork.getStartLocation(), null, 0);
 		vertices.add(vertice);
-		fillEdgesAndVertices(vertice, locations.length - 1, 0);
+		fillEdgesAndVertices(vertice, locations.length - 1, 0, locations.length);
 
-		for (Edge edge : edges) {
-			System.out.println(edge.getVertice1().getName() + " with " + edge.getWeight() + " to " + edge.getVertice2().getName());
-		}
+
 	}
 
 	public Location[] getLocationsMST() {
 		ArrayList<Location> locations = new ArrayList<>();
-		System.out.println();
+		//System.out.println();
 		for (Edge edge : edgesMST) {
-			System.out.println(edge.getVertice1().getName() + " with " + edge.getWeight() + " to " + edge.getVertice2().getName());
+			//System.out.println(edge.getVertice1().getName() + " with " + edge.getWeight() + " to " + edge.getVertice2().getName());
 		}
 		// TODO implement
 
@@ -43,48 +45,74 @@ public class Kruskal {
 	}
 
 	public void findMST() {
-		edgesMST = new ArrayList<>();
+
 		while (edges.size() != 0) {
 			int lowestEdge = findLowestEdge();
 			ArrayList<Edge> edgesByWeight = getAllEdgesByWeight(lowestEdge);
 			for (Edge edgeByWeight : edgesByWeight) {
-				if (!addingProducesCycle(edgeByWeight, edgesMST)) {
+				if (!addingProducesCycle(edgeByWeight)) {
 					edgesMST.add(edgeByWeight);
+					System.out.println(edgeByWeight.getVertice1().getName() + " with " + edgeByWeight.getWeight() + " to " + edgeByWeight.getVertice2().getName());
 				}
 			}
 			removeEdges(edgesByWeight);
 		}
 	}
 
-	private boolean addingProducesCycle(Edge edgeByWeight, ArrayList<Edge> edgesMST) {
+	private boolean addingProducesCycle(Edge edgeByWeight) {
 
+		isConnected(edgeByWeight);
 
-		for (int i = 0; i < edgesMST.size(); i++) {
-			ArrayList<Edge> edgesMSTCopy = new ArrayList<>(edgesMST);
-			Edge start = edgesMSTCopy.get(i);
+		for (ArrayList<Edge> subGraph : subGraphEdges) {
+			ArrayList<Vertice> vertices = new ArrayList<>();
 
-			edgesMSTCopy.remove(start);
-			edgesMSTCopy.add(edgeByWeight);
-
-			Edge next = edgesMSTCopy.get((i + 1) % edgesMST.size());
-
-			if (hasCycle(edgesMSTCopy, start, next, 0, edgesMST.size() - 1, new ArrayList<>())) return true;
-			System.out.println();
+			for (Edge edge : subGraph) {
+				Vertice vertice = edge.getVertice1();
+				if (!verticeAlreadyGot(vertices, vertice)) vertices.add(vertice);
+				vertice = edge.getVertice2();
+				if (!verticeAlreadyGot(vertices, vertice)) vertices.add(vertice);
+			}
+			if (subGraph.size() + 1 > vertices.size()) {
+				return subGraph.remove(edgeByWeight); // remove it again
+			}
 		}
 		return false;
 	}
 
-	private boolean hasCycle(ArrayList<Edge> edgeMST, Edge start, Edge next, int edgesChecked, int maxEdgesToCheck, ArrayList<Edge> alreadyCheckedEdges) {
-		if (next == null) return false;
+	private boolean isConnected(Edge edgeByWeight) {
 
-		if (start.getVertice1().getName().equals(next.getVertice2().getName()) && alreadyCheckedEdges.size() >= 1
-				|| start.getVertice2().getName().equals(next.getVertice1().getName()) && alreadyCheckedEdges.size() >= 1) {
-			System.out.println(start.getVertice1().getName() + " to " + start.getVertice2().getName() + " (compared to) " + next.getVertice1().getName() + " to " + next.getVertice2().getName());
-			return true;
+		ArrayList<ArrayList<Edge>> subGraphsMathed = new ArrayList<>();
+
+		for (ArrayList<Edge> subGraph : subGraphEdges) {
+			for (Edge edge : subGraph) {
+				if (edge.getVertice1().getName().equals(edgeByWeight.getVertice1().getName())
+						|| edge.getVertice2().getName().equals(edgeByWeight.getVertice1().getName())
+						|| edge.getVertice1().getName().equals(edgeByWeight.getVertice2().getName())
+						|| edge.getVertice2().getName().equals(edgeByWeight.getVertice2().getName())) {
+					subGraphsMathed.add(subGraph);
+					break;
+				}
+			}
 		}
-		if (maxEdgesToCheck != edgesChecked) {
-			alreadyCheckedEdges.add(next);
-			return hasCycle(edgeMST, start, findNextEdge(edgeMST, next, alreadyCheckedEdges), edgesChecked + 1, maxEdgesToCheck, alreadyCheckedEdges);
+
+		if (subGraphsMathed.size() == 2) { // compare
+			subGraphsMathed.get(0).add(edgeByWeight);
+			subGraphsMathed.get(0).addAll(subGraphsMathed.get(1));
+			subGraphEdges.remove(subGraphsMathed.get(1));
+			return true;
+		} else if (subGraphsMathed.size() == 1) {
+			return subGraphsMathed.get(0).add(edgeByWeight);
+		} else {
+			// else not connected
+			ArrayList<Edge> subGraph = new ArrayList<>();
+			subGraph.add(edgeByWeight);
+			return subGraphEdges.add(subGraph);
+		}
+	}
+
+	private boolean verticeAlreadyGot(ArrayList<Vertice> vertices, Vertice vertice) {
+		for (Vertice verticeAlreadyGot : vertices) {
+			if (verticeAlreadyGot.getName().equals(vertice.getName())) return true;
 		}
 		return false;
 	}
@@ -123,9 +151,9 @@ public class Kruskal {
 		return lowestEdge;
 	}
 
-	private void fillEdgesAndVertices(Vertice vertice1, int maxDeep, int deep) {
+	private void fillEdgesAndVertices(Vertice vertice1, int maxDeep, int deep, int locationsCount) {
 
-		if (deep == maxDeep) return;
+		if (deep == maxDeep || vertices.size() == locationsCount) return;
 		for (Map.Entry<Location, Integer> neighbouringEntry : vertice1.getLocationReference().getNeighbouringLocations().entrySet()) {
 			Location location = neighbouringEntry.getKey();
 			int weight = neighbouringEntry.getValue();
@@ -138,7 +166,7 @@ public class Kruskal {
 				vertices.add(vertice2);
 				edges.add(edge);
 			}
-			fillEdgesAndVertices(vertice2, maxDeep, deep + 1);
+			fillEdgesAndVertices(vertice2, maxDeep, deep + 1, locationsCount);
 
 		}
 

@@ -13,7 +13,7 @@ public class Vertice {
 
 	private String name;
 
-	Location locationReference;
+	private Location locationReference;
 
 	public Vertice(Location location, Vertice parentLocation, int expenseToParentLocation) {
 		this.locationReference = location;
