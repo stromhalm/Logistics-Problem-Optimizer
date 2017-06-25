@@ -16,17 +16,28 @@ public class NorthWestCornerOptimizer implements Optimizer {
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
 
+		/*ArrayList<ArrayList<Vertice>> minimalSpanningNetwork = getMinimalSpanningNetwork(transportNetwork.getLocations(), transportNetwork.getStartLocation());
+		for (ArrayList<Vertice> spanningNode : minimalSpanningNetwork) {
+			for (int i = 0; i < spanningNode.size(); i++) {
+				System.out.print(spanningNode.get(i).getName() + ", ");
+			}
+			// is a quite well optimized shortest path
+			System.out.print("\n");
+		}*/
+
+		Kruskal kruskal = new Kruskal(transportNetwork);
+		kruskal.findMST();
+		transportNetwork = kruskal.getLocationsMST();
+
 		ArrayList<ArrayList<Vertice>> minimalSpanningNetwork = getMinimalSpanningNetwork(transportNetwork.getLocations(), transportNetwork.getStartLocation());
 		for (ArrayList<Vertice> spanningNode : minimalSpanningNetwork) {
 			for (int i = 0; i < spanningNode.size(); i++) {
 				System.out.print(spanningNode.get(i).getName() + ", ");
 			}
+			// is a quite well optimized shortest path
 			System.out.print("\n");
 		}
 
-		Kruskal kruskal = new Kruskal(transportNetwork);
-		kruskal.findMST();
-		transportNetwork = kruskal.getLocationsMST();
 		return null;
 	}
 
@@ -56,6 +67,13 @@ public class NorthWestCornerOptimizer implements Optimizer {
 				}
 			}
 		}
+		for (ArrayList<Vertice> spanningNode : spanningNodesOut) {
+			for (Vertice vertice : spanningNode) {
+				System.out.print(vertice.getName() + ", ");
+			}
+			System.out.println();
+		}
+
 
 		if (allVerticesGot(locations, spanningNodes)) {
 			return spanningNodesOut;
@@ -63,7 +81,6 @@ public class NorthWestCornerOptimizer implements Optimizer {
 			System.out.println("Failed to get shortest paths");
 			return null;
 		}
-
 	}
 
 	private void minimize(ArrayList<Vertice> spanningNode, ArrayList<Vertice> vertices, ArrayList<ArrayList<Vertice>> spanningNodesOut) {
