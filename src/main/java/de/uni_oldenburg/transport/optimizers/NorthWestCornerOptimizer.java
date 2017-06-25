@@ -26,7 +26,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 
 		Kruskal kruskal = new Kruskal(transportNetwork);
 		kruskal.findMST();
-		kruskal.getLocationsMST();
+		transportNetwork = kruskal.getLocationsMST();
 		return null;
 	}
 

@@ -2,6 +2,7 @@ package de.uni_oldenburg.transport.optimizers.Graph;
 
 import de.uni_oldenburg.transport.Location;
 import de.uni_oldenburg.transport.TransportNetwork;
+import org.omg.PortableInterceptor.LOCATION_FORWARD;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -15,33 +16,41 @@ public class Kruskal {
 	private ArrayList<Edge> edges;
 
 	private ArrayList<Edge> edgesMST;
+	private ArrayList<Edge> notEdgesMST;
 
 	private ArrayList<ArrayList<Edge>> subGraphEdges;
 
+	private TransportNetwork transportNetwork;
+
 	public Kruskal(TransportNetwork transportNetwork) {
-		Location[] locations = transportNetwork.getLocations();
+		this.transportNetwork = transportNetwork;
 		vertices = new ArrayList<>();
 		edges = new ArrayList<>();
 		highestEdgeWeight = 0;
 		edgesMST = new ArrayList<>();
+		notEdgesMST = new ArrayList<>();
 		subGraphEdges = new ArrayList<>();
 
 		Vertice vertice = new Vertice(transportNetwork.getStartLocation(), null, 0);
 		vertices.add(vertice);
-		fillEdgesAndVertices(vertice, locations.length - 1, 0, locations.length);
+		fillEdgesAndVertices(vertice, transportNetwork.getLocations().length - 1, 0, transportNetwork.getLocations().length);
 
 
 	}
 
-	public Location[] getLocationsMST() {
-		ArrayList<Location> locations = new ArrayList<>();
-		//System.out.println();
-		for (Edge edge : edgesMST) {
-			//System.out.println(edge.getVertice1().getName() + " with " + edge.getWeight() + " to " + edge.getVertice2().getName());
+	public TransportNetwork getLocationsMST() {
+		Location[] locations = new Location[transportNetwork.getLocations().length];
+		for (Edge edge : notEdgesMST) {
+			System.out.println("Removing Edge: " + edge.getVertice1().getName() + " to " + edge.getVertice2().getName() + " with " + edge.getWeight());
+			edge.getVertice1().getLocationReference().getNeighbouringLocations().remove(edge.getVertice2().getLocationReference(), edge.getWeight());
+			edge.getVertice2().getLocationReference().getNeighbouringLocations().remove(edge.getVertice1().getLocationReference(), edge.getWeight());
 		}
-		// TODO implement
 
-		return (Location[]) locations.toArray();
+		for (int i = 0; i < vertices.size(); i++) {
+			locations[i] = vertices.get(i).getLocationReference();
+			System.out.println(locations[i].getName() + " with " + locations[i].getNeighbouringLocations().size() + " neighbours");
+		}
+		return new TransportNetwork(locations);
 	}
 
 	public void findMST() {
@@ -50,9 +59,8 @@ public class Kruskal {
 			int lowestEdge = findLowestEdge();
 			ArrayList<Edge> edgesByWeight = getAllEdgesByWeight(lowestEdge);
 			for (Edge edgeByWeight : edgesByWeight) {
-				if (!addingProducesCycle(edgeByWeight)) {
-					edgesMST.add(edgeByWeight);
-					System.out.println(edgeByWeight.getVertice1().getName() + " with " + edgeByWeight.getWeight() + " to " + edgeByWeight.getVertice2().getName());
+				if (addingProducesCycle(edgeByWeight)) {
+					notEdgesMST.add(edgeByWeight);
 				}
 			}
 			removeEdges(edgesByWeight);
@@ -117,20 +125,6 @@ public class Kruskal {
 		return false;
 	}
 
-	private Edge findNextEdge(ArrayList<Edge> edgeMST, Edge next, ArrayList<Edge> alreadyCheckedEdges) {
-		for (Edge edge : edgeMST) {
-			if (!alreadyCheckedEdges.contains(edge)) {
-				if (edge.getVertice1().getName().equals(next.getVertice1().getName())
-						|| edge.getVertice2().getName().equals(next.getVertice1().getName())
-						|| edge.getVertice1().getName().equals(next.getVertice2().getName())
-						|| edge.getVertice2().getName().equals(next.getVertice2().getName())) {
-					return edge;
-				}
-			}
-		}
-		return null;
-	}
-
 	private void removeEdges(ArrayList<Edge> edgesByWeight) {
 		edges.removeAll(edgesByWeight);
 	}
@@ -183,7 +177,6 @@ public class Kruskal {
 				return false;
 			}
 		}
-		// TODO take weight into acc
 		return true;
 	}
 
