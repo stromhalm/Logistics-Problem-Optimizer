@@ -2,44 +2,27 @@ package de.uni_oldenburg.transport.optimizers.Graph;
 
 import de.uni_oldenburg.transport.Location;
 
-import java.util.ArrayList;
+/**
+ * A simple implementation for a graph vertex. The vertex provides a reference to {@link Location}s. It is easier to do graph operations with the standard graph layout containing vertices.
+ */
+public class Vertex {
 
-public class Vertice {
-
-	private ArrayList<Vertice> childNodes;
-
-	private Vertice parentLocation;
+	private Vertex parentLocation;
 	private int expenseToParentLocation;
-
-	private String name;
 
 	private Location locationReference;
 
-	public Vertice(Location location, Vertice parentLocation, int expenseToParentLocation) {
+	public Vertex(Location location, Vertex parentLocation, int expenseToParentLocation) {
 		this.locationReference = location;
 		this.parentLocation = parentLocation;
 		this.expenseToParentLocation = expenseToParentLocation;
-		this.childNodes = new ArrayList<>();
-		this.name = location.getName();
 	}
 
-	public boolean addChild(Vertice child) {
-		return this.childNodes.add(child);
-	}
-
-	public ArrayList<Vertice> getChildNodes() {
-		return childNodes;
-	}
-
-	public void setChildNodes(ArrayList<Vertice> childNodes) {
-		this.childNodes = childNodes;
-	}
-
-	public Vertice getParentLocation() {
+	public Vertex getParentLocation() {
 		return parentLocation;
 	}
 
-	public void setParentLocation(Vertice parentLocation) {
+	public void setParentLocation(Vertex parentLocation) {
 		this.parentLocation = parentLocation;
 	}
 
@@ -60,10 +43,6 @@ public class Vertice {
 	}
 
 	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+		return locationReference.getName();
 	}
 }

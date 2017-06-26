@@ -48,6 +48,7 @@ public class AppStarter {
 			transportNetwork = deliveryCSVLoader.getTransportNetworkWithDeliveries();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Error when reading the input files");
 			System.exit(1);
 		}

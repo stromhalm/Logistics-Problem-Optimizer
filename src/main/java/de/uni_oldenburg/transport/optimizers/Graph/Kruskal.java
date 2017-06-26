@@ -6,11 +6,14 @@ import de.uni_oldenburg.transport.TransportNetwork;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * A simple implementation of the Kruskal algorithm to get a minimal spanning tree (MST) of an undirected weighted graph. The implementation can handle not connected graphs, too.
+ */
 public class Kruskal {
 
 	private int highestEdgeWeight;
 
-	private ArrayList<Vertice> vertices;
+	private ArrayList<Vertex> vertices;
 	private ArrayList<Edge> edges;
 
 	private ArrayList<Edge> notEdgesMST;
@@ -24,16 +27,16 @@ public class Kruskal {
 		notEdgesMST = new ArrayList<>();
 		subGraphEdges = new ArrayList<>();
 
-		Vertice vertice = new Vertice(transportNetwork.getStartLocation(), null, 0);
-		vertices.add(vertice);
-		fillEdgesAndVertices(vertice, transportNetwork.getLocations().length - 1, 0, transportNetwork.getLocations().length);
+		Vertex vertex = new Vertex(transportNetwork.getStartLocation(), null, 0);
+		vertices.add(vertex);
+		fillEdgesAndVertices(vertex, transportNetwork.getLocations().length - 1, 0, transportNetwork.getLocations().length);
 	}
 
 	public TransportNetwork getLocationsMST() {
 		for (Edge edge : notEdgesMST) {
-//			System.out.println("Removing Edge: " + edge.getVertice1().getName() + " to " + edge.getVertice2().getName() + " with " + edge.getWeight());
-			edge.getVertice1().getLocationReference().getNeighbouringLocations().remove(edge.getVertice2().getLocationReference(), edge.getWeight());
-			edge.getVertice2().getLocationReference().getNeighbouringLocations().remove(edge.getVertice1().getLocationReference(), edge.getWeight());
+//			System.out.println("Removing Edge: " + edge.getVertex1().getName() + " to " + edge.getVertex2().getName() + " with " + edge.getWeight());
+			edge.getVertex1().getLocationReference().getNeighbouringLocations().remove(edge.getVertex2().getLocationReference(), edge.getWeight());
+			edge.getVertex2().getLocationReference().getNeighbouringLocations().remove(edge.getVertex1().getLocationReference(), edge.getWeight());
 		}
 
 		Location[] locations = new Location[vertices.size()];
@@ -63,13 +66,13 @@ public class Kruskal {
 		isConnected(edgeByWeight);
 
 		for (ArrayList<Edge> subGraph : subGraphEdges) {
-			ArrayList<Vertice> vertices = new ArrayList<>();
+			ArrayList<Vertex> vertices = new ArrayList<>();
 
 			for (Edge edge : subGraph) {
-				Vertice vertice = edge.getVertice1();
-				if (!verticeAlreadyGot(vertices, vertice)) vertices.add(vertice);
-				vertice = edge.getVertice2();
-				if (!verticeAlreadyGot(vertices, vertice)) vertices.add(vertice);
+				Vertex vertex = edge.getVertex1();
+				if (!vertexAlreadyGot(vertices, vertex)) vertices.add(vertex);
+				vertex = edge.getVertex2();
+				if (!vertexAlreadyGot(vertices, vertex)) vertices.add(vertex);
 			}
 			if (subGraph.size() + 1 > vertices.size()) {
 				return subGraph.remove(edgeByWeight); // remove it again
@@ -84,10 +87,10 @@ public class Kruskal {
 
 		for (ArrayList<Edge> subGraph : subGraphEdges) {
 			for (Edge edge : subGraph) {
-				if (edge.getVertice1().getName().equals(edgeByWeight.getVertice1().getName())
-						|| edge.getVertice2().getName().equals(edgeByWeight.getVertice1().getName())
-						|| edge.getVertice1().getName().equals(edgeByWeight.getVertice2().getName())
-						|| edge.getVertice2().getName().equals(edgeByWeight.getVertice2().getName())) {
+				if (edge.getVertex1().getName().equals(edgeByWeight.getVertex1().getName())
+						|| edge.getVertex2().getName().equals(edgeByWeight.getVertex1().getName())
+						|| edge.getVertex1().getName().equals(edgeByWeight.getVertex2().getName())
+						|| edge.getVertex2().getName().equals(edgeByWeight.getVertex2().getName())) {
 					subGraphsMathed.add(subGraph);
 					break;
 				}
@@ -109,9 +112,9 @@ public class Kruskal {
 		}
 	}
 
-	private boolean verticeAlreadyGot(ArrayList<Vertice> vertices, Vertice vertice) {
-		for (Vertice verticeAlreadyGot : vertices) {
-			if (verticeAlreadyGot.getName().equals(vertice.getName())) return true;
+	private boolean vertexAlreadyGot(ArrayList<Vertex> vertices, Vertex vertex) {
+		for (Vertex vertexAlreadyGot : vertices) {
+			if (vertexAlreadyGot.getName().equals(vertex.getName())) return true;
 		}
 		return false;
 	}
@@ -136,26 +139,26 @@ public class Kruskal {
 		return lowestEdge;
 	}
 
-	private void fillEdgesAndVertices(Vertice vertice1, int maxDeep, int deep, int locationsCount) {
+	private void fillEdgesAndVertices(Vertex vertex1, int maxDeep, int deep, int locationsCount) {
 
 		if (deep == maxDeep || vertices.size() == locationsCount) return;
-		for (Map.Entry<Location, Integer> neighbouringEntry : vertice1.getLocationReference().getNeighbouringLocations().entrySet()) {
+		for (Map.Entry<Location, Integer> neighbouringEntry : vertex1.getLocationReference().getNeighbouringLocations().entrySet()) {
 			Location location = neighbouringEntry.getKey();
 			int weight = neighbouringEntry.getValue();
 
-			Vertice vertice2 = new Vertice(location, null, 0);
+			Vertex vertex2 = new Vertex(location, null, 0);
 
-			Edge edge = new Edge(vertice1, vertice2, weight);
+			Edge edge = new Edge(vertex1, vertex2, weight);
 			if (edgeDoesNotExistYet(edge)) {
 				if (weight > highestEdgeWeight) highestEdgeWeight = weight;
 				boolean alreadyGot = false;
-				for (Vertice vertice : vertices) {
-					if (vertice.getName().equals(vertice2.getName())) alreadyGot = true;
+				for (Vertex vertex : vertices) {
+					if (vertex.getName().equals(vertex2.getName())) alreadyGot = true;
 				}
-				if (!alreadyGot) vertices.add(vertice2);
+				if (!alreadyGot) vertices.add(vertex2);
 				edges.add(edge);
 			}
-			fillEdgesAndVertices(vertice2, maxDeep, deep + 1, locationsCount);
+			fillEdgesAndVertices(vertex2, maxDeep, deep + 1, locationsCount);
 
 		}
 
@@ -164,11 +167,11 @@ public class Kruskal {
 
 	private boolean edgeDoesNotExistYet(Edge edge) {
 		for (Edge egeAlreadPut : edges) {
-			if (egeAlreadPut.getVertice1().getName().equals(edge.getVertice1().getName())
-					&& egeAlreadPut.getVertice2().getName().equals(edge.getVertice2().getName())) {
+			if (egeAlreadPut.getVertex1().getName().equals(edge.getVertex1().getName())
+					&& egeAlreadPut.getVertex2().getName().equals(edge.getVertex2().getName())) {
 				return false;
-			} else if (egeAlreadPut.getVertice1().getName().equals(edge.getVertice2().getName())
-					&& egeAlreadPut.getVertice2().getName().equals(edge.getVertice1().getName())) {
+			} else if (egeAlreadPut.getVertex1().getName().equals(edge.getVertex2().getName())
+					&& egeAlreadPut.getVertex2().getName().equals(edge.getVertex1().getName())) {
 				return false;
 			}
 		}
