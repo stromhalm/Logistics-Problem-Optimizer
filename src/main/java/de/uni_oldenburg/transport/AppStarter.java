@@ -25,7 +25,7 @@ public class AppStarter {
 		if (args.length > 0) {
 			optimizerId = Integer.parseInt(args[0]);
 		} else {
-			System.out.println("No optimizer Id passed. Using default .");
+			System.out.println("No optimizer Id passed. Using default optimizer.");
 			optimizerId = 0;
 		}
 
