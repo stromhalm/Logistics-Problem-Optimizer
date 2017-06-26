@@ -1,6 +1,9 @@
 package de.uni_oldenburg.transport;
 
+import de.uni_oldenburg.transport.optimizers.Graph.Graph;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * The TransportNetwork represents the map
@@ -11,6 +14,8 @@ public class TransportNetwork {
 	 * The map is just a list of locations
 	 */
 	private final Location[] network;
+
+	private Map.Entry<ArrayList<Location>, Integer>[][] shortestPaths;
 
 	public TransportNetwork(Location[] network) {
 		this.network = network;
@@ -59,5 +64,29 @@ public class TransportNetwork {
 
 	public int getNumberOfLocations() {
 		return network.length;
+	}
+
+	/**
+	 * Computes the shortest path using Dijkstra.
+	 */
+	private void computeShortestPaths() {
+		shortestPaths = Graph.computeAdjazenMatrix(network);
+	}
+
+	/**
+	 * Gets the shortest path from a start location to a destination the following list order: i:0 (start), i:1 (startNeighbour), ..., i:n (destination);
+	 *
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	private ArrayList<Location> getShortestPath(Location from, Location to) {
+		for (int i = 0; i < shortestPaths.length; i++) {
+			for (int j = 0; j < shortestPaths[i].length; j++) {
+				if (shortestPaths[i][j].getKey().get(0).getName().equals(from.getName()) && shortestPaths[i][j].getKey().get(0).getName().equals(from.getName()))
+					return shortestPaths[i][j].getKey();
+			}
+		}
+		return null;
 	}
 }

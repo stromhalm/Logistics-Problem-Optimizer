@@ -2,13 +2,67 @@ package de.uni_oldenburg.transport.optimizers.Graph;
 
 import de.uni_oldenburg.transport.Location;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Provides static method and functions to get spanning networks (aka spanning graphs).
  */
 public class Graph {
+
+	public static Map.Entry<ArrayList<Location>, Integer>[][] computeAdjazenMatrix(Location[] locations) {
+		Map.Entry<ArrayList<Location>, Integer>[][] adjazenMatrix = new Map.Entry[locations.length][locations.length];
+		for (int i = 0; i < locations.length; i++) {
+			for (int j = 0; j < locations.length; j++) {
+				Location from = locations[i];
+				Location to = locations[j];
+				HashMap<ArrayList<Location>, Integer> entry = new HashMap<ArrayList<Location>, Integer>();
+				adjazenMatrix[i][j] = doDijkstra(from, to, new ArrayList<>(), entry);
+			}
+		}
+		return adjazenMatrix;
+	}
+
+	/**
+	 * Compute Dijkstra recursively;
+	 *
+	 * @param from
+	 * @param to
+	 * @param locations
+	 * @return
+	 */
+	private static Map.Entry<ArrayList<Location>, Integer> doDijkstra(Location from, Location to, ArrayList<Location> alreadyVisited, HashMap<ArrayList<Location>, Integer> locations) {
+		if (alreadyVisited(alreadyVisited, from)) return null;
+		for (Map.Entry<Location, Integer> neighbouringLocation : from.getNeighbouringLocations().entrySet()) {
+			Location neighbour = neighbouringLocation.getKey();
+			int expense = neighbouringLocation.getValue();
+			if (neighbour.getName().equals(to.getName())) {
+				ArrayList<Location> locationArrayList = new ArrayList<>();
+				locationArrayList.add(to);
+				locationArrayList.add(from);
+				return new AbstractMap.SimpleEntry<ArrayList<Location>, Integer>(locationArrayList, expense);
+			} else {
+				alreadyVisited.add(neighbour);
+				Map.Entry<ArrayList<Location>, Integer> path;
+				if ((path = doDijkstra(neighbour, to, new ArrayList<>(alreadyVisited), locations)) != null) {
+					path.getKey().add(from);
+					path.setValue(path.getValue() + expense);
+				}
+				return path;
+			}
+		}
+
+		int leastExpense = Integer.MAX_VALUE;
+		Map.Entry<ArrayList<Location>, Integer> shortestPath = null;
+		for (Map.Entry<ArrayList<Location>, Integer> entry : locations.entrySet()) {
+			if (entry.getValue() < leastExpense) shortestPath = entry;
+		}
+
+		return shortestPath;
+	}
+
 
 	/**
 	 * Get the minimized spanning network. Have not to be the minimum spanning tree as it allows loops if it improves the solution.
@@ -198,6 +252,22 @@ public class Graph {
 	private static boolean alreadyVisited(Vertex location, ArrayList<Vertex> alreadyVisitedList) {
 		for (Vertex vertex : alreadyVisitedList) {
 			if (location.getName().equals(vertex.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks whether a location has already been visited.
+	 *
+	 * @param location
+	 * @param alreadyVisitedList
+	 * @return
+	 */
+	private static boolean alreadyVisited(ArrayList<Location> alreadyVisitedList, Location location) {
+		for (Location visitedLocation : alreadyVisitedList) {
+			if (location.getName().equals(visitedLocation.getName())) {
 				return true;
 			}
 		}
