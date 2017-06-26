@@ -20,7 +20,9 @@ public class Graph {
 				Location to = locations[j];
 				HashMap<ArrayList<Location>, Integer> entry = new HashMap<ArrayList<Location>, Integer>();
 				adjazenMatrix[i][j] = doDijkstra(from, to, new ArrayList<>(), entry);
+				System.out.print(adjazenMatrix[i][j].getValue() + " ");
 			}
+			System.out.println();
 		}
 		return adjazenMatrix;
 	}
@@ -49,18 +51,11 @@ public class Graph {
 				if ((path = doDijkstra(neighbour, to, new ArrayList<>(alreadyVisited), locations)) != null) {
 					path.getKey().add(from);
 					path.setValue(path.getValue() + expense);
+					return path;
 				}
-				return path;
 			}
 		}
-
-		int leastExpense = Integer.MAX_VALUE;
-		Map.Entry<ArrayList<Location>, Integer> shortestPath = null;
-		for (Map.Entry<ArrayList<Location>, Integer> entry : locations.entrySet()) {
-			if (entry.getValue() < leastExpense) shortestPath = entry;
-		}
-
-		return shortestPath;
+		return new AbstractMap.SimpleEntry<ArrayList<Location>, Integer>(new ArrayList<>(), 0);
 	}
 
 

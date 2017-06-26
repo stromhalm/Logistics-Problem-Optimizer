@@ -15,10 +15,14 @@ public class TransportNetwork {
 	 */
 	private final Location[] network;
 
+	/**
+	 * {@link Map.Entry} matrix with shortest path as key and the overall expense of the path as value.
+	 */
 	private Map.Entry<ArrayList<Location>, Integer>[][] shortestPaths;
 
 	public TransportNetwork(Location[] network) {
 		this.network = network;
+		this.computeShortestPaths();
 	}
 
 	/**
