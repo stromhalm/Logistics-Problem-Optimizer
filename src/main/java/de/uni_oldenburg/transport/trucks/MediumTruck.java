@@ -13,5 +13,4 @@ public class MediumTruck extends AbstractTruck {
 	public MediumTruck() {
 		super(CAPACITY, 25);
 	}
-
 }

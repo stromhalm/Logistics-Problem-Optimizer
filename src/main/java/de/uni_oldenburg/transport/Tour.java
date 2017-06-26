@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Tour {
 
 	private final AbstractTruck truck;
-	private ArrayList<TourDestination> destinations;
+	private ArrayList<TourDestination> tourDestinations;
 	private int consumption;
 	private int kilometersToDrive;
 
@@ -23,7 +23,7 @@ public class Tour {
 	 */
 	public Tour(final AbstractTruck truck, final Location startLocation) {
 		this.truck = truck;
-		this.destinations = new ArrayList<>();
+		this.tourDestinations = new ArrayList<>();
 		consumption = 0;
 		kilometersToDrive = 0;
 		this.startLocation = startLocation;
@@ -45,7 +45,7 @@ public class Tour {
 	 * @param expense         The expense to the location.
 	 */
 	public void addDestination(TourDestination tourDestination, int expense) {
-		destinations.add(tourDestination);
+		tourDestinations.add(tourDestination);
 		kilometersToDrive += expense;
 		addConsumption(expense);
 	}
@@ -60,7 +60,7 @@ public class Tour {
 	public boolean removeTourDestination(TourDestination tourDestination, int expense) {
 		subtractConsumption(expense);
 		kilometersToDrive -= expense;
-		return destinations.remove(tourDestination);
+		return tourDestinations.remove(tourDestination);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class Tour {
 	 * @return This tours destinations
 	 */
 	public TourDestination[] getTourDestinations() {
-		return destinations.toArray(new TourDestination[0]);
+		return tourDestinations.toArray(new TourDestination[0]);
 	}
 
 	/**
@@ -81,14 +81,14 @@ public class Tour {
 
 		// Verify truck load
 		int load = 0;
-		for (TourDestination tourDestination : destinations) {
+		for (TourDestination tourDestination : tourDestinations) {
 			load += tourDestination.getUnload();
 		}
 		return (load <= truck.getCapacity());
 	}
 
 	public void addConsumption(int expense) {
-		this.consumption += truck.getConsumption() * expense/100;
+		this.consumption += (truck.getConsumption() * expense) / 100;
 	}
 
 	public void subtractConsumption(int expense) {
@@ -105,5 +105,16 @@ public class Tour {
 
 	public int getKilometersToDrive() {
 		return kilometersToDrive;
+	}
+
+	@Override
+	public String toString() {
+		String string = "";
+		string += "Drive " + kilometersToDrive + "km with a " + truck.toString() + " consuming " + consumption + " from " + startLocation.getName() + " over: \n";
+
+		for (TourDestination tourDestination : tourDestinations) {
+			string += tourDestination.toString() + "\n";
+		}
+		return string;
 	}
 }

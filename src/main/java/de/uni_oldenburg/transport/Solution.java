@@ -65,7 +65,10 @@ public class Solution {
 		}
 		for (Location location : transportNetwork.getLocations()) {
 			if (deliveries.containsKey(location) && location.getAmount() != 0)
-				if (location.getAmount() != deliveries.get(location)) return false;
+				if (location.getAmount() != deliveries.get(location)) {
+					System.out.println(location.getName() + " needs " + location.getAmount() + " but gets " + deliveries.get(location) + " delivered."); // error message servicing
+					return false;
+				}
 		}
 		return true;
 	}
@@ -75,15 +78,13 @@ public class Solution {
 	 *
 	 * @return The output as a String
 	 */
+	@Override
 	public String toString() {
 		String output = "";
 		int consumption = 0;
 		for (Tour tour : truckTours) {
+			output += tour.toString();
 			consumption += tour.getConsumption();
-			output += "\nTruck of type " + tour.getTruck().getClass().getSimpleName() + " consumed " + tour.getConsumption() + " while driving from " + tour.getStartLocation().getName() + "...\n";
-			for (TourDestination tourDestination : tour.getTourDestinations()) {
-				output += "    to " + tourDestination.getDestination().getName() + " and deliver " + tourDestination.getUnload() + "\n";
-			}
 		}
 		output += "Total consumption: " + consumption;
 		return output;

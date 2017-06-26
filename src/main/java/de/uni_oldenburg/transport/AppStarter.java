@@ -56,25 +56,23 @@ public class AppStarter {
 			case 0:
 				optimizer = new GeneticOptimizer();
 				break;
-
 			case 1:
 				optimizer = new NearestNeighborOptimizer();
 				break;
-
 			case 2:
 				optimizer = new BruteForceOptimizer();
 				break;
 			case 3:
-				optimizer = new NorthWestCornerOptimizer();
+				optimizer = new NorthWestCornerKruskalOptimizer();
 				break;
 			case 4:
-				optimizer = new SweepLineOptimizer();
+				optimizer = new NorthWestCornerOwnOptimizer();
 				break;
 			case 5:
 				optimizer = new SavingsOptimizer();
 				break;
 			default:
-				optimizer = new GeneticOptimizer();
+				optimizer = null;
 				System.out.println("Optimizer not found");
 				System.exit(1);
 		}

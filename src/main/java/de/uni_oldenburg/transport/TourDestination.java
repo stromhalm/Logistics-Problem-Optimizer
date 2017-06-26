@@ -49,4 +49,9 @@ public class TourDestination {
 		this.destination = destination;
 	}
 
+	@Override
+	public String toString() {
+		return "    Tour destination to " + destination.getName() + " delivering " + String.valueOf(unload);
+	}
+
 }

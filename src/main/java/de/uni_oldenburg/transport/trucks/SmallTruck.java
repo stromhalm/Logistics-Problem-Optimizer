@@ -13,5 +13,4 @@ public class SmallTruck extends AbstractTruck {
 	public SmallTruck() {
 		super(CAPACITY, 15);
 	}
-
 }
