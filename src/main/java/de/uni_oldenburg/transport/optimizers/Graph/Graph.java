@@ -7,126 +7,162 @@ import java.util.Map;
 
 public class Graph {
 
-	public static ArrayList<ArrayList<Vertice>> getMinimalSpanningNetwork(Location[] locations, Location startLocation) {
-		ArrayList<ArrayList<Vertice>> spanningNodes = new ArrayList<>();
+	/**
+	 * Get the minimized spanning network. Must not be the minimum spanning tree as it allows loops if it improves the solution.
+	 *
+	 * @param locations
+	 * @param startLocation
+	 * @return minimized spanning network.
+	 */
+	public static ArrayList<ArrayList<Vertex>> getSpanningNetwork(Location[] locations, Location startLocation) {
+		ArrayList<ArrayList<Vertex>> spanningTrees = new ArrayList<>();
 
+		/*
+		 * Get all possible routes.
+		 */
+		for (int depth = 0; depth < locations.length; depth++) {
+			Vertex root = new Vertex(startLocation, null, 0);
 
-		for (int deepth = 0; deepth < locations.length; deepth++) {
-			Vertice root = new Vertice(startLocation, null, 0);
-
-			ArrayList<ArrayList<Vertice>> spanningNodesTmp = new ArrayList<>();
-			ArrayList<Vertice> spanningNodeTmp = new ArrayList<>();
-			findNewSpanningNode(spanningNodesTmp, spanningNodeTmp, new ArrayList<Vertice>(), root, "Hamburg", deepth);
-			for (ArrayList<Vertice> spanningNode : spanningNodesTmp) {
-				if (spanningNodeIsCheaperOrNew(spanningNode, spanningNodes)) {
-					spanningNodes.add(spanningNode);
+			ArrayList<ArrayList<Vertex>> spanningTreesTmp = new ArrayList<>();
+			ArrayList<Vertex> spanningTreeTmp = new ArrayList<>();
+			findNewSpanningTree(spanningTreesTmp, spanningTreeTmp, new ArrayList<Vertex>(), root, startLocation.getName(), depth);
+			for (ArrayList<Vertex> spanningTree : spanningTreesTmp) {
+				if (spanningTreeIsCheaperOrNew(spanningTree, spanningTrees, startLocation.getName())) {
+					spanningTrees.add(spanningTree);
 				}
 			}
 		}
 
-		ArrayList<ArrayList<Vertice>> spanningNodesOut = new ArrayList<>(spanningNodes);
-		for (int i = 0; i < spanningNodes.size(); i++) {
-			ArrayList<Vertice> spanningNode = spanningNodes.get(i);
-			for (int y = 0; y < spanningNodes.size(); y++) {
+		/*
+		 * Minimize the found routes by finding overlapping routes, etc.
+		 */
+		ArrayList<ArrayList<Vertex>> spanningTreesOut = new ArrayList<>(spanningTrees);
+		for (int i = 0; i < spanningTrees.size(); i++) {
+			ArrayList<Vertex> spanningTree = spanningTrees.get(i);
+			for (int y = 0; y < spanningTrees.size(); y++) {
 				if (y != i) {
-					minimize(spanningNode, spanningNodes.get(y), spanningNodesOut);
+					minimize(spanningTree, spanningTrees.get(y), spanningTreesOut);
 				}
 			}
 		}
 
-		if (allVerticesGot(locations, spanningNodes)) {
-			return spanningNodesOut;
-		} else {
-			for (ArrayList<Vertice> spanningNode : spanningNodesOut) {
-				for (int i = 0; i < spanningNode.size(); i++) {
-					System.out.print(spanningNode.get(i).getName() + ", ");
-				}
-				// is a quite well optimized shortest path
-				System.out.print("\n");
-			}
-			System.out.println("Failed to get shortest paths");
-			return null;
+		if (allVerticesGot(locations, spanningTrees)) {
+			return spanningTreesOut;
 		}
+		return null;
 	}
 
-	public static void minimize(ArrayList<Vertice> spanningNode, ArrayList<Vertice> vertices, ArrayList<ArrayList<Vertice>> spanningNodesOut) {
+	/**
+	 * Minimizes a given set of routes.
+	 *
+	 * @param spanningTree
+	 * @param vertices
+	 * @param spanningTreesOut
+	 */
+	private static void minimize(ArrayList<Vertex> spanningTree, ArrayList<Vertex> vertices, ArrayList<ArrayList<Vertex>> spanningTreesOut) {
 		boolean replacable = true;
 
-		int min = Math.min(spanningNode.size(), vertices.size());
+		int min = Math.min(spanningTree.size(), vertices.size());
 		for (int i = 0; i < min; i++) {
-			if (!spanningNode.get(i).getName().equals(vertices.get(i).getName())) {
+			if (!spanningTree.get(i).getName().equals(vertices.get(i).getName())) {
 				replacable = false;
 			}
 		}
 
-		if (replacable && min == spanningNode.size()) {
-			spanningNodesOut.remove(spanningNode);
+		if (replacable && min == spanningTree.size()) {
+			spanningTreesOut.remove(spanningTree);
 		} else if (replacable) {
-			spanningNodesOut.remove(vertices);
+			spanningTreesOut.remove(vertices);
 		}
 	}
 
-	public static void findNewSpanningNode(ArrayList<ArrayList<Vertice>> spanningNodesTmp, ArrayList<Vertice> spanningNode, ArrayList<Vertice> alreadyVisitedList, Vertice startLocation, String hamburg, int deepth) {
+	/**
+	 * Finds new spanning trees recursively.
+	 *
+	 * @param spanningTreesTmp
+	 * @param spanningTree
+	 * @param alreadyVisitedList
+	 * @param startLocation
+	 * @param startLocationName
+	 * @param depth
+	 */
+	private static void findNewSpanningTree(ArrayList<ArrayList<Vertex>> spanningTreesTmp, ArrayList<Vertex> spanningTree, ArrayList<Vertex> alreadyVisitedList, Vertex startLocation, String startLocationName, int depth) {
 
-		spanningNode.add(startLocation);
+		spanningTree.add(startLocation);
 		alreadyVisitedList.add(startLocation);
-		if (deepth != 0) {
+		if (depth != 0) {
 			for (Map.Entry<Location, Integer> neighbouringLocation : startLocation.getLocationReference().getNeighbouringLocations().entrySet()) {
-				Vertice location = new Vertice(neighbouringLocation.getKey(), startLocation, neighbouringLocation.getValue());
+				Vertex location = new Vertex(neighbouringLocation.getKey(), startLocation, neighbouringLocation.getValue());
 				if (!alreadyVisited(location, alreadyVisitedList)) {
 
-					if (location.getName().equals(hamburg)) {
+					if (location.getName().equals(startLocationName)) {
 						return;
 					}
-					startLocation.addChild(location);
-					int weight = neighbouringLocation.getValue();
-					location.setExpenseToParentLocation(weight);
 
-					findNewSpanningNode(spanningNodesTmp, new ArrayList<Vertice>(spanningNode) /*Create a copy*/, new ArrayList<>(alreadyVisitedList), location, hamburg, deepth - 1);
+					location.setExpenseToParentLocation(neighbouringLocation.getValue());
+
+					findNewSpanningTree(spanningTreesTmp, new ArrayList<Vertex>(spanningTree) /*Create a copy*/, new ArrayList<>(alreadyVisitedList), location, startLocationName, depth - 1);
 				} else {
 					// cycle
-					//spanningNodesTmp.add(spanningNode); // TODO imlement cycle detection?!
+					//spanningTreesTmp.add(spanningTree); // TODO imlement cycle detection?!
 				}
 			}
 		} else {
 			// end is reached
-			spanningNodesTmp.add(spanningNode);
+			spanningTreesTmp.add(spanningTree);
 
 		}
 	}
 
-	public static boolean spanningNodeIsCheaperOrNew(ArrayList<Vertice> spanningNode, ArrayList<ArrayList<Vertice>> spanningNodes) {
+	/**
+	 * Checks whether a new tree is new or cheaper than one already found.
+	 *
+	 * @param spanningTree
+	 * @param spanningTrees
+	 * @param startLocationName
+	 * @return
+	 */
+	private static boolean spanningTreeIsCheaperOrNew(ArrayList<Vertex> spanningTree, ArrayList<ArrayList<Vertex>> spanningTrees, String startLocationName) {
 
 		boolean matchFound = false;
-		for (ArrayList<Vertice> spanningNodeAlreadyGot : spanningNodes) {
+		for (ArrayList<Vertex> spanningTreeAlreadyGot : spanningTrees) {
 			int oldWeigth = 0;
 			int newWeigth = 0;
 
-			if (spanningNode.get(spanningNode.size() - 1).getName().equals(spanningNodeAlreadyGot.get(spanningNodeAlreadyGot.size() - 1).getName())) {
+			if (spanningTree.get(spanningTree.size() - 1).getName().equals(spanningTreeAlreadyGot.get(spanningTreeAlreadyGot.size() - 1).getName())) {
 				matchFound = true;
-				// because all nodes start from the original start location the end specifies the node
-				int comparedMinimum = (Math.min(spanningNode.size(), spanningNodeAlreadyGot.size()) - 1);
+				// because all Trees start from the original start location the end specifies the Tree
+				int comparedMinimum = (Math.min(spanningTree.size(), spanningTreeAlreadyGot.size()) - 1);
 				for (int i = comparedMinimum; i > 0; i--) { // compare which one is cheaper
-					newWeigth += spanningNode.get(spanningNode.size() - i).getExpenseToParentLocation();
-					oldWeigth += spanningNodeAlreadyGot.get(spanningNodeAlreadyGot.size() - i).getExpenseToParentLocation();
+					newWeigth += spanningTree.get(spanningTree.size() - i).getExpenseToParentLocation();
+					oldWeigth += spanningTreeAlreadyGot.get(spanningTreeAlreadyGot.size() - i).getExpenseToParentLocation();
 				}
-				if (spanningNode.get(spanningNode.size() - comparedMinimum).getName().equals("Hamburg")
-						&& spanningNodeAlreadyGot.get(spanningNodeAlreadyGot.size() - comparedMinimum).getName().equals("Hamburg")) { // only compare paths that are of same length // TODO find a better solution to switch paths and replace parts of them
+				if (spanningTree.get(spanningTree.size() - comparedMinimum).getName().equals(startLocationName)
+						&& spanningTreeAlreadyGot.get(spanningTreeAlreadyGot.size() - comparedMinimum).getName().equals(startLocationName)) { // only compare paths that are of same length // TODO find a better solution to switch paths and replace parts of them
 					if (oldWeigth > newWeigth) {
-						spanningNodes.remove(spanningNodeAlreadyGot); // TODO do not delete but adjust the path
+						spanningTrees.remove(spanningTreeAlreadyGot); // TODO do not delete but adjust the path
 						return true;
 					}
 				}
 
 			}
+
 		}
 		return !matchFound;
 	}
 
-	public static boolean allVerticesGot(Location[] locations, ArrayList<ArrayList<Vertice>> spanningNodes) {
+
+	/**
+	 * Checks whether all vertices are delivered or reached by the routes found.
+	 *
+	 * @param locations
+	 * @param spanningTrees
+	 * @return
+	 */
+	private static boolean allVerticesGot(Location[] locations, ArrayList<ArrayList<Vertex>> spanningTrees) {
 		boolean[] locationsGot = new boolean[locations.length];
-		for (ArrayList<Vertice> nodes : spanningNodes) {
-			for (Vertice location : nodes) {
+		for (ArrayList<Vertex> Trees : spanningTrees) {
+			for (Vertex location : Trees) {
 				for (int i = 0; i < locations.length; i++) {
 					if (locations[i].getName().equals(location.getName())) {
 						locationsGot[i] = true;
@@ -149,9 +185,16 @@ public class Graph {
 		return false;
 	}
 
-	public static boolean alreadyVisited(Vertice location, ArrayList<Vertice> alreadyVisitedList) {
-		for (Vertice vertice : alreadyVisitedList) {
-			if (location.getName().equals(vertice.getName())) {
+	/**
+	 * Checks whether a location has already been visited and checked by a route of vertices.
+	 *
+	 * @param location
+	 * @param alreadyVisitedList
+	 * @return
+	 */
+	private static boolean alreadyVisited(Vertex location, ArrayList<Vertex> alreadyVisitedList) {
+		for (Vertex vertex : alreadyVisitedList) {
+			if (location.getName().equals(vertex.getName())) {
 				return true;
 			}
 		}

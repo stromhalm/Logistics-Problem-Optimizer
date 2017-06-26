@@ -1,7 +1,7 @@
 package de.uni_oldenburg.transport.optimizers;
 
 import de.uni_oldenburg.transport.*;
-import de.uni_oldenburg.transport.optimizers.Graph.Vertice;
+import de.uni_oldenburg.transport.optimizers.Graph.Vertex;
 import de.uni_oldenburg.transport.trucks.AbstractTruck;
 import de.uni_oldenburg.transport.trucks.LargeTruck;
 import de.uni_oldenburg.transport.trucks.MediumTruck;
@@ -17,19 +17,19 @@ import java.util.ArrayList;
  */
 public abstract class NorthWestCornerOptimizer implements Optimizer {
 
-	protected ArrayList<ArrayList<Vertice>> minimalSpanningNetwork;
+	protected ArrayList<ArrayList<Vertex>> spanningNetwork;
 
 	@Override
 	public abstract Solution optimizeTransportNetwork(TransportNetwork transportNetwork);
 
 	public ArrayList<Tour> doNorthWestCornerMethod(Location startLocation) {
-		int[] kmToDriveOnRoute = new int[minimalSpanningNetwork.size()];
-		int[] amountToDeliverOnRoute = new int[minimalSpanningNetwork.size()];
+		int[] kmToDriveOnRoute = new int[spanningNetwork.size()];
+		int[] amountToDeliverOnRoute = new int[spanningNetwork.size()];
 
 		ArrayList<Location> locationsDelivered = new ArrayList<>();
 
-		for (int route = 0; route < minimalSpanningNetwork.size(); route++) {
-			Vertice leaf = minimalSpanningNetwork.get(route).get(minimalSpanningNetwork.get(route).size() - 1);
+		for (int route = 0; route < spanningNetwork.size(); route++) {
+			Vertex leaf = spanningNetwork.get(route).get(spanningNetwork.get(route).size() - 1);
 
 			while (leaf.getParentLocation() != null) {
 				if (!locationDeliveredAlready(locationsDelivered, leaf))
@@ -43,12 +43,12 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 
 		ArrayList<Tour> tours = new ArrayList<>();
 		locationsDelivered = new ArrayList<>();
-		for (int route = 0; route < minimalSpanningNetwork.size(); route++) {
+		for (int route = 0; route < spanningNetwork.size(); route++) {
 			ArrayList<SmallTruck> smallTrucks = new ArrayList<>();
 			ArrayList<MediumTruck> mediumTrucks = new ArrayList<>();
 			ArrayList<LargeTruck> largeTrucks = new ArrayList<>();
 
-			ArrayList<Vertice> vertices = minimalSpanningNetwork.get(route);
+			ArrayList<Vertex> vertices = spanningNetwork.get(route);
 			boolean trucksConstellationPut = false;
 			do { // TODO improve by detecting already delivered locations
 				if (amountToDeliverOnRoute[route] <= SmallTruck.CAPACITY) {
@@ -71,8 +71,8 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 
 			AbstractTruck lastTruck = null;
 			Tour lastTour = null;
-			for (Vertice vertice : vertices) {
-				int locationAmount = (locationDeliveredAlready(locationsDelivered, vertice) ? 0 : vertice.getLocationReference().getAmount());
+			for (Vertex vertex : vertices) {
+				int locationAmount = (locationDeliveredAlready(locationsDelivered, vertex) ? 0 : vertex.getLocationReference().getAmount());
 				while (locationAmount != 0) {
 					int min;
 					if (lastTruck == null || lastTruck.getUnloaded() - lastTruck.getCapacity() == 0) {
@@ -80,62 +80,62 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 							min = Math.min(LargeTruck.CAPACITY, locationAmount);
 							lastTruck = largeTrucks.get(0);
 							lastTour = new Tour(lastTruck, startLocation);
-							lastTour.addDestination(new TourDestination(vertice.getLocationReference(), min), computeExpense(vertice));
+							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex));
 							largeTrucks.remove(lastTruck);
 						} else if (mediumTrucks.size() != 0) {
 							min = Math.min(MediumTruck.CAPACITY, locationAmount);
 							lastTruck = mediumTrucks.get(0);
 							lastTour = new Tour(lastTruck, startLocation);
-							lastTour.addDestination(new TourDestination(vertice.getLocationReference(), min), computeExpense(vertice));
+							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex));
 							mediumTrucks.remove(lastTruck);
 						} else {
 							min = Math.min(SmallTruck.CAPACITY, locationAmount);
 							lastTruck = smallTrucks.get(0);
 							lastTour = new Tour(lastTruck, startLocation);
-							lastTour.addDestination(new TourDestination(vertice.getLocationReference(), min), computeExpense(vertice));
+							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex));
 							smallTrucks.remove(lastTruck);
 						}
 						tours.add(lastTour);
 					} else {
 						min = Math.min(lastTruck.getCapacity() - lastTruck.getUnloaded(), locationAmount);
-						lastTour.addDestination(new TourDestination(vertice.getLocationReference(), min), computeExpense(vertice) - lastTour.getKilometersToDrive());
+						lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex) - lastTour.getKilometersToDrive());
 					}
 					locationAmount -= min;
 					lastTruck.unload(min);
 				}
-				locationsDelivered.add(vertice.getLocationReference());
+				locationsDelivered.add(vertex.getLocationReference());
 			}
 		}
 		return tours;
 	}
 
-	private boolean locationDeliveredAlready(ArrayList<Location> locationsDelivered, Vertice vertice) {
+	private boolean locationDeliveredAlready(ArrayList<Location> locationsDelivered, Vertex vertex) {
 		for (Location location : locationsDelivered) {
-			if (vertice.getName().equals(location.getName())) return true;
+			if (vertex.getName().equals(location.getName())) return true;
 		}
 		return false;
 	}
 
-	private int computeExpense(Vertice vertice) {
+	private int computeExpense(Vertex vertex) {
 		int expense = 0;
-		while (vertice.getParentLocation() != null) {
-			expense += vertice.getExpenseToParentLocation()*2;
-			vertice = vertice.getParentLocation();// TODO find better way back and beware that might change the pointer?!
+		while (vertex.getParentLocation() != null) {
+			expense += vertex.getExpenseToParentLocation() * 2;
+			vertex = vertex.getParentLocation();// TODO find better way back and beware that might change the pointer?!
 		}
 		return expense;
 	}
 
 	@Override
 	public String toString() {
-		String spanningNetwork = "";
-		for (ArrayList<Vertice> tours : minimalSpanningNetwork) {
-			spanningNetwork += "Possible tour: ";
-			for (Vertice vertice : tours) {
-				spanningNetwork += vertice.getName() + " to ";
+		String spanningNetworkString = "";
+		for (ArrayList<Vertex> tours : spanningNetwork) {
+			spanningNetworkString += "Possible tour: ";
+			for (Vertex vertex : tours) {
+				spanningNetworkString += vertex.getName() + " to ";
 			}
-			spanningNetwork += "\n";
+			spanningNetworkString += "\n";
 		}
-		return spanningNetwork;
+		return spanningNetworkString;
 	}
 
 }
