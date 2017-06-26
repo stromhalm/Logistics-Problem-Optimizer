@@ -97,7 +97,6 @@ public class Location {
 			// Save for later
 			shortestKnownDistanceToStart = distanceToStart;
 			shortestKnownWayToStart = neighborLocation;
-			System.out.println("Shortest known distance from " + getName() + " to start is now " + shortestKnownDistanceToStart);
 
 			// Recursively notify neighbors
 			for (Map.Entry<Location, Integer> neighbor: neighbouringLocations.entrySet()) {

@@ -26,12 +26,6 @@ public class TransportNetwork {
 	}
 
 	public void buildShortestPaths() {
-
-		// Compute the sortest paths
-		for (Location location : network) {
-			System.out.println(location.getName() + ": " + location.getAmount());
-		}
-		System.out.println("Start Location: " + getStartLocation().getName());
 		this.getStartLocation().addShortDistanceToStartCandidate(null, 0);
 	}
 
