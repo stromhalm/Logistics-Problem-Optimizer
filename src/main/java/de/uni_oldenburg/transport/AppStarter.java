@@ -86,6 +86,7 @@ public class AppStarter {
 		}
 
 		// Print solution
+		System.out.println("Solution found:");
 		System.out.println(solution.toString());
 	}
 

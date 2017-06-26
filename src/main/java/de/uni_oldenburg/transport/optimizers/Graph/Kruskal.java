@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * A simple implementation of the Kruskal algorithm to get a minimal spanning tree (MST) of an undirected weighted graph. The implementation can handle not connected graphs, too.
+ * A simple implementation of the Kruskal algorithm to get a minimal spanning tree (MST) of an undirected weighted graph.
  */
 public class Kruskal {
 
@@ -34,7 +34,7 @@ public class Kruskal {
 
 	public TransportNetwork getLocationsMST() {
 		for (Edge edge : notEdgesMST) {
-//			System.out.println("Removing Edge: " + edge.getVertex1().getName() + " to " + edge.getVertex2().getName() + " with " + edge.getWeight());
+			//System.out.println("Removing Edge: " + edge.getVertex1().getName() + " to " + edge.getVertex2().getName() + " with " + edge.getWeight());
 			edge.getVertex1().getLocationReference().getNeighbouringLocations().remove(edge.getVertex2().getLocationReference(), edge.getWeight());
 			edge.getVertex2().getLocationReference().getNeighbouringLocations().remove(edge.getVertex1().getLocationReference(), edge.getWeight());
 		}

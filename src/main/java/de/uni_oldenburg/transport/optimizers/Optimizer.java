@@ -9,7 +9,7 @@ import de.uni_oldenburg.transport.TransportNetwork;
 public interface Optimizer {
 
 	/**
-	 * @param transportNetwork A transport network for which the transport problem has to optimized.
+	 * @param transportNetwork A transport network for which the transport problem has to be optimized.
 	 * @return The best {@link Solution} found by the implementing Optimizer.
 	 */
 	Solution optimizeTransportNetwork(TransportNetwork transportNetwork);

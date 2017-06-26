@@ -28,7 +28,9 @@ public class TransportNetworkCSVLoader extends CSVLoader {
 
 	public TransportNetwork getTransportNetwork() throws IOException {
 
-		String entry = this.bufferedReader.readLine(); // skips the first line containing just the column information.
+		String entry;
+
+		this.bufferedReader.readLine(); // skips the first line containing just the column information.
 
 		while ((entry = this.bufferedReader.readLine()) != null) {
 			// separate the entry into its parts. Index 0 is the start locations name,

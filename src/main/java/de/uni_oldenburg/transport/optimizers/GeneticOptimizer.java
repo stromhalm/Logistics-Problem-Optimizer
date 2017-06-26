@@ -10,6 +10,10 @@ public class GeneticOptimizer implements Optimizer {
 
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
-		return new Solution(transportNetwork);
+
+		transportNetwork.buildShortestPaths();
+		Solution solution = new Solution(transportNetwork);
+
+		return solution;
 	}
 }

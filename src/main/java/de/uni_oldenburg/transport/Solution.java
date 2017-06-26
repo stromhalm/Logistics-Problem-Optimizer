@@ -52,7 +52,7 @@ public class Solution {
 		// Check if all delivery targets have been fulfilled
 		for (Tour tour : truckTours) {
 
-			// ckeck if truck was overloaded
+			// ckeck if truck was overloaded and returned to start
 			if (!tour.isValid()) return false;
 
 			for (TourDestination tourDestination : tour.getTourDestinations()) {
@@ -66,7 +66,8 @@ public class Solution {
 		for (Location location : transportNetwork.getLocations()) {
 			if (deliveries.containsKey(location) && location.getAmount() != 0)
 				if (location.getAmount() != deliveries.get(location)) {
-					System.out.println(location.getName() + " needs " + location.getAmount() + " but gets " + deliveries.get(location) + " delivered."); // error message servicing
+					// error message servicing
+					System.out.println(location.getName() + " needs " + location.getAmount() + " but gets " + deliveries.get(location) + " delivered.");
 					return false;
 				}
 		}
