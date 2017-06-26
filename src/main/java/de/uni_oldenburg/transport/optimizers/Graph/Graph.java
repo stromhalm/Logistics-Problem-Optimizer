@@ -2,7 +2,6 @@ package de.uni_oldenburg.transport.optimizers.Graph;
 
 import de.uni_oldenburg.transport.Location;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,15 +11,18 @@ import java.util.Map;
  */
 public class Graph {
 
-	public static Map.Entry<ArrayList<Location>, Integer>[][] computeAdjazenMatrix(Location[] locations) {
-		Map.Entry<ArrayList<Location>, Integer>[][] adjazenMatrix = new Map.Entry[locations.length][locations.length];
+	public static HashMap<Location, Integer>[][] computeAdjazenMatrix(Location[] locations) {
+		HashMap<Location, Integer>[][] adjazenMatrix = new HashMap[locations.length][locations.length];
 		for (int i = 0; i < locations.length; i++) {
 			for (int j = 0; j < locations.length; j++) {
 				Location from = locations[i];
 				Location to = locations[j];
 				HashMap<ArrayList<Location>, Integer> entry = new HashMap<ArrayList<Location>, Integer>();
-				adjazenMatrix[i][j] = doDijkstra(from, to, new ArrayList<>(), entry);
-				System.out.print(adjazenMatrix[i][j].getValue() + " ");
+				adjazenMatrix[i][j] = doDijkstra(from, to, new ArrayList(), new ArrayList());
+				adjazenMatrix[i][j].put(from, 0); // add start location of the path
+				for (Map.Entry<Location, Integer> mapEntry : adjazenMatrix[i][j].entrySet()) {
+					System.out.print(mapEntry.getValue() + " ");
+				}
 			}
 			System.out.println();
 		}
@@ -32,30 +34,31 @@ public class Graph {
 	 *
 	 * @param from
 	 * @param to
-	 * @param locations
 	 * @return
 	 */
-	private static Map.Entry<ArrayList<Location>, Integer> doDijkstra(Location from, Location to, ArrayList<Location> alreadyVisited, HashMap<ArrayList<Location>, Integer> locations) {
+	private static HashMap<Location, Integer> doDijkstra(Location from, Location to, ArrayList alreadyVisited, ArrayList settled) {
 		if (alreadyVisited(alreadyVisited, from)) return null;
 		for (Map.Entry<Location, Integer> neighbouringLocation : from.getNeighbouringLocations().entrySet()) {
-			Location neighbour = neighbouringLocation.getKey();
-			int expense = neighbouringLocation.getValue();
-			if (neighbour.getName().equals(to.getName())) {
-				ArrayList<Location> locationArrayList = new ArrayList<>();
-				locationArrayList.add(to);
-				locationArrayList.add(from);
-				return new AbstractMap.SimpleEntry<ArrayList<Location>, Integer>(locationArrayList, expense);
-			} else {
-				alreadyVisited.add(neighbour);
-				Map.Entry<ArrayList<Location>, Integer> path;
-				if ((path = doDijkstra(neighbour, to, new ArrayList<>(alreadyVisited), locations)) != null) {
-					path.getKey().add(from);
-					path.setValue(path.getValue() + expense);
+			if (!neighbouringLocation.getKey().getName().equals(from.getName())) {
+				Location neighbour = neighbouringLocation.getKey();
+				int expense = neighbouringLocation.getValue();
+				if (neighbour.getName().equals(to.getName())) {
+					HashMap<Location, Integer> path = new HashMap<>();
+					path.put(to, expense);
 					return path;
+				} else {
+					alreadyVisited.add(neighbour);
+					HashMap<Location, Integer> path;
+					if ((path = doDijkstra(neighbour, to, new ArrayList<>(alreadyVisited), settled)) != null) {
+						path.put(from, expense);
+						return path;
+					}
 				}
 			}
 		}
-		return new AbstractMap.SimpleEntry<ArrayList<Location>, Integer>(new ArrayList<>(), 0);
+		HashMap<Location, Integer> defaultMap = new HashMap<>();
+		defaultMap.put(from, 0);
+		return defaultMap;
 	}
 
 

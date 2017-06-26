@@ -2,8 +2,8 @@ package de.uni_oldenburg.transport;
 
 import de.uni_oldenburg.transport.optimizers.Graph.Graph;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * The TransportNetwork represents the map
@@ -16,9 +16,9 @@ public class TransportNetwork {
 	private final Location[] network;
 
 	/**
-	 * {@link Map.Entry} matrix with shortest path as key and the overall expense of the path as value.
+	 * {@link HashMap} matrix with shortest path as key and the single expenses in the path as values of the locations.
 	 */
-	private Map.Entry<ArrayList<Location>, Integer>[][] shortestPaths;
+	private HashMap<Location, Integer>[][] shortestPaths;
 
 	public TransportNetwork(Location[] network) {
 		this.network = network;
@@ -84,11 +84,17 @@ public class TransportNetwork {
 	 * @param to
 	 * @return
 	 */
-	private ArrayList<Location> getShortestPath(Location from, Location to) {
+	private HashMap<Location, Integer> getShortestPath(Location from, Location to) {
 		for (int i = 0; i < shortestPaths.length; i++) {
 			for (int j = 0; j < shortestPaths[i].length; j++) {
-				if (shortestPaths[i][j].getKey().get(0).getName().equals(from.getName()) && shortestPaths[i][j].getKey().get(0).getName().equals(from.getName()))
-					return shortestPaths[i][j].getKey();
+				Iterator iterators = shortestPaths[i][j].keySet().iterator();
+				Location location = null;
+				if ((location = (Location) iterators.next()) != null) {
+					if (location.getName().equals(from.getName())) {
+						while (iterators.hasNext()) location = (Location) iterators.next();
+						if (location.getName().equals(to.getName())) return shortestPaths[i][j];
+					}
+				}
 			}
 		}
 		return null;
