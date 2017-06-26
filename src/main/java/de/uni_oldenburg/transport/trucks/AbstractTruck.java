@@ -48,5 +48,7 @@ public abstract class AbstractTruck {
 	}
 
 	@Override
-	public abstract String toString();
+	public String toString() {
+		return this.getClass().getSimpleName();
+	}
 }

@@ -13,10 +13,4 @@ public class SmallTruck extends AbstractTruck {
 	public SmallTruck() {
 		super(CAPACITY, 15);
 	}
-
-
-	@Override
-	public String toString() {
-		return "SmallTruck";
-	}
 }

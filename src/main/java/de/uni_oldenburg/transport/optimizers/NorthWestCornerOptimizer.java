@@ -34,14 +34,29 @@ public class NorthWestCornerOptimizer implements Optimizer {
 
 		ArrayList<ArrayList<Vertice>> minimalSpanningNetwork = getMinimalSpanningNetwork(transportNetwork.getLocations(), transportNetwork.getStartLocation());
 
-		doNorthWestCornerMethod(minimalSpanningNetwork, transportNetwork.getStartLocation());
+		for (ArrayList<Vertice> tours : minimalSpanningNetwork) {
+			System.out.print("Possible tour: ");
+			for (Vertice vertice : tours) {
+				System.out.print(vertice.getName() + " to ");
+			}
+			System.out.print("\n");
+		}
 
-		return null;
+		Solution solution = new Solution(transportNetwork);
+
+		for (Tour tour : doNorthWestCornerMethod(minimalSpanningNetwork, transportNetwork.getStartLocation())) {
+			solution.addTour(tour);
+		}
+
+		return solution;
 	}
 
-	public void doNorthWestCornerMethod(ArrayList<ArrayList<Vertice>> minimalSpanningNetwork, Location startLocation) {
+	public ArrayList<Tour> doNorthWestCornerMethod(ArrayList<ArrayList<Vertice>> minimalSpanningNetwork, Location startLocation) {
 		int[] kmToDriveOnRoute = new int[minimalSpanningNetwork.size()];
 		int[] amountToDeliverOnRoute = new int[minimalSpanningNetwork.size()];
+
+		ArrayList<Location> locationsDelivered = new ArrayList<>();
+
 		for (int route = 0; route < minimalSpanningNetwork.size(); route++) {
 			Vertice leaf = minimalSpanningNetwork.get(route).get(minimalSpanningNetwork.get(route).size() - 1);
 
@@ -50,7 +65,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 				kmToDriveOnRoute[route] += leaf.getExpenseToParentLocation();
 				leaf = leaf.getParentLocation();
 			}
-			System.out.println("Route: " + route + ": " + amountToDeliverOnRoute[route] + " (amountNeeded) and " + kmToDriveOnRoute[route] + "(kmToDrive)");
+			//System.out.println("Route: " + route + ": " + amountToDeliverOnRoute[route] + " (amountNeeded) and " + kmToDriveOnRoute[route] + "(kmToDrive)");
 		}
 
 		ArrayList<Tour> tours = new ArrayList<>();
@@ -84,7 +99,7 @@ public class NorthWestCornerOptimizer implements Optimizer {
 			AbstractTruck lastTruck = null;
 			Tour lastTour = null;
 			for (Vertice vertice : vertices) {
-				int locationAmount = vertice.getLocationReference().getAmount();
+				int locationAmount = (locationDeliveredAlready(locationsDelivered, vertice) ? 0 : vertice.getLocationReference().getAmount());
 				while (locationAmount != 0) {
 					int min;
 					if (lastTruck == null || lastTruck.getUnloaded() - lastTruck.getCapacity() == 0) {
@@ -115,12 +130,17 @@ public class NorthWestCornerOptimizer implements Optimizer {
 					locationAmount -= min;
 					lastTruck.unload(min);
 				}
+				locationsDelivered.add(vertice.getLocationReference());
 			}
 		}
+		return tours;
+	}
 
-		for (Tour tour : tours) {
-			System.out.println(tour.toString());
+	private boolean locationDeliveredAlready(ArrayList<Location> locationsDelivered, Vertice vertice) {
+		for (Location location : locationsDelivered) {
+			if (vertice.getName().equals(location.getName())) return true;
 		}
+		return false;
 	}
 
 	private int computeExpense(Vertice vertice) {
