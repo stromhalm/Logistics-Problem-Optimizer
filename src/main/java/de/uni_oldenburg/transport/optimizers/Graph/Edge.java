@@ -1,5 +1,8 @@
 package de.uni_oldenburg.transport.optimizers.Graph;
 
+/**
+ * A simple edge connecting two vertices with a weighted edge.
+ */
 public class Edge {
 
 	private Vertex vertex1;

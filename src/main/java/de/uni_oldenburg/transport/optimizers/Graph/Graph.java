@@ -5,10 +5,13 @@ import de.uni_oldenburg.transport.Location;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Provides static method and functions to get spanning networks (aka spanning graphs).
+ */
 public class Graph {
 
 	/**
-	 * Get the minimized spanning network. Must not be the minimum spanning tree as it allows loops if it improves the solution.
+	 * Get the minimized spanning network. Have not to be the minimum spanning tree as it allows loops if it improves the solution.
 	 *
 	 * @param locations
 	 * @param startLocation

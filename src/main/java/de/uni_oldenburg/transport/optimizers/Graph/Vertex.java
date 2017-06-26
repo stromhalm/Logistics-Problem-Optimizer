@@ -2,6 +2,9 @@ package de.uni_oldenburg.transport.optimizers.Graph;
 
 import de.uni_oldenburg.transport.Location;
 
+/**
+ * A simple implementation for a graph vertex. The vertex provides a reference to {@link Location}s. It is easier to do graph operations with the standard graph layout containing vertices.
+ */
 public class Vertex {
 
 	private Vertex parentLocation;

@@ -6,6 +6,9 @@ import de.uni_oldenburg.transport.TransportNetwork;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * A simple implementation of the Kruskal algorithm to get a minimal spanning tree (MST) of an undirected weighted graph. The implementation can handle not connected graphs, too.
+ */
 public class Kruskal {
 
 	private int highestEdgeWeight;
@@ -67,9 +70,9 @@ public class Kruskal {
 
 			for (Edge edge : subGraph) {
 				Vertex vertex = edge.getVertex1();
-				if (!verticeAlreadyGot(vertices, vertex)) vertices.add(vertex);
+				if (!vertexAlreadyGot(vertices, vertex)) vertices.add(vertex);
 				vertex = edge.getVertex2();
-				if (!verticeAlreadyGot(vertices, vertex)) vertices.add(vertex);
+				if (!vertexAlreadyGot(vertices, vertex)) vertices.add(vertex);
 			}
 			if (subGraph.size() + 1 > vertices.size()) {
 				return subGraph.remove(edgeByWeight); // remove it again
@@ -109,7 +112,7 @@ public class Kruskal {
 		}
 	}
 
-	private boolean verticeAlreadyGot(ArrayList<Vertex> vertices, Vertex vertex) {
+	private boolean vertexAlreadyGot(ArrayList<Vertex> vertices, Vertex vertex) {
 		for (Vertex vertexAlreadyGot : vertices) {
 			if (vertexAlreadyGot.getName().equals(vertex.getName())) return true;
 		}
