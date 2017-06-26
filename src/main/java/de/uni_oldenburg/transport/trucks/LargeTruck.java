@@ -13,4 +13,8 @@ public class LargeTruck extends AbstractTruck {
 		super(CAPACITY, 35);
 	}
 
+	@Override
+	public String toString() {
+		return "LargeTruck";
+	}
 }

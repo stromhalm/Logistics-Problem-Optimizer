@@ -7,6 +7,7 @@ public abstract class AbstractTruck {
 
 	private int capacity;
 	private final int consumption;
+	private int unloaded;
 
 	/**
 	 * Basic constructor
@@ -17,6 +18,7 @@ public abstract class AbstractTruck {
 	public AbstractTruck(int capacity, int consumption) {
 		this.capacity = capacity;
 		this.consumption = consumption;
+		unloaded = 0;
 	}
 
 	/**
@@ -36,4 +38,15 @@ public abstract class AbstractTruck {
 	public int getConsumption() {
 		return consumption;
 	}
+
+	public void unload(int unload) {
+		this.unloaded += unload;
+	}
+
+	public int getUnloaded() {
+		return unloaded;
+	}
+
+	@Override
+	public abstract String toString();
 }
