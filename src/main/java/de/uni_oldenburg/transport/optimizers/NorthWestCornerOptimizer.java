@@ -119,8 +119,8 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 	private int computeExpense(Vertice vertice) {
 		int expense = 0;
 		while (vertice.getParentLocation() != null) {
-			expense += vertice.getExpenseToParentLocation();
-			vertice = vertice.getParentLocation();// TODO beware that might change the pointer?!
+			expense += vertice.getExpenseToParentLocation()*2;
+			vertice = vertice.getParentLocation();// TODO find better way back and beware that might change the pointer?!
 		}
 		return expense;
 	}

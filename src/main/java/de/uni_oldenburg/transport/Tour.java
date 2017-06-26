@@ -88,7 +88,7 @@ public class Tour {
 	}
 
 	public void addConsumption(int expense) {
-		this.consumption += truck.getConsumption() * expense / 100;
+		this.consumption += (truck.getConsumption() * expense) / 100;
 	}
 
 	public void subtractConsumption(int expense) {
