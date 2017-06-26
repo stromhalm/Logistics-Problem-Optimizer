@@ -32,15 +32,17 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 			Vertice leaf = minimalSpanningNetwork.get(route).get(minimalSpanningNetwork.get(route).size() - 1);
 
 			while (leaf.getParentLocation() != null) {
-				amountToDeliverOnRoute[route] += leaf.getLocationReference().getAmount();
+				if (!locationDeliveredAlready(locationsDelivered, leaf))
+					amountToDeliverOnRoute[route] += leaf.getLocationReference().getAmount();
 				kmToDriveOnRoute[route] += leaf.getExpenseToParentLocation();
+				locationsDelivered.add(leaf.getLocationReference());
 				leaf = leaf.getParentLocation();
 			}
 			//System.out.println("Route: " + route + ": " + amountToDeliverOnRoute[route] + " (amountNeeded) and " + kmToDriveOnRoute[route] + "(kmToDrive)");
 		}
 
 		ArrayList<Tour> tours = new ArrayList<>();
-
+		locationsDelivered = new ArrayList<>();
 		for (int route = 0; route < minimalSpanningNetwork.size(); route++) {
 			ArrayList<SmallTruck> smallTrucks = new ArrayList<>();
 			ArrayList<MediumTruck> mediumTrucks = new ArrayList<>();
