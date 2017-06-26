@@ -13,19 +13,14 @@ public class Kruskal {
 	private ArrayList<Vertice> vertices;
 	private ArrayList<Edge> edges;
 
-	private ArrayList<Edge> edgesMST;
 	private ArrayList<Edge> notEdgesMST;
 
 	private ArrayList<ArrayList<Edge>> subGraphEdges;
 
-	private TransportNetwork transportNetwork;
-
 	public Kruskal(TransportNetwork transportNetwork) {
-		this.transportNetwork = transportNetwork;
 		vertices = new ArrayList<>();
 		edges = new ArrayList<>();
 		highestEdgeWeight = 0;
-		edgesMST = new ArrayList<>();
 		notEdgesMST = new ArrayList<>();
 		subGraphEdges = new ArrayList<>();
 
