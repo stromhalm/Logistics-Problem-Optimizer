@@ -84,19 +84,19 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 							min = Math.min(LargeTruck.CAPACITY, locationAmount);
 							lastTruck = largeTrucks.get(0);
 							lastTour = addPaths(lastTruck, startLocation, vertex);
-							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex));
+							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex) - lastTour.getKilometersToDrive());
 							largeTrucks.remove(lastTruck);
 						} else if (mediumTrucks.size() != 0) {
 							min = Math.min(MediumTruck.CAPACITY, locationAmount);
 							lastTruck = mediumTrucks.get(0);
 							lastTour = addPaths(lastTruck, startLocation, vertex);
-							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex));
+							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex) - lastTour.getKilometersToDrive());
 							mediumTrucks.remove(lastTruck);
 						} else {
 							min = Math.min(SmallTruck.CAPACITY, locationAmount);
 							lastTruck = smallTrucks.get(0);
 							lastTour = addPaths(lastTruck, startLocation, vertex);
-							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex));
+							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex) - lastTour.getKilometersToDrive());
 							smallTrucks.remove(lastTruck);
 						}
 						System.out.print(startLocation.getName() + " with " + computeExpense(vertex) + " to " + lastTour.getTourDestinations()[lastTour.getTourDestinations().length - 1].getDestination().getName());
@@ -124,6 +124,7 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 
 						}
 						System.out.println();
+						System.out.println(lastTruck.getCapacity() - lastTruck.getUnloaded() + " capacity left in the truck.");
 					}
 				}
 				locationsDelivered.add(vertex.getLocationReference());
