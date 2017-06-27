@@ -2,9 +2,7 @@ package de.uni_oldenburg.transport;
 
 import de.uni_oldenburg.transport.optimizers.Graph.Graph;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 /**
  * The TransportNetwork represents the map
@@ -48,6 +46,81 @@ public class TransportNetwork {
 
 	public Location[] getLocations() {
 		return network;
+	}
+
+
+	public Location[] getLocationsDeepCopy() {
+		ArrayList<Location> locations = new ArrayList<>();
+		for (int i = 0; i < network.length; i++) {
+			Location location = network[i];
+			Location locationDeepCopy = null;
+			for (Location locationDeepCopyAlreadyFound : locations) {
+				if (location.getName().equals(locationDeepCopyAlreadyFound.getName())) {
+					locationDeepCopy = locationDeepCopyAlreadyFound;
+					break;
+				}
+			}
+			if (locationDeepCopy == null) {
+				locationDeepCopy = new Location(location.getName());
+				locationDeepCopy.setAmount(location.getAmount());
+				locations.add(location);
+			}
+			for (Map.Entry<Location, Integer> neighbouringLocationEntry : location.getNeighbouringLocations().entrySet()) {
+				Location neighbouringLocationDeepCopy = null;
+				// find existing references
+				for (Location locationDeepCopyAlreadyFound : locations) {
+					if (neighbouringLocationEntry.getKey().getName().equals(locationDeepCopyAlreadyFound.getName())) {
+						neighbouringLocationDeepCopy = locationDeepCopyAlreadyFound;
+						break;
+					}
+				}
+				if (neighbouringLocationDeepCopy == null) {
+					neighbouringLocationDeepCopy = new Location(neighbouringLocationEntry.getKey().getName());
+					neighbouringLocationDeepCopy.setAmount(neighbouringLocationEntry.getKey().getAmount());
+					locations.add(neighbouringLocationDeepCopy);
+				}
+
+				int expense = neighbouringLocationEntry.getValue();
+				if (!locationDeepCopy.getNeighbouringLocations().containsKey(neighbouringLocationDeepCopy))
+					locationDeepCopy.addNeighbouringLocation(neighbouringLocationDeepCopy, expense);
+				if (!neighbouringLocationDeepCopy.getNeighbouringLocations().containsKey(locationDeepCopy))
+					neighbouringLocationDeepCopy.addNeighbouringLocation(locationDeepCopy, expense);
+			}
+		}
+
+		// check
+		for (Location locationDeepCopy : locations) {
+			boolean locationEquivaliantFound = false;
+			for (Location location : network) {
+				if (location.getName().equals(locationDeepCopy.getName()) && location.getAmount() == location.getAmount()) {
+					locationEquivaliantFound = true;
+					boolean neighboursAreCorrect = true;
+					for (Map.Entry<Location, Integer> neighbouringLocationEntry : location.getNeighbouringLocations().entrySet()) {
+						boolean neighbourFound = false;
+						for (Map.Entry<Location, Integer> neighbouringLocationDeepCopyEntry : locationDeepCopy.getNeighbouringLocations().entrySet()) {
+							if (neighbouringLocationEntry.getKey().getName().equals(neighbouringLocationDeepCopyEntry.getKey().getName())
+									&& neighbouringLocationEntry.getValue().equals(neighbouringLocationDeepCopyEntry.getValue())
+									&& neighbouringLocationEntry.getKey().getAmount() == neighbouringLocationDeepCopyEntry.getKey().getAmount()) {
+								neighbourFound = true;
+							}
+						}
+						if (!neighbourFound) neighboursAreCorrect = false;
+					}
+
+					if (!neighboursAreCorrect) {
+						System.out.println("Deep copy failed to create correct neighbours.");
+						return null;
+					}
+					break;
+				}
+			}
+			if (!locationEquivaliantFound) {
+				System.out.println("Deep copy failed.");
+				return null;
+			}
+		}
+
+		return locations.toArray(new Location[0]);
 	}
 
 	/**
@@ -99,4 +172,5 @@ public class TransportNetwork {
 		}
 		return null;
 	}
+
 }

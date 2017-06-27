@@ -68,7 +68,7 @@ public class AppStarter {
 				//optimizers.put(new BruteForceOptimizer(), -1);
 				break;
 			case 3:
-				//optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
+				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
 				break;
 			case 4:
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1);
@@ -80,16 +80,14 @@ public class AppStarter {
 				optimizers.put(new PheromoneOptimizer(), -1);
 				optimizers.put(new NearestNeighborOptimizer(), -1);
 				//optimizers.put(new BruteForceOptimizer(), -1);
-				//optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
+				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1);
 				//optimizers.put(new SavingsOptimizer(), -1);
 		}
 
-
 		for (Map.Entry<Optimizer, Integer> optimizerEntry : optimizers.entrySet()) {
 			System.out.println("Running \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\"");
-			// TODO previous optimizer affect others. We need to make a "deep copy"
-			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocations().clone())/*Fresh copy for every optimizer*/);
+			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocationsDeepCopy()/*Fresh copy for every optimizer*/));
 			if (solution.isValid()) {
 				// Print solution
 				System.out.println("Solution found:");
