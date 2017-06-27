@@ -61,7 +61,7 @@ public class TourDestination {
 
 	@Override
 	public String toString() {
-		return "    Tour destination to " + destination.getName() + " (" + expense + " km) delivering " + String.valueOf(unload);
+		return "    Tour destination to " + destination.getName() + " (" + expense + "km) delivering " + String.valueOf(unload);
 	}
 
 }
