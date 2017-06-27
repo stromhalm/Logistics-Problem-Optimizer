@@ -12,8 +12,10 @@ public class NorthWestCornerOwnOptimizer extends NorthWestCornerOptimizer {
 		this.spanningNetwork = Graph.getSpanningNetwork(transportNetwork.getLocations(), transportNetwork.getStartLocation());
 		System.out.print(toString());
 		Solution solution = new Solution(transportNetwork);
+		transportNetwork.computeShortestPaths();
 
-		for (Tour tour : doNorthWestCornerMethod(transportNetwork.getStartLocation())) {
+
+		for (Tour tour : doNorthWestCornerMethod(transportNetwork.getStartLocation(), transportNetwork)) {
 			solution.addTour(tour);
 		}
 

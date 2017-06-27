@@ -4,6 +4,9 @@ import de.uni_oldenburg.transport.csv.DeliveryCSVLoader;
 import de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader;
 import de.uni_oldenburg.transport.optimizers.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class is the entry point to our optimizers
  */
@@ -17,7 +20,6 @@ public class AppStarter {
 	public static void main(String[] args) {
 
 		TransportNetwork transportNetwork = null;
-		Optimizer optimizer;
 		String networkFile;
 		String deliveryFile;
 		int optimizerId;
@@ -25,8 +27,8 @@ public class AppStarter {
 		if (args.length > 0) {
 			optimizerId = Integer.parseInt(args[0]);
 		} else {
-			System.out.println("No optimizer Id passed. Using default optimizer.");
-			optimizerId = 0;
+			System.out.println("No optimizer specified. Comparing all.");
+			optimizerId = -1;
 		}
 
 		if (args.length > 1) {
@@ -53,41 +55,55 @@ public class AppStarter {
 			System.exit(1);
 		}
 
+		HashMap<Optimizer, Integer> optimizers = new HashMap<>();
+
 		switch (optimizerId) {
 			case 0:
-				optimizer = new GeneticOptimizer();
+				optimizers.put(new PheromoneOptimizer(), -1);
 				break;
 			case 1:
-				optimizer = new NearestNeighborOptimizer();
+				optimizers.put(new NearestNeighborOptimizer(), -1);
 				break;
 			case 2:
-				optimizer = new BruteForceOptimizer();
+				//optimizers.put(new BruteForceOptimizer(), -1);
 				break;
 			case 3:
-				optimizer = new NorthWestCornerKruskalOptimizer();
+				//optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
 				break;
 			case 4:
-				optimizer = new NorthWestCornerOwnOptimizer();
+				optimizers.put(new NorthWestCornerOwnOptimizer(), -1);
 				break;
 			case 5:
-				optimizer = new SavingsOptimizer();
+				//optimizers.put(new SavingsOptimizer(), -1);
 				break;
 			default:
-				optimizer = null;
-				System.out.println("Optimizer not found");
-				System.exit(1);
+				optimizers.put(new PheromoneOptimizer(), -1);
+				optimizers.put(new NearestNeighborOptimizer(), -1);
+				//optimizers.put(new BruteForceOptimizer(), -1);
+				//optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
+				optimizers.put(new NorthWestCornerOwnOptimizer(), -1);
+				//optimizers.put(new SavingsOptimizer(), -1);
 		}
 
-		Solution solution = optimizer.optimizeTransportNetwork(transportNetwork);
 
-		if (!solution.isValid()) {
-			System.out.println("Optimizer did not give a valid solution");
-			System.exit(1);
+		for (Map.Entry<Optimizer, Integer> optimizerEntry : optimizers.entrySet()) {
+			System.out.println("Running \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\"");
+			// TODO previous optimizer affect others. We need to make a "deep copy"
+			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocations().clone())/*Fresh copy for every optimizer*/);
+			if (solution.isValid()) {
+				// Print solution
+				System.out.println("Solution found:");
+				System.out.println(solution.toString());
+				optimizerEntry.setValue(solution.getTotalConsumption()); // update the consumption
+			}
 		}
-
-		// Print solution
-		System.out.println("Solution found:");
-		System.out.println(solution.toString());
+		System.out.println("\nRanking:");
+		for (Map.Entry<Optimizer, Integer> optimizerEntry : optimizers.entrySet()) {
+			if (optimizerEntry.getValue() == -1) {
+				System.out.println("Optimizer \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\":  (No valid solution found)");
+			} else {
+				System.out.println("Optimizer \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\": " + optimizerEntry.getValue() + "(consumed)");
+			}
+		}
 	}
-
 }

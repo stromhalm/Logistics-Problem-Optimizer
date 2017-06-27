@@ -3,7 +3,7 @@ package de.uni_oldenburg.transport.optimizers.Graph;
 import de.uni_oldenburg.transport.Location;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -11,20 +11,14 @@ import java.util.Map;
  */
 public class Graph {
 
-	public static HashMap<Location, Integer>[][] computeAdjazenMatrix(Location[] locations) {
-		HashMap<Location, Integer>[][] adjazenMatrix = new HashMap[locations.length][locations.length];
+	public static LinkedHashMap<Location, Integer>[][] computeAdjazenMatrix(Location[] locations) {
+		LinkedHashMap<Location, Integer>[][] adjazenMatrix = new LinkedHashMap[locations.length][locations.length];
 		for (int i = 0; i < locations.length; i++) {
 			for (int j = 0; j < locations.length; j++) {
 				Location from = locations[i];
 				Location to = locations[j];
-				HashMap<ArrayList<Location>, Integer> entry = new HashMap<ArrayList<Location>, Integer>();
-				adjazenMatrix[i][j] = doDijkstra(from, to, new ArrayList(), new ArrayList());
-				adjazenMatrix[i][j].put(from, 0); // add start location of the path
-				for (Map.Entry<Location, Integer> mapEntry : adjazenMatrix[i][j].entrySet()) {
-					System.out.print(mapEntry.getValue() + " ");
-				}
+				adjazenMatrix[i][j] = doDijkstra(from, to);
 			}
-			System.out.println();
 		}
 		return adjazenMatrix;
 	}
@@ -36,29 +30,71 @@ public class Graph {
 	 * @param to
 	 * @return
 	 */
-	private static HashMap<Location, Integer> doDijkstra(Location from, Location to, ArrayList alreadyVisited, ArrayList settled) {
-		if (alreadyVisited(alreadyVisited, from)) return null;
-		for (Map.Entry<Location, Integer> neighbouringLocation : from.getNeighbouringLocations().entrySet()) {
-			if (!neighbouringLocation.getKey().getName().equals(from.getName())) {
-				Location neighbour = neighbouringLocation.getKey();
-				int expense = neighbouringLocation.getValue();
-				if (neighbour.getName().equals(to.getName())) {
-					HashMap<Location, Integer> path = new HashMap<>();
-					path.put(to, expense);
-					return path;
-				} else {
-					alreadyVisited.add(neighbour);
-					HashMap<Location, Integer> path;
-					if ((path = doDijkstra(neighbour, to, new ArrayList<>(alreadyVisited), settled)) != null) {
-						path.put(from, expense);
-						return path;
+	private static LinkedHashMap<Location, Integer> doDijkstra(Location from, Location to) {
+		LinkedHashMap<Location, Integer> path = new LinkedHashMap<>();
+
+		if (from.getName().equals(to.getName())) {
+			path.put(from, 0);
+		} else {
+			ArrayList<Vertex> markedVertex = new ArrayList<>();
+			ArrayList<Vertex> vertices = new ArrayList<>();
+			// init
+			Vertex start = new Vertex(from, 0, null);
+			vertices.add(start);
+			for (Map.Entry<Location, Integer> neighbour : start.getLocationReference().getNeighbouringLocations().entrySet()) {
+				Vertex vertex = new Vertex(neighbour.getKey(), neighbour.getValue(), start);
+				markedVertex.add(vertex);
+				vertices.add(vertex);
+			}
+			// start iteration
+			while (markedVertex.size() != 0) {
+				//System.out.print("Marked vertices: ");
+				Vertex leastVertex = null;
+				for (Vertex vertex : markedVertex) {
+					//	System.out.print(vertex.getName() + ", ");
+					if (leastVertex == null) {
+						leastVertex = vertex;
+					} else if (vertex.getExpenseToStart() < leastVertex.getExpenseToStart()) {
+						leastVertex = vertex;
 					}
+				}
+				//System.out.println();
+
+				for (Map.Entry<Location, Integer> neighbour : leastVertex.getLocationReference().getNeighbouringLocations().entrySet()) {
+					boolean isNew = true;
+					for (Vertex vertex : vertices) {
+						if (vertex.getName().equals(neighbour.getKey().getName())) {
+							// update the vertex if less
+							isNew = false;
+							if (vertex.getExpenseToStart() > leastVertex.getExpenseToStart() + neighbour.getValue()) {
+								vertex.setExpenseToStart(leastVertex.getExpenseToStart() + neighbour.getValue());
+								vertex.setPredecessor(leastVertex);
+								break;
+							}
+						}
+					}
+					if (isNew) {
+						Vertex vertex = new Vertex(neighbour.getKey(), neighbour.getValue() + leastVertex.getExpenseToStart(), leastVertex);
+						markedVertex.add(vertex);
+						vertices.add(vertex);
+					}
+				}
+				markedVertex.remove(leastVertex);
+			}
+
+			for (Vertex vertex : vertices) {
+				if (vertex.getName().equals(to.getName())) {
+					while (vertex.getPredecessor() != null) {
+						path.put(vertex.getLocationReference(), vertex.getLocationReference().getNeighbouringLocations().get(vertex.getPredecessor().getLocationReference()));
+						vertex = vertex.getPredecessor();
+					}
+					path.put(vertex.getLocationReference(), 0);
+					break;
 				}
 			}
 		}
-		HashMap<Location, Integer> defaultMap = new HashMap<>();
-		defaultMap.put(from, 0);
-		return defaultMap;
+
+		return path;
 	}
 
 

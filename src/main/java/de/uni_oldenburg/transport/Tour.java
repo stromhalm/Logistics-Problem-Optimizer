@@ -1,6 +1,9 @@
 package de.uni_oldenburg.transport;
 
 import de.uni_oldenburg.transport.trucks.AbstractTruck;
+import de.uni_oldenburg.transport.trucks.LargeTruck;
+import de.uni_oldenburg.transport.trucks.MediumTruck;
+import de.uni_oldenburg.transport.trucks.SmallTruck;
 
 import java.util.ArrayList;
 
@@ -9,45 +12,60 @@ import java.util.ArrayList;
  */
 public class Tour {
 
-	private final AbstractTruck truck;
 	private ArrayList<TourDestination> tourDestinations;
-	private int consumption;
-	private int kilometersToDrive;
-
 	private final Location startLocation;
+	private AbstractTruck truck;
 
 	/**
-	 * Constructor
+	 * Create Tour with specific Truck
 	 *
-	 * @param truck The truck to be used in this tour
+	 * @param startLocation The start location
 	 */
-	public Tour(final AbstractTruck truck, final Location startLocation) {
+	public Tour(AbstractTruck truck, final Location startLocation) {
 		this.truck = truck;
 		this.tourDestinations = new ArrayList<>();
-		consumption = 0;
-		kilometersToDrive = 0;
 		this.startLocation = startLocation;
 	}
 
 	/**
-	 * Get the actual type of truck
+	 * Create Tour without specific Truck (chosen automatically)
+	 *
+	 * @param startLocation The start location
+	 */
+	public Tour(final Location startLocation) {
+		this.truck = truck;
+		this.tourDestinations = new ArrayList<>();
+		this.startLocation = startLocation;
+	}
+
+	/**
+	 * Get the specified type of truck or an automatic truck type if not specified
 	 *
 	 * @return
 	 */
 	public AbstractTruck getTruck() {
-		return truck;
+
+		// Truck already specified?
+		if (truck != null) return truck;
+
+		// Choose truck automatically
+		int tourLoad = getTourLoad();
+		if (tourLoad <= SmallTruck.CAPACITY) {
+			return new SmallTruck();
+		} else if (tourLoad <= MediumTruck.CAPACITY) {
+			return new MediumTruck();
+		} else {
+			return new LargeTruck();
+		}
 	}
 
 	/**
 	 * Add a destination to this tour
 	 *
 	 * @param tourDestination The destination to add
-	 * @param expense         The expense to the location.
 	 */
-	public void addDestination(TourDestination tourDestination, int expense) {
+	public void addDestination(TourDestination tourDestination) {
 		tourDestinations.add(tourDestination);
-		kilometersToDrive += expense;
-		addConsumption(expense);
 	}
 
 	/**
@@ -58,8 +76,6 @@ public class Tour {
 	 * @return False if tour was not found
 	 */
 	public boolean removeTourDestination(TourDestination tourDestination, int expense) {
-		subtractConsumption(expense);
-		kilometersToDrive -= expense;
 		return tourDestinations.remove(tourDestination);
 	}
 
@@ -72,6 +88,15 @@ public class Tour {
 		return tourDestinations.toArray(new TourDestination[0]);
 	}
 
+	public int getTourLoad() {
+		int load = 0;
+		for (TourDestination tourDestination : tourDestinations) {
+			load += tourDestination.getUnload();
+		}
+		return load;
+	}
+
+
 	/**
 	 * Checks if the tour is valid for this type of truck
 	 *
@@ -80,18 +105,14 @@ public class Tour {
 	public boolean isValid() {
 
 		// Verify truck load
-		int load = 0;
-		for (TourDestination tourDestination : tourDestinations) {
-			load += tourDestination.getUnload();
-		}
-		if (load > truck.getCapacity()) {
+		if (getTourLoad() > getTruck().getCapacity()) {
 			// Error Service
-			System.out.println("Truck was overloaded with a load of " + load + " (maximum capacity " + truck.getCapacity() + ")");
+			System.out.println("Truck was overloaded with a load of " + getTourLoad() + " (maximum capacity " + getTruck().getCapacity() + ")");
 			return false;
 		}
 
 		// Verify truck returned to start
-		Location lastDestination = tourDestinations.get(tourDestinations.size()-1).getDestination();
+		Location lastDestination = tourDestinations.get(tourDestinations.size() - 1).getDestination();
 		if (lastDestination != startLocation) {
 			// Error Service
 			System.out.println("Truck did not return to " + startLocation.getName() + " but stayed in " + lastDestination.getName());
@@ -100,33 +121,37 @@ public class Tour {
 		return true;
 	}
 
-	public void addConsumption(int expense) {
-		this.consumption += (truck.getConsumption() * expense) / 100;
-	}
-
-	public void subtractConsumption(int expense) {
-		this.consumption -= truck.getConsumption() * expense;
-	}
-
-	public int getConsumption() {
-		return consumption;
+	public double getConsumption() {
+		return getKilometersToDrive() * ((double) getTruck().getConsumption() / 100);
 	}
 
 	public Location getStartLocation() {
 		return startLocation;
 	}
 
+	/**
+	 * Sum of the kilometers in this tour
+	 *
+	 * @return Total way length in km
+	 */
 	public int getKilometersToDrive() {
+
+		int kilometersToDrive = 0;
+		Location currentLocation = startLocation;
+		for (TourDestination tourDestination : tourDestinations) {
+			kilometersToDrive += currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
+			currentLocation = tourDestination.getDestination();
+		}
 		return kilometersToDrive;
 	}
 
 	@Override
 	public String toString() {
 		String string = "";
-		string += "Drive " + kilometersToDrive + "km with a " + truck.toString() + " consuming " + consumption + " from " + startLocation.getName() + " over: \n";
+		string += "Drive " + getKilometersToDrive() + "km with a " + getTruck().toString() + " consuming " + getConsumption() + " from " + startLocation + " over: \n";
 
 		for (TourDestination tourDestination : tourDestinations) {
-			string += tourDestination.toString() + "\n";
+			string += tourDestination.toString() + " while consuming " +getConsumption()  + " liters of gas\n";
 		}
 		return string;
 	}

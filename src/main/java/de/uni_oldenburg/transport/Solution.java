@@ -75,6 +75,19 @@ public class Solution {
 	}
 
 	/**
+	 * Get the total consumption
+	 *
+	 * @return Total consumption
+	 */
+	public double getConsumption() {
+		double consumption = 0;
+		for (Tour tour : truckTours) {
+			consumption += tour.getConsumption();
+		}
+		return consumption;
+	}
+
+	/**
 	 * Output this solution
 	 *
 	 * @return The output as a String
@@ -82,16 +95,21 @@ public class Solution {
 	@Override
 	public String toString() {
 		String output = "";
-		int consumption = 0;
 		for (Tour tour : truckTours) {
 			output += tour.toString();
-			consumption += tour.getConsumption();
 		}
-		output += "Total consumption: " + consumption;
 		return output;
 	}
 
 	public ArrayList<Tour> getTruckTours() {
 		return truckTours;
+	}
+
+	public int getTotalConsumption() {
+		int consumption = 0;
+		for (Tour tour : truckTours) {
+			consumption += tour.getConsumption();
+		}
+		return consumption;
 	}
 }

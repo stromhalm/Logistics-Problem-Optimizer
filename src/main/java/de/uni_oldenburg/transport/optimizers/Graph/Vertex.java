@@ -12,10 +12,19 @@ public class Vertex {
 
 	private Location locationReference;
 
+	private Vertex predecessor;
+	private int expenseToStart;
+
 	public Vertex(Location location, Vertex parentLocation, int expenseToParentLocation) {
 		this.locationReference = location;
 		this.parentLocation = parentLocation;
 		this.expenseToParentLocation = expenseToParentLocation;
+	}
+
+	public Vertex(Location location, int expenseToStart, Vertex predecessor) {
+		this.locationReference = location;
+		this.expenseToStart = expenseToStart;
+		this.predecessor = predecessor;
 	}
 
 	public Vertex getParentLocation() {
@@ -44,5 +53,21 @@ public class Vertex {
 
 	public String getName() {
 		return locationReference.getName();
+	}
+
+	public Vertex getPredecessor() {
+		return predecessor;
+	}
+
+	public void setPredecessor(Vertex predecessor) {
+		this.predecessor = predecessor;
+	}
+
+	public int getExpenseToStart() {
+		return expenseToStart;
+	}
+
+	public void setExpenseToStart(int expensToStart) {
+		this.expenseToStart = expensToStart;
 	}
 }

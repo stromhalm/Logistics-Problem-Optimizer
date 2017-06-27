@@ -8,6 +8,8 @@ public class TourDestination {
 	private Location destination;
 	private int unload;
 
+	private int expense;
+
 	public TourDestination(Location destination, int unload) {
 		this.destination = destination;
 		this.unload = unload;
@@ -49,9 +51,17 @@ public class TourDestination {
 		this.destination = destination;
 	}
 
+	public int getExpense() {
+		return expense;
+	}
+
+	public void setExpense(int expense) {
+		this.expense = expense;
+	}
+
 	@Override
 	public String toString() {
-		return "    Tour destination to " + destination.getName() + " delivering " + String.valueOf(unload);
+		return "    Tour destination to " + destination.getName() + " (" + expense + " km) delivering " + String.valueOf(unload);
 	}
 
 }
