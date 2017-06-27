@@ -12,6 +12,9 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class PheromoneOptimizer implements Optimizer {
 
+	final double START_SCENT = 200;
+	final double SCENT_FADE = 0.993;
+
 	TransportNetwork transportNetwork;
 	Location startLocation;
 
@@ -84,10 +87,9 @@ public class PheromoneOptimizer implements Optimizer {
 		for (Location scentSource : transportNetwork.getLocations()) {
 
 			// Build scentMap for every location
-			double startScent = 20;
 			double scent;
 			if (scentSource == startLocation) {
-				scent = startScent*driftToStart;
+				scent = START_SCENT*driftToStart;
 			} else {
 				scent = scentSource.getAmount();
 			}
@@ -128,7 +130,7 @@ public class PheromoneOptimizer implements Optimizer {
 			scentMap.put(location, scent);
 
 			for (HashMap.Entry neighbor : location.getNeighbouringLocations().entrySet()) {
-				scentMap = markRecursively(scentMap, (Location) neighbor.getKey(), scent*Math.pow(0.995, (int) neighbor.getValue()));
+				scentMap = markRecursively(scentMap, (Location) neighbor.getKey(), scent*Math.pow(SCENT_FADE, (int) neighbor.getValue()));
 			}
 		}
 		return scentMap;
