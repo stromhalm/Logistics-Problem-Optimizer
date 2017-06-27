@@ -8,6 +8,8 @@ import de.uni_oldenburg.transport.trucks.MediumTruck;
 import de.uni_oldenburg.transport.trucks.SmallTruck;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Implements the North-Wester-Corner method to solve the transport problem and optimize it. See VL 6 for further information. The method can be improved if the table organization is optimized, too.
@@ -22,7 +24,7 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 	@Override
 	public abstract Solution optimizeTransportNetwork(TransportNetwork transportNetwork);
 
-	public ArrayList<Tour> doNorthWestCornerMethod(Location startLocation) {
+	public ArrayList<Tour> doNorthWestCornerMethod(Location startLocation, TransportNetwork transportNetwork) {
 		int[] kmToDriveOnRoute = new int[spanningNetwork.size()];
 		int[] amountToDeliverOnRoute = new int[spanningNetwork.size()];
 
@@ -76,6 +78,16 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 				while (locationAmount != 0) {
 					int min;
 					if (lastTruck == null || lastTruck.getUnloaded() - lastTruck.getCapacity() == 0) {
+						if (lastTruck != null) { // send the last truck home
+							Location from = lastTour.getTourDestinations()[lastTour.getTourDestinations().length - 1].getDestination();
+							Location to = lastTour.getStartLocation();
+							LinkedHashMap<Location, Integer> pathBack = transportNetwork.getShortestPath(from, to);
+							for (Map.Entry<Location, Integer> subPath : pathBack.entrySet()) {
+								System.out.print(subPath.getKey().getName() + " with " + subPath.getValue() + " to ");
+								// TODO add tourdestinations
+							}
+							System.out.println();
+						}
 						if (largeTrucks.size() != 0) {
 							min = Math.min(LargeTruck.CAPACITY, locationAmount);
 							lastTruck = largeTrucks.get(0);
@@ -119,8 +131,8 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 	private int computeExpense(Vertex vertex) {
 		int expense = 0;
 		while (vertex.getParentLocation() != null) {
-			expense += vertex.getExpenseToParentLocation() * 2;
-			vertex = vertex.getParentLocation();// TODO find better way back and beware that might change the pointer?!
+			expense += vertex.getExpenseToParentLocation();
+			vertex = vertex.getParentLocation();
 		}
 		return expense;
 	}

@@ -17,7 +17,7 @@ public class NorthWestCornerKruskalOptimizer extends NorthWestCornerOptimizer {
 		System.out.print(toString());
 		Solution solution = new Solution(transportNetwork);
 
-		for (Tour tour : doNorthWestCornerMethod(transportNetwork.getStartLocation())) {
+		for (Tour tour : doNorthWestCornerMethod(transportNetwork.getStartLocation(), transportNetwork)) {
 			solution.addTour(tour);
 		}
 

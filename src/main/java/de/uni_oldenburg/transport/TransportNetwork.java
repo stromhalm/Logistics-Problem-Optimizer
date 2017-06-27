@@ -4,6 +4,7 @@ import de.uni_oldenburg.transport.optimizers.Graph.Graph;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 /**
  * The TransportNetwork represents the map
@@ -18,7 +19,7 @@ public class TransportNetwork {
 	/**
 	 * {@link HashMap} matrix with shortest path as key and the single expenses in the path as values of the locations.
 	 */
-	private HashMap<Location, Integer>[][] shortestPaths;
+	private LinkedHashMap<Location, Integer>[][] shortestPaths;
 
 	public TransportNetwork(Location[] network) {
 		this.network = network;
@@ -87,7 +88,7 @@ public class TransportNetwork {
 	 * @param to
 	 * @return
 	 */
-	public HashMap<Location, Integer> getShortestPath(Location from, Location to) {
+	public LinkedHashMap<Location, Integer> getShortestPath(Location from, Location to) {
 		for (int i = 0; i < shortestPaths.length; i++) {
 			for (int j = 0; j < shortestPaths[i].length; j++) {
 				Iterator iterators = shortestPaths[i][j].keySet().iterator();

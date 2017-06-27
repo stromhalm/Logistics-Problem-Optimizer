@@ -3,7 +3,7 @@ package de.uni_oldenburg.transport.optimizers.Graph;
 import de.uni_oldenburg.transport.Location;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -11,19 +11,14 @@ import java.util.Map;
  */
 public class Graph {
 
-	public static HashMap<Location, Integer>[][] computeAdjazenMatrix(Location[] locations) {
-		HashMap<Location, Integer>[][] adjazenMatrix = new HashMap[locations.length][locations.length];
+	public static LinkedHashMap<Location, Integer>[][] computeAdjazenMatrix(Location[] locations) {
+		LinkedHashMap<Location, Integer>[][] adjazenMatrix = new LinkedHashMap[locations.length][locations.length];
 		for (int i = 0; i < locations.length; i++) {
 			for (int j = 0; j < locations.length; j++) {
 				Location from = locations[i];
 				Location to = locations[j];
 				adjazenMatrix[i][j] = doDijkstra(from, to);
-				adjazenMatrix[i][j].put(from, 0); // add start location of the path
-				for (Map.Entry<Location, Integer> mapEntry : adjazenMatrix[i][j].entrySet()) {
-					System.out.print(mapEntry.getValue() + " ");
-				}
 			}
-			System.out.println();
 		}
 		return adjazenMatrix;
 	}
@@ -35,8 +30,8 @@ public class Graph {
 	 * @param to
 	 * @return
 	 */
-	private static HashMap<Location, Integer> doDijkstra(Location from, Location to) {
-		HashMap<Location, Integer> path = new HashMap<>();
+	private static LinkedHashMap<Location, Integer> doDijkstra(Location from, Location to) {
+		LinkedHashMap<Location, Integer> path = new LinkedHashMap<>();
 
 		if (from.getName().equals(to.getName())) {
 			path.put(from, 0);
@@ -51,7 +46,6 @@ public class Graph {
 				markedVertex.add(vertex);
 				vertices.add(vertex);
 			}
-			System.out.println("Start: " + from.getName() + ", To: " + to.getName());
 			// start iteration
 			while (markedVertex.size() != 0) {
 				//System.out.print("Marked vertices: ");
@@ -91,10 +85,10 @@ public class Graph {
 			for (Vertex vertex : vertices) {
 				if (vertex.getName().equals(to.getName())) {
 					while (vertex.getPredecessor() != null) {
-						System.out.print(vertex.getName() + " to ");
+						path.put(vertex.getLocationReference(), vertex.getLocationReference().getNeighbouringLocations().get(vertex.getPredecessor().getLocationReference()));
 						vertex = vertex.getPredecessor();
 					}
-					System.out.println(vertex.getName());
+					path.put(vertex.getLocationReference(), 0);
 					break;
 				}
 			}
