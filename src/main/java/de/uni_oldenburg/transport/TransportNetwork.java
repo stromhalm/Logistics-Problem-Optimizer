@@ -22,7 +22,6 @@ public class TransportNetwork {
 
 	public TransportNetwork(Location[] network) {
 		this.network = network;
-		this.computeShortestPaths();
 	}
 
 	public void buildShortestPaths() {
@@ -77,7 +76,7 @@ public class TransportNetwork {
 	/**
 	 * Computes the shortest path using Dijkstra.
 	 */
-	private void computeShortestPaths() {
+	public void computeShortestPaths() {
 		shortestPaths = Graph.computeAdjazenMatrix(network);
 	}
 
@@ -88,7 +87,7 @@ public class TransportNetwork {
 	 * @param to
 	 * @return
 	 */
-	private HashMap<Location, Integer> getShortestPath(Location from, Location to) {
+	public HashMap<Location, Integer> getShortestPath(Location from, Location to) {
 		for (int i = 0; i < shortestPaths.length; i++) {
 			for (int j = 0; j < shortestPaths[i].length; j++) {
 				Iterator iterators = shortestPaths[i][j].keySet().iterator();

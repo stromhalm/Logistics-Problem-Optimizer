@@ -65,9 +65,11 @@ public class AppStarter {
 				break;
 			case 3:
 				optimizer = new NorthWestCornerKruskalOptimizer();
+				transportNetwork.computeShortestPaths();
 				break;
 			case 4:
 				optimizer = new NorthWestCornerOwnOptimizer();
+				transportNetwork.computeShortestPaths();
 				break;
 			case 5:
 				optimizer = new SavingsOptimizer();
