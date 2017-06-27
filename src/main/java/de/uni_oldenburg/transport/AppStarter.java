@@ -87,7 +87,7 @@ public class AppStarter {
 
 		for (Map.Entry<Optimizer, Integer> optimizerEntry : optimizers.entrySet()) {
 			System.out.println("Running \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\"");
-			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocationsDeepCopy()/*Fresh copy for every optimizer*/));
+			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(transportNetwork);
 			if (solution.isValid()) {
 				// Print solution
 				System.out.println("Solution found:");

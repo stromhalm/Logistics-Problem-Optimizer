@@ -48,7 +48,11 @@ public class TransportNetwork {
 		return network;
 	}
 
-
+	/**
+	 * If in need of a fresh copy.
+	 *
+	 * @return
+	 */
 	public Location[] getLocationsDeepCopy() {
 		ArrayList<Location> locations = new ArrayList<>();
 		for (int i = 0; i < network.length; i++) {
