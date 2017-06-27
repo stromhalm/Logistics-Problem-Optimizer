@@ -101,7 +101,7 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 					} else {
 						unload = Math.min(lastTruck.getCapacity() - lastTruck.getUnloaded(), locationAmount);
 						//System.out.print(" with " + vertex.getExpenseToParentLocation() + " to " + lastTour.getTourDestinations()[lastTour.getTourDestinations().length - 1].getDestination().getName());
-						lastTour.addDestination(new TourDestination(vertex.getLocationReference(), unload), vertex.getExpenseToParentLocation());
+						lastTour.addDestination(new TourDestination(vertex.getLocationReference(), unload));
 					}
 					locationAmount -= unload;
 					lastTruck.unload(unload);
@@ -114,7 +114,7 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 							if (lastSubPath == null) {
 								lastSubPath = subPath;
 							} else {
-								lastTour.addDestination(new TourDestination(subPath.getKey(), 0), lastSubPath.getValue());
+								lastTour.addDestination(new TourDestination(subPath.getKey(), 0));
 								//System.out.print(" with " + lastSubPath.getValue() + " to " + subPath.getKey().getName());
 								lastSubPath = subPath;
 							}
@@ -138,7 +138,7 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 			if (lastSubPath == null) {
 				lastSubPath = subPath;
 			} else {
-				tour.addDestination(new TourDestination(subPath.getKey(), (subPath.getKey().getName().equals(vertex.getName()) ? unload : 0)), lastSubPath.getValue());
+				tour.addDestination(new TourDestination(subPath.getKey(), (subPath.getKey().getName().equals(vertex.getName()) ? unload : 0)));
 				lastSubPath = subPath;
 			}
 

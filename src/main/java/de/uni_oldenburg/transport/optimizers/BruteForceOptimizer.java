@@ -73,7 +73,7 @@ public class BruteForceOptimizer implements Optimizer {
 			if (!checkForLocationAlreadyServed(solution, location)) {
 
 				TourDestination tourDestination = new TourDestination(location, location.getAmount());
-				tour.addDestination(tourDestination, expense);
+				tour.addDestination(tourDestination);
 				amountPossible -= location.getAmount();
 
 				System.out.println("LKW " + x + " drives " + expense + " kilometers from " + startTourLocation.getName() + " to " + location.getName() + " and unloads " + location.getAmount() + " at tour number " + x);
@@ -86,7 +86,6 @@ public class BruteForceOptimizer implements Optimizer {
 				}
 			} else {
 				// compute the expense nonetheless
-				tour.addConsumption(expense);
 				startTourLocation = location;
 			}
 		}
