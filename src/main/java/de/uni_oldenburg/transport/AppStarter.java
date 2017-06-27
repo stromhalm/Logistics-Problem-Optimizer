@@ -80,7 +80,7 @@ public class AppStarter {
 				optimizers.put(new PheromoneOptimizer(), -1.0);
 				optimizers.put(new NearestNeighborOptimizer(), -1.0);
 				//optimizers.put(new BruteForceOptimizer(), -1);
-				//optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
+				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
 				//optimizers.put(new SavingsOptimizer(), -1);
 		}
@@ -88,8 +88,7 @@ public class AppStarter {
 
 		for (Map.Entry<Optimizer, Double> optimizerEntry : optimizers.entrySet()) {
 			System.out.println("Running \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\"");
-			// TODO previous optimizer affect others. We need to make a "deep copy"
-			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocations().clone())/*Fresh copy for every optimizer*/);
+			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(transportNetwork);
 			if (solution.isValid()) {
 				// Print solution
 				System.out.println("Solution found:");

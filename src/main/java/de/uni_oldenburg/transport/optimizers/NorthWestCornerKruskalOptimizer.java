@@ -13,9 +13,7 @@ public class NorthWestCornerKruskalOptimizer extends NorthWestCornerOptimizer {
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
 		transportNetwork.computeShortestPaths();
 
-		Location[] locationsCopy = new Location[transportNetwork.getLocations().length];
-		System.arraycopy(transportNetwork.getLocations(), 0, locationsCopy, 0, locationsCopy.length);
-		Kruskal kruskal = new Kruskal(new TransportNetwork(locationsCopy));
+		Kruskal kruskal = new Kruskal(new TransportNetwork(transportNetwork.getLocationsDeepCopy()));
 		kruskal.findMST();
 		TransportNetwork transportNetworkKruskal = kruskal.getLocationsMST();
 
