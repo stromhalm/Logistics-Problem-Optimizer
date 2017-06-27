@@ -46,6 +46,7 @@ public class Tour {
 	 */
 	public void addDestination(TourDestination tourDestination, int expense) {
 		tourDestinations.add(tourDestination);
+		tourDestination.setExpense(expense); // TODO delete if not wanted
 		kilometersToDrive += expense;
 		addConsumption(expense);
 	}
@@ -91,7 +92,7 @@ public class Tour {
 		}
 
 		// Verify truck returned to start
-		Location lastDestination = tourDestinations.get(tourDestinations.size()-1).getDestination();
+		Location lastDestination = tourDestinations.get(tourDestinations.size() - 1).getDestination();
 		if (lastDestination != startLocation) {
 			// Error Service
 			System.out.println("Truck did not return to " + startLocation.getName() + " but stayed in " + lastDestination.getName());
@@ -123,10 +124,10 @@ public class Tour {
 	@Override
 	public String toString() {
 		String string = "";
-		string += "Drive " + kilometersToDrive + "km with a " + truck.toString() + " consuming " + consumption + " from " + startLocation.getName() + " over: \n";
+		string += "Drive " + kilometersToDrive + "km with a " + truck.toString() + " consuming " + consumption + " liters of gas from " + startLocation.getName() + " over: \n";
 
 		for (TourDestination tourDestination : tourDestinations) {
-			string += tourDestination.toString() + "\n";
+			string += tourDestination.toString() + " while consuming " + (tourDestination.getExpense() * truck.getConsumption() / 100) + " liters of gas\n";
 		}
 		return string;
 	}

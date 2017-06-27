@@ -11,11 +11,11 @@ public class NorthWestCornerKruskalOptimizer extends NorthWestCornerOptimizer {
 
 		Kruskal kruskal = new Kruskal(transportNetwork);
 		kruskal.findMST();
-		transportNetwork = kruskal.getLocationsMST();
+		TransportNetwork transportNetworkKruskal = kruskal.getLocationsMST();
 
-		this.spanningNetwork = Graph.getSpanningNetwork(transportNetwork.getLocations(), transportNetwork.getStartLocation());
+		this.spanningNetwork = Graph.getSpanningNetwork(transportNetworkKruskal.getLocations(), transportNetworkKruskal.getStartLocation());
 		System.out.print(toString());
-		Solution solution = new Solution(transportNetwork);
+		Solution solution = new Solution(transportNetworkKruskal);
 
 		for (Tour tour : doNorthWestCornerMethod(transportNetwork.getStartLocation(), transportNetwork)) {
 			solution.addTour(tour);
