@@ -88,6 +88,7 @@ public class AppStarter {
 
 		for (Map.Entry<Optimizer, Integer> optimizerEntry : optimizers.entrySet()) {
 			System.out.println("Running \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\"");
+			// TODO previous optimizer affect others
 			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocations().clone())/*Fresh copy for every optimizer*/);
 			if (solution.isValid()) {
 				// Print solution
