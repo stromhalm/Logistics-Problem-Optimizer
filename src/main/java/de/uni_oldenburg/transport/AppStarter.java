@@ -89,5 +89,4 @@ public class AppStarter {
 		System.out.println("Solution found:");
 		System.out.println(solution.toString());
 	}
-
 }
