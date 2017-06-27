@@ -51,17 +51,8 @@ public class TourDestination {
 		this.destination = destination;
 	}
 
-	public int getExpense() {
-		return expense;
-	}
-
-	public void setExpense(int expense) {
-		this.expense = expense;
-	}
-
 	@Override
 	public String toString() {
-		return "    Tour destination to " + destination.getName() + " (" + expense + " km) delivering " + String.valueOf(unload);
+		return "   Tour destination to " + destination + " delivering " + getUnload();
 	}
-
 }
