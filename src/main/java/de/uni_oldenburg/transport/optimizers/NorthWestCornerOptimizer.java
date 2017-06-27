@@ -42,7 +42,7 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 				locationsDelivered.add(leaf.getLocationReference());
 				leaf = leaf.getParentLocation();
 			}
-			//System.out.println("Route: " + route + ": " + amountToDeliverOnRoute[route] + " (amountNeeded) and " + kmToDriveOnRoute[route] + "(kmToDrive)");
+			////System.out.println("Route: " + route + ": " + amountToDeliverOnRoute[route] + " (amountNeeded) and " + kmToDriveOnRoute[route] + "(kmToDrive)");
 		}
 
 		ArrayList<Tour> tours = new ArrayList<>();
@@ -96,11 +96,11 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 							lastTour = addPaths(lastTruck, startLocation, vertex, unload, transportNetwork);
 							smallTrucks.remove(lastTruck);
 						}
-						System.out.print(startLocation.getName() + " with " + computeExpense(vertex) + " to " + lastTour.getTourDestinations()[lastTour.getTourDestinations().length - 1].getDestination().getName());
+						//System.out.print(startLocation.getName() + " with " + computeExpense(vertex) + " to " + lastTour.getTourDestinations()[lastTour.getTourDestinations().length - 1].getDestination().getName());
 						tours.add(lastTour);
 					} else {
 						unload = Math.min(lastTruck.getCapacity() - lastTruck.getUnloaded(), locationAmount);
-						System.out.print(" with " + vertex.getExpenseToParentLocation() + " to " + lastTour.getTourDestinations()[lastTour.getTourDestinations().length - 1].getDestination().getName());
+						//System.out.print(" with " + vertex.getExpenseToParentLocation() + " to " + lastTour.getTourDestinations()[lastTour.getTourDestinations().length - 1].getDestination().getName());
 						lastTour.addDestination(new TourDestination(vertex.getLocationReference(), unload), vertex.getExpenseToParentLocation());
 					}
 					locationAmount -= unload;
@@ -115,13 +115,13 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 								lastSubPath = subPath;
 							} else {
 								lastTour.addDestination(new TourDestination(subPath.getKey(), 0), lastSubPath.getValue());
-								System.out.print(" with " + lastSubPath.getValue() + " to " + subPath.getKey().getName());
+								//System.out.print(" with " + lastSubPath.getValue() + " to " + subPath.getKey().getName());
 								lastSubPath = subPath;
 							}
 
 						}
-						System.out.println();
-						System.out.println(lastTruck.getCapacity() - lastTruck.getUnloaded() + " capacity left in the truck.");
+						//System.out.println();
+						//System.out.println(lastTruck.getCapacity() - lastTruck.getUnloaded() + " capacity left in the truck.");
 					}
 				}
 				locationsDelivered.add(vertex.getLocationReference());

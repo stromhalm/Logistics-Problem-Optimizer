@@ -8,6 +8,7 @@ import de.uni_oldenburg.transport.optimizers.Graph.Kruskal;
 public class NorthWestCornerKruskalOptimizer extends NorthWestCornerOptimizer {
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
+		transportNetwork.computeShortestPaths();
 
 		Kruskal kruskal = new Kruskal(transportNetwork);
 		kruskal.findMST();
