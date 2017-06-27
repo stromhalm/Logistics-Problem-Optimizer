@@ -4,6 +4,7 @@ import de.uni_oldenburg.transport.*;
 import de.uni_oldenburg.transport.trucks.AbstractTruck;
 import de.uni_oldenburg.transport.trucks.LargeTruck;
 
+import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -17,54 +18,83 @@ public class GeneticOptimizer implements Optimizer {
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
 
 		this.transportNetwork = transportNetwork;
-
-		transportNetwork.buildShortestPaths();
-		Location startLocation = transportNetwork.getStartLocation();
 		Solution solution = new Solution(transportNetwork);
 
-		// While work to do
-		Location location = getLocationWithPositiveAmount();
-		while (location != null) {
+		Location startLocation = transportNetwork.getStartLocation();
+		Location currentLocation = startLocation;
+		Tour tour = new Tour(new LargeTruck(), startLocation);
 
-			AbstractTruck truck = new LargeTruck();
-			int tourload = 0;
-			Tour tour = new Tour(truck, startLocation);
-			Location truckLocation = startLocation;
+		/*do {
+			HashMap<Location, Double> scentMap = getSummedScentMap(0.0);
 
-			// While truck not overloaded
-			while (tourload < truck.getCapacity()) {
+			Location bestNeighbor;
+			int bestScent;
 
-				// Choose direction
-				int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
-				direction = direction % (truckLocation.getNeighbouringLocations().size());
-
-				Location nextLocation = (Location) truckLocation.getNeighbouringLocations().keySet().toArray()[direction];
-				int nextLocationDistance = truckLocation.getNeighbouringLocations().get(nextLocation);
-				int nextLocationCost = nextLocationDistance*(truck.getConsumption()/100);
-				int nextLocationUnload = Math.min(nextLocation.getAmount(), truck.getCapacity()-tourload);
-				nextLocation.setAmount(nextLocation.getAmount()-nextLocationUnload);
-				tourload += nextLocationUnload;
-
-				TourDestination tourDestination = new TourDestination(nextLocation, nextLocationUnload);
-				tour.addDestination(tourDestination, nextLocationCost);
-				truckLocation = nextLocation;
-
-				// TODO: Back to start
+			for (HashMap.Entry neighbor : currentLocation.getNeighbouringLocations().entrySet()) {
+				if (scentMap.get((Location) neighbor.getValue()) > bestScent) {
+					bestNeighbor =
+				}
 			}
 
-			System.out.println(tour.toString());
+			TourDestination nextDestination =
+		} while (startLocation != currentLocation)
 
-			solution.addTour(tour);
-		}
-
+		for (HashMap.Entry source : scentMap.entrySet()) {
+			Location location = (Location) source.getKey();
+			System.out.println("Scent for " + location.getName() + " is " + (Double) source.getValue());
+		}*/
 
 		return solution;
 	}
 
-	private Location getLocationWithPositiveAmount() {
-		for (Location location : transportNetwork.getLocations()) {
-			if (location.getAmount() > 0) return location;
+	private HashMap<Location, Double> getSummedScentMap(double driftToStart) {
+
+		HashMap<Location, Double> summedScentMap = new HashMap();
+
+		// Sum scents for all the locations
+		for (Location scentSource : transportNetwork.getLocations()) {
+
+			// Build scentMap for every location
+			int startScent = 20;
+			int scent;
+			if (scentSource == transportNetwork.getStartLocation()) {
+				scent = startScent;
+			} else {
+				scent = scentSource.getAmount();
+			}
+
+			HashMap<Location, Double> locationScentMap = markRecursively(new HashMap<>(), scentSource, scent);
+
+			// Add to summedScentMap
+			for (HashMap.Entry singleScentSource : locationScentMap.entrySet()) {
+				double currentScent = 0;
+				if (summedScentMap.get(singleScentSource.getKey()) != null) {
+					currentScent = summedScentMap.get(singleScentSource.getKey());
+				}
+
+				double additionalScent = (Double) singleScentSource.getValue();
+
+				// Drift to start
+				if (scentSource != transportNetwork.getStartLocation()) {
+					additionalScent = (1-driftToStart)*additionalScent;
+				}
+
+				summedScentMap.put((Location) singleScentSource.getKey(), currentScent + additionalScent);
+			}
 		}
-		return null;
+		return summedScentMap;
+	}
+
+	private HashMap<Location, Double> markRecursively(HashMap<Location, Double> scentMap, Location location, double scent) {
+
+		// Mark the current location
+		if (scentMap.get(location) == null || scentMap.get(location) < scent) {
+			scentMap.put(location, scent);
+
+			for (HashMap.Entry neighbor : location.getNeighbouringLocations().entrySet()) {
+				scentMap = markRecursively(scentMap, (Location) neighbor.getKey(), scent*Math.pow(0.995, (int) neighbor.getValue()));
+			}
+		}
+		return scentMap;
 	}
 }
