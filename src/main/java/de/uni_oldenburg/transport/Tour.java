@@ -122,7 +122,7 @@ public class Tour {
 	}
 
 	public double getConsumption() {
-		return getKilometersToDrive() * ((double) getTruck().getConsumption() / 100);
+		return Math.round(getKilometersToDrive() * ((double) getTruck().getConsumption()))/100;
 	}
 
 	public Location getStartLocation() {
@@ -151,7 +151,7 @@ public class Tour {
 		string += "Drive " + getKilometersToDrive() + "km with a " + getTruck().toString() + " consuming " + getConsumption() + " from " + startLocation + " over: \n";
 
 		for (TourDestination tourDestination : tourDestinations) {
-			string += tourDestination.toString() + " while consuming " +getConsumption()  + " liters of gas\n";
+			string += tourDestination.toString() + " while consuming " + tourDestination.getExpense()  + " liters of gas\n";
 		}
 		return string;
 	}

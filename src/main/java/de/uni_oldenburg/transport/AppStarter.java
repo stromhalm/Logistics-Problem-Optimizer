@@ -55,14 +55,14 @@ public class AppStarter {
 			System.exit(1);
 		}
 
-		HashMap<Optimizer, Integer> optimizers = new HashMap<>();
+		HashMap<Optimizer, Double> optimizers = new HashMap<>();
 
 		switch (optimizerId) {
 			case 0:
-				optimizers.put(new PheromoneOptimizer(), -1);
+				optimizers.put(new PheromoneOptimizer(), -1.0);
 				break;
 			case 1:
-				optimizers.put(new NearestNeighborOptimizer(), -1);
+				optimizers.put(new NearestNeighborOptimizer(), -1.0);
 				break;
 			case 2:
 				//optimizers.put(new BruteForceOptimizer(), -1);
@@ -71,22 +71,22 @@ public class AppStarter {
 				//optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
 				break;
 			case 4:
-				optimizers.put(new NorthWestCornerOwnOptimizer(), -1);
+				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
 				break;
 			case 5:
 				//optimizers.put(new SavingsOptimizer(), -1);
 				break;
 			default:
-				optimizers.put(new PheromoneOptimizer(), -1);
-				optimizers.put(new NearestNeighborOptimizer(), -1);
+				optimizers.put(new PheromoneOptimizer(), -1.0);
+				optimizers.put(new NearestNeighborOptimizer(), -1.0);
 				//optimizers.put(new BruteForceOptimizer(), -1);
 				//optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
-				optimizers.put(new NorthWestCornerOwnOptimizer(), -1);
+				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
 				//optimizers.put(new SavingsOptimizer(), -1);
 		}
 
 
-		for (Map.Entry<Optimizer, Integer> optimizerEntry : optimizers.entrySet()) {
+		for (Map.Entry<Optimizer, Double> optimizerEntry : optimizers.entrySet()) {
 			System.out.println("Running \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\"");
 			// TODO previous optimizer affect others. We need to make a "deep copy"
 			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocations().clone())/*Fresh copy for every optimizer*/);
@@ -98,11 +98,11 @@ public class AppStarter {
 			}
 		}
 		System.out.println("\nRanking:");
-		for (Map.Entry<Optimizer, Integer> optimizerEntry : optimizers.entrySet()) {
-			if (optimizerEntry.getValue() == -1) {
-				System.out.println("Optimizer \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\":  (No valid solution found)");
+		for (Map.Entry<Optimizer, Double> optimizerEntry : optimizers.entrySet()) {
+			if (optimizerEntry.getValue() < 0) {
+				System.out.println("Optimizer \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\": No valid solution found");
 			} else {
-				System.out.println("Optimizer \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\": " + optimizerEntry.getValue() + "(consumed)");
+				System.out.println("Optimizer \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\": " + optimizerEntry.getValue() + " consumed");
 			}
 		}
 	}

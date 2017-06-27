@@ -35,7 +35,7 @@ public abstract class AbstractTruck {
 	 *
 	 * @return
 	 */
-	public int getConsumption() {
+	public double getConsumption() {
 		return consumption;
 	}
 

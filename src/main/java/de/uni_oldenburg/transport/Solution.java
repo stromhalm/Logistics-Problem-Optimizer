@@ -105,7 +105,7 @@ public class Solution {
 		return truckTours;
 	}
 
-	public int getTotalConsumption() {
+	public double getTotalConsumption() {
 		int consumption = 0;
 		for (Tour tour : truckTours) {
 			consumption += tour.getConsumption();
