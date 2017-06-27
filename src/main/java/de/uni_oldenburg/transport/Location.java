@@ -14,9 +14,19 @@ public class Location {
 	private final String name;
 
 	/**
-	 * Is the amount of units to be delivered to this location.
+	 * Is the amount of units to be delivered to this location
 	 */
 	private int amount;
+
+	/**
+	 * The shortest known distance to the start location
+	 */
+	private int shortestKnownDistanceToStart = 0;
+
+	/**
+	 * The location which will finally lead to the start location
+	 */
+	private Location shortestKnownWayToStart = null;
 
 	/**
 	 * Is a map of neighbouring locations with a expense indicator as kilometers.
@@ -73,6 +83,26 @@ public class Location {
 	 */
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	/**
+	 * Notify this location about a new candidate for a shortest way to the start
+	 *
+	 * @param neighborLocation The neighbor candidate
+	 * @param distanceToStart The overall distance for this location
+	 */
+	public void addShortDistanceToStartCandidate(Location neighborLocation, int distanceToStart) {
+		if (distanceToStart < shortestKnownDistanceToStart || shortestKnownWayToStart == null) {
+
+			// Save for later
+			shortestKnownDistanceToStart = distanceToStart;
+			shortestKnownWayToStart = neighborLocation;
+
+			// Recursively notify neighbors
+			for (Map.Entry<Location, Integer> neighbor: neighbouringLocations.entrySet()) {
+				neighbor.getKey().addShortDistanceToStartCandidate(this, distanceToStart+neighbor.getValue());
+			}
+		}
 	}
 
 	/**

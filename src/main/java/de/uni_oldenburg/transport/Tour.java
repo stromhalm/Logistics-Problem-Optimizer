@@ -84,7 +84,20 @@ public class Tour {
 		for (TourDestination tourDestination : tourDestinations) {
 			load += tourDestination.getUnload();
 		}
-		return (load <= truck.getCapacity());
+		if (load > truck.getCapacity()) {
+			// Error Service
+			System.out.println("Truck was overloaded with a load of " + load + " (maximum capacity " + truck.getCapacity() + ")");
+			return false;
+		}
+
+		// Verify truck returned to start
+		Location lastDestination = tourDestinations.get(tourDestinations.size()-1).getDestination();
+		if (lastDestination != startLocation) {
+			// Error Service
+			System.out.println("Truck did not return to " + startLocation.getName() + " but stayed in " + lastDestination.getName());
+			return false;
+		}
+		return true;
 	}
 
 	public void addConsumption(int expense) {
