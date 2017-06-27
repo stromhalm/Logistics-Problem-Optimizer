@@ -15,6 +15,11 @@ public class PheromoneOptimizer implements Optimizer {
 	TransportNetwork transportNetwork;
 	Location startLocation;
 
+	/**
+	 *
+	 * @param transportNetwork A transport network for which the transport problem has to be optimized.
+	 * @return The solution found by this optimizer
+	 */
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
 
@@ -66,6 +71,11 @@ public class PheromoneOptimizer implements Optimizer {
 		return solution;
 	}
 
+	/**
+	 * Calculate a scent map with a driven drift to the start location
+	 * @param driftToStart Drift to start location [0..1]. The higher the higher is the drift
+	 * @return A scent map
+	 */
 	private HashMap<Location, Double> getSummedScentMap(double driftToStart) {
 
 		HashMap<Location, Double> summedScentMap = new HashMap();
@@ -104,6 +114,13 @@ public class PheromoneOptimizer implements Optimizer {
 		return summedScentMap;
 	}
 
+	/**
+	 * Recursive function to calculate the recursive scents on the map
+	 * @param scentMap The initial scent map
+	 * @param location The location with a new scent
+	 * @param scent The new scents value
+	 * @return The refreshed scent map
+	 */
 	private HashMap<Location, Double> markRecursively(HashMap<Location, Double> scentMap, Location location, double scent) {
 
 		// Mark the current location and its neighbors
@@ -117,6 +134,10 @@ public class PheromoneOptimizer implements Optimizer {
 		return scentMap;
 	}
 
+	/**
+	 * Finds a location that has an amount > 0
+	 * @return Any location with amount > 0 else null
+	 */
 	private Location getLocationWithPositiveAmount() {
 		for (Location location : transportNetwork.getLocations()) {
 			if (location.getAmount() > 0) return location;
