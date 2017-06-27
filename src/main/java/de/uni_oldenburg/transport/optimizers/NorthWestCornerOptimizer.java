@@ -80,25 +80,25 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 							min = Math.min(LargeTruck.CAPACITY, locationAmount);
 							lastTruck = largeTrucks.get(0);
 							lastTour = new Tour(lastTruck, startLocation);
-							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex));
+							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min));
 							largeTrucks.remove(lastTruck);
 						} else if (mediumTrucks.size() != 0) {
 							min = Math.min(MediumTruck.CAPACITY, locationAmount);
 							lastTruck = mediumTrucks.get(0);
 							lastTour = new Tour(lastTruck, startLocation);
-							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex));
+							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min));
 							mediumTrucks.remove(lastTruck);
 						} else {
 							min = Math.min(SmallTruck.CAPACITY, locationAmount);
 							lastTruck = smallTrucks.get(0);
 							lastTour = new Tour(lastTruck, startLocation);
-							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex));
+							lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min));
 							smallTrucks.remove(lastTruck);
 						}
 						tours.add(lastTour);
 					} else {
 						min = Math.min(lastTruck.getCapacity() - lastTruck.getUnloaded(), locationAmount);
-						lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min), computeExpense(vertex) - lastTour.getKilometersToDrive());
+						lastTour.addDestination(new TourDestination(vertex.getLocationReference(), min));
 					}
 					locationAmount -= min;
 					lastTruck.unload(min);

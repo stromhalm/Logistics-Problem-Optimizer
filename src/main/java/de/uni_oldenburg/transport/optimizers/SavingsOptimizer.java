@@ -85,7 +85,7 @@ public class SavingsOptimizer implements Optimizer {
                             tourDestination.setUnload(unloadAmount);
                             tourLocations.get(k).setAmount(restAmount);
                         }
-                        tour.addDestination(tourDestination, expense);
+                        tour.addDestination(tourDestination);
                         amountPossible -= unload;
 
                         System.out.println("LKW " + j + " drives " + expense + " kilometers from " + startTourLocation.getName() + " to " + actLocation.getName() + " and unloads " + unloadAmount + " at tour number " + j);

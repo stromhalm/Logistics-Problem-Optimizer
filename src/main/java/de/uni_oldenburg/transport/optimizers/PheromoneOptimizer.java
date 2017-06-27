@@ -8,41 +8,60 @@ import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Example optimizer
+ *  Optimizer that works with scent traces (pheromones)
  */
-public class GeneticOptimizer implements Optimizer {
+public class PheromoneOptimizer implements Optimizer {
 
 	TransportNetwork transportNetwork;
+	Location startLocation;
 
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
 
 		this.transportNetwork = transportNetwork;
+		this.startLocation = transportNetwork.getStartLocation();
 		Solution solution = new Solution(transportNetwork);
 
-		Location startLocation = transportNetwork.getStartLocation();
 		Location currentLocation = startLocation;
-		Tour tour = new Tour(new LargeTruck(), startLocation);
+		int maximumTruckCapacity = LargeTruck.CAPACITY;
 
-		/*do {
-			HashMap<Location, Double> scentMap = getSummedScentMap(0.0);
+		// While work to do
+		while (getLocationWithPositiveAmount() != null) {
 
-			Location bestNeighbor;
-			int bestScent;
+			Tour tour = new Tour(startLocation);
+			int tourload = 0;
 
-			for (HashMap.Entry neighbor : currentLocation.getNeighbouringLocations().entrySet()) {
-				if (scentMap.get((Location) neighbor.getValue()) > bestScent) {
-					bestNeighbor =
+			// Go to highest scent
+			do {
+
+				// Get scentMap
+				HashMap<Location, Double> scentMap = getSummedScentMap((double) tourload/maximumTruckCapacity);
+
+				// Find neighbor with highest scent
+				Location bestNeighbor = null;
+				double bestScent = 0;
+				for (HashMap.Entry neighbor : currentLocation.getNeighbouringLocations().entrySet()) {
+					if (scentMap.get(neighbor.getKey()) > bestScent) {
+						bestNeighbor = (Location) neighbor.getKey();
+						bestScent = scentMap.get(neighbor.getKey());
+					}
 				}
-			}
 
-			TourDestination nextDestination =
-		} while (startLocation != currentLocation)
+				// Calculate amounts
+				int nextLocationUnload = Math.min(bestNeighbor.getAmount(), maximumTruckCapacity - tourload);
+				bestNeighbor.setAmount(bestNeighbor.getAmount() - nextLocationUnload);
+				tourload += nextLocationUnload;
 
-		for (HashMap.Entry source : scentMap.entrySet()) {
-			Location location = (Location) source.getKey();
-			System.out.println("Scent for " + location.getName() + " is " + (Double) source.getValue());
-		}*/
+				// Add destination
+				TourDestination nextDestination = new TourDestination(bestNeighbor, nextLocationUnload);
+				tour.addDestination(nextDestination);
+
+				currentLocation = bestNeighbor;
+
+			} while (startLocation != currentLocation);
+
+			solution.addTour(tour);
+		}
 
 		return solution;
 	}
@@ -55,10 +74,10 @@ public class GeneticOptimizer implements Optimizer {
 		for (Location scentSource : transportNetwork.getLocations()) {
 
 			// Build scentMap for every location
-			int startScent = 20;
-			int scent;
-			if (scentSource == transportNetwork.getStartLocation()) {
-				scent = startScent;
+			double startScent = 20;
+			double scent;
+			if (scentSource == startLocation) {
+				scent = startScent*driftToStart;
 			} else {
 				scent = scentSource.getAmount();
 			}
@@ -75,7 +94,7 @@ public class GeneticOptimizer implements Optimizer {
 				double additionalScent = (Double) singleScentSource.getValue();
 
 				// Drift to start
-				if (scentSource != transportNetwork.getStartLocation()) {
+				if (scentSource != startLocation) {
 					additionalScent = (1-driftToStart)*additionalScent;
 				}
 
@@ -87,7 +106,7 @@ public class GeneticOptimizer implements Optimizer {
 
 	private HashMap<Location, Double> markRecursively(HashMap<Location, Double> scentMap, Location location, double scent) {
 
-		// Mark the current location
+		// Mark the current location and its neighbors
 		if (scentMap.get(location) == null || scentMap.get(location) < scent) {
 			scentMap.put(location, scent);
 
@@ -96,5 +115,12 @@ public class GeneticOptimizer implements Optimizer {
 			}
 		}
 		return scentMap;
+	}
+
+	private Location getLocationWithPositiveAmount() {
+		for (Location location : transportNetwork.getLocations()) {
+			if (location.getAmount() > 0) return location;
+		}
+		return null;
 	}
 }

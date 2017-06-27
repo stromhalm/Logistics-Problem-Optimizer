@@ -25,10 +25,6 @@ public class TransportNetwork {
 		this.computeShortestPaths();
 	}
 
-	public void buildShortestPaths() {
-		this.getStartLocation().addShortDistanceToStartCandidate(null, 0);
-	}
-
 	/**
 	 * Get a specific location by its name
 	 *

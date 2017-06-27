@@ -55,7 +55,7 @@ public class AppStarter {
 
 		switch (optimizerId) {
 			case 0:
-				optimizer = new GeneticOptimizer();
+				optimizer = new PheromoneOptimizer();
 				break;
 			case 1:
 				optimizer = new NearestNeighborOptimizer();
