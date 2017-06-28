@@ -67,6 +67,7 @@ public class AppStarter {
 				//optimizers.put(new SavingsOptimizer(), -1.0);
 		}
 
+		TransportNetwork transportNetwork = readFromFiles();
 
 		// Print solutions
 		for (Map.Entry<Optimizer, Double> optimizerEntry : optimizers.entrySet()) {
@@ -92,6 +93,7 @@ public class AppStarter {
 
 	/**
 	 * Read transport network from files
+	 *
 	 * @return
 	 */
 	private static TransportNetwork readFromFiles() {
