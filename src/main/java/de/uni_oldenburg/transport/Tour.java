@@ -138,17 +138,9 @@ public class Tour {
 
 		int kilometersToDrive = 0;
 		Location currentLocation = startLocation;
-		try {
-			for (TourDestination tourDestination : tourDestinations) {
-				kilometersToDrive += currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
-				currentLocation = tourDestination.getDestination();
-			}
-		} catch (Exception e) {
-			System.out.println("Drive with a " + getTruck().toString() + " from " + startLocation + " over:");
-			for (TourDestination tourDestination : tourDestinations) {
-				System.out.println(tourDestination.getDestination().getName());
-				System.out.println(tourDestination.toString());
-			}
+		for (TourDestination tourDestination : tourDestinations) {
+			kilometersToDrive += currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
+			currentLocation = tourDestination.getDestination();
 		}
 		return kilometersToDrive;
 	}

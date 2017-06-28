@@ -18,7 +18,7 @@ public class NorthWestCornerKruskalOptimizer extends NorthWestCornerOptimizer {
 		TransportNetwork transportNetworkKruskal = kruskal.getLocationsMST();
 
 		this.spanningNetwork = Graph.getSpanningNetwork(transportNetworkKruskal.getLocations(), transportNetworkKruskal.getStartLocation());
-		System.out.print(toString());
+		//System.out.print(toString());
 
 		for (ArrayList<Vertex> vertices : spanningNetwork) {
 			for (Vertex vertex : vertices) {

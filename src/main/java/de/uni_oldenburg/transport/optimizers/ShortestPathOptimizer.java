@@ -1,14 +1,8 @@
 package de.uni_oldenburg.transport.optimizers;
 
 import de.uni_oldenburg.transport.*;
-import de.uni_oldenburg.transport.trucks.AbstractTruck;
-import de.uni_oldenburg.transport.trucks.LargeTruck;
-import de.uni_oldenburg.transport.trucks.MediumTruck;
-import de.uni_oldenburg.transport.trucks.SmallTruck;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,7 +11,7 @@ import java.util.Map;
  *
  * @see Optimizer
  */
-public class BruteForceOptimizer implements Optimizer {
+public class ShortestPathOptimizer implements Optimizer {
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
 		transportNetwork.computeShortestPaths();
