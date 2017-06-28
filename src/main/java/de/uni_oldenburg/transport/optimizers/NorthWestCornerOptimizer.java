@@ -6,7 +6,6 @@ import de.uni_oldenburg.transport.trucks.AbstractTruck;
 import de.uni_oldenburg.transport.trucks.LargeTruck;
 import de.uni_oldenburg.transport.trucks.MediumTruck;
 import de.uni_oldenburg.transport.trucks.SmallTruck;
-import sun.awt.image.ImageWatched;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

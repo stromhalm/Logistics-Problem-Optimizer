@@ -59,36 +59,27 @@ public class TransportNetwork {
 	 * @return
 	 */
 	public Location[] getLocationsDeepCopy() {
-		ArrayList<Location> locations = new ArrayList<>();
+		Location[] locations = new Location[network.length];
+
+		for (int i = 0; i < network.length; i++) {
+			Location locationDeepCopy = new Location(network[i].getName());
+			locationDeepCopy.setAmount(network[i].getAmount());
+			locations[i] = locationDeepCopy;
+		}
+
 		for (int i = 0; i < network.length; i++) {
 			Location location = network[i];
-			Location locationDeepCopy = null;
-			for (Location locationDeepCopyAlreadyFound : locations) {
-				if (location.getName().equals(locationDeepCopyAlreadyFound.getName())) {
-					locationDeepCopy = locationDeepCopyAlreadyFound;
-					break;
-				}
-			}
-			if (locationDeepCopy == null) {
-				locationDeepCopy = new Location(location.getName());
-				locationDeepCopy.setAmount(location.getAmount());
-				locations.add(location);
-			}
+			Location locationDeepCopy = locations[i];
+
 			for (Map.Entry<Location, Integer> neighbouringLocationEntry : location.getNeighbouringLocations().entrySet()) {
 				Location neighbouringLocationDeepCopy = null;
 				// find existing references
-				for (Location locationDeepCopyAlreadyFound : locations) {
-					if (neighbouringLocationEntry.getKey().getName().equals(locationDeepCopyAlreadyFound.getName())) {
-						neighbouringLocationDeepCopy = locationDeepCopyAlreadyFound;
+				for (Location locationsDeepCopy : locations) {
+					if (neighbouringLocationEntry.getKey().getName().equals(locationsDeepCopy.getName())) {
+						neighbouringLocationDeepCopy = locationsDeepCopy;
 						break;
 					}
 				}
-				if (neighbouringLocationDeepCopy == null) {
-					neighbouringLocationDeepCopy = new Location(neighbouringLocationEntry.getKey().getName());
-					neighbouringLocationDeepCopy.setAmount(neighbouringLocationEntry.getKey().getAmount());
-					locations.add(neighbouringLocationDeepCopy);
-				}
-
 				int expense = neighbouringLocationEntry.getValue();
 				if (!locationDeepCopy.getNeighbouringLocations().containsKey(neighbouringLocationDeepCopy))
 					locationDeepCopy.addNeighbouringLocation(neighbouringLocationDeepCopy, expense);
@@ -98,38 +89,38 @@ public class TransportNetwork {
 		}
 
 		// check
-		for (Location locationDeepCopy : locations) {
-			boolean locationEquivaliantFound = false;
-			for (Location location : network) {
-				if (location.getName().equals(locationDeepCopy.getName()) && location.getAmount() == location.getAmount()) {
-					locationEquivaliantFound = true;
-					boolean neighboursAreCorrect = true;
-					for (Map.Entry<Location, Integer> neighbouringLocationEntry : location.getNeighbouringLocations().entrySet()) {
-						boolean neighbourFound = false;
-						for (Map.Entry<Location, Integer> neighbouringLocationDeepCopyEntry : locationDeepCopy.getNeighbouringLocations().entrySet()) {
-							if (neighbouringLocationEntry.getKey().getName().equals(neighbouringLocationDeepCopyEntry.getKey().getName())
-									&& neighbouringLocationEntry.getValue().equals(neighbouringLocationDeepCopyEntry.getValue())
-									&& neighbouringLocationEntry.getKey().getAmount() == neighbouringLocationDeepCopyEntry.getKey().getAmount()) {
-								neighbourFound = true;
-							}
-						}
-						if (!neighbourFound) neighboursAreCorrect = false;
-					}
+		for (int i = 0; i < network.length; i++) {
+			if (network[i].getName().equals(locations[i].getName())
+					&& network[i].getAmount() == locations[i].getAmount()
+					&& network[i].getNeighbouringLocations().size() == locations[i].getNeighbouringLocations().size()) {
 
-					if (!neighboursAreCorrect) {
-						System.out.println("Deep copy failed to create correct neighbours.");
-						return null;
+				boolean neighboursAreCorrect = true;
+				for (Map.Entry<Location, Integer> neighbouringLocationEntry : network[i].getNeighbouringLocations().entrySet()) {
+					boolean neighbourFound = false;
+					for (Map.Entry<Location, Integer> neighbouringLocationDeepCopyEntry : locations[i].getNeighbouringLocations().entrySet()) {
+						if (neighbouringLocationEntry.getKey().getName().equals(neighbouringLocationDeepCopyEntry.getKey().getName())
+								&& neighbouringLocationEntry.getValue().equals(neighbouringLocationDeepCopyEntry.getValue())
+								&& neighbouringLocationEntry.getKey().getAmount() == neighbouringLocationDeepCopyEntry.getKey().getAmount()
+								&& neighbouringLocationEntry.getKey().getNeighbouringLocations().size() == neighbouringLocationDeepCopyEntry.getKey().getNeighbouringLocations().size()) {
+							neighbourFound = true;
+							break;
+						}
 					}
-					break;
+					if (!neighbourFound) neighboursAreCorrect = false;
 				}
-			}
-			if (!locationEquivaliantFound) {
+
+				if (!neighboursAreCorrect) {
+					System.out.println("Deep copy failed to create correct neighbours.");
+					return null;
+				}
+
+			} else {
 				System.out.println("Deep copy failed.");
 				return null;
 			}
 		}
 
-		return locations.toArray(new Location[0]);
+		return locations;
 	}
 
 	/**
