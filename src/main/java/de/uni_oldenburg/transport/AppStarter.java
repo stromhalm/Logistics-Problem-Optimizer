@@ -65,16 +65,17 @@ public class AppStarter {
 				optimizers.put(new NearestNeighborOptimizer(), -1.0);
 				break;
 			case 2:
-				//optimizers.put(new BruteForceOptimizer(), -1);
+				//optimizers.put(new BruteForceOptimizer(), -1.0);
 				break;
 			case 3:
-				//optimizers.put(new NorthWestCornerKruskalOptimizer(), -1);
+				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
+				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
 				break;
 			case 4:
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
 				break;
 			case 5:
-				//optimizers.put(new SavingsOptimizer(), -1);
+				//optimizers.put(new SavingsOptimizer(), -1.0);
 				break;
 			default:
 				optimizers.put(new PheromoneOptimizer(), -1.0);
@@ -88,7 +89,7 @@ public class AppStarter {
 
 		for (Map.Entry<Optimizer, Double> optimizerEntry : optimizers.entrySet()) {
 			System.out.println("Running \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\"");
-			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(transportNetwork);
+			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocationsDeepCopy()));
 			if (solution.isValid()) {
 				// Print solution
 				System.out.println("Solution found:");
