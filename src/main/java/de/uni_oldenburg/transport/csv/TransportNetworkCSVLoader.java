@@ -6,7 +6,6 @@ import de.uni_oldenburg.transport.TransportNetwork;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

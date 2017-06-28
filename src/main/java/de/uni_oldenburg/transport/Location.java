@@ -21,7 +21,7 @@ public class Location {
 	/**
 	 * Is a map of neighbouring locations with a expense indicator as kilometers.
 	 */
-	private HashMap<Location, Integer> neighbouringLocations = new HashMap<>();
+	private LinkedHashMap<Location, Integer> neighbouringLocations = new LinkedHashMap<>();
 
 	/**
 	 * Create a simple location without neighbors and zero amount
@@ -80,7 +80,7 @@ public class Location {
 	 *
 	 * @return The map of neighbouring locations as {@link HashMap}.
 	 */
-	public HashMap<Location, Integer> getNeighbouringLocations() {
+	public LinkedHashMap<Location, Integer> getNeighbouringLocations() {
 		return neighbouringLocations;
 	}
 

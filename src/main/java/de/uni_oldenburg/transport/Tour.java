@@ -122,7 +122,7 @@ public class Tour {
 	}
 
 	public double getConsumption() {
-		return getKilometersToDrive() * (getTruck().getConsumption())/100;
+		return getKilometersToDrive() * (getTruck().getConsumption()) / 100;
 	}
 
 	public Location getStartLocation() {
@@ -138,9 +138,17 @@ public class Tour {
 
 		int kilometersToDrive = 0;
 		Location currentLocation = startLocation;
-		for (TourDestination tourDestination : tourDestinations) {
-			kilometersToDrive += currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
-			currentLocation = tourDestination.getDestination();
+		try {
+			for (TourDestination tourDestination : tourDestinations) {
+				kilometersToDrive += currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
+				currentLocation = tourDestination.getDestination();
+			}
+		} catch (Exception e) {
+			System.out.println("Drive with a " + getTruck().toString() + " from " + startLocation + " over:");
+			for (TourDestination tourDestination : tourDestinations) {
+				System.out.println(tourDestination.getDestination().getName());
+				System.out.println(tourDestination.toString());
+			}
 		}
 		return kilometersToDrive;
 	}
@@ -155,7 +163,7 @@ public class Tour {
 			int destinationKilometers = currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
 			double destinationConsumption = destinationKilometers * getTruck().getConsumption() / 100;
 			currentLocation = tourDestination.getDestination();
-			string += tourDestination + " (" + destinationKilometers + "km) while consuming " + destinationConsumption + " litres of gas\n";
+			string += tourDestination.toString() + " (" + destinationKilometers + "km) while consuming " + destinationConsumption + " litres of gas\n";
 		}
 		return string;
 	}

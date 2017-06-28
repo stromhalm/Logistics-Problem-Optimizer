@@ -62,25 +62,21 @@ public class AppStarter {
 				optimizers.put(new PheromoneOptimizer(), -1.0);
 				break;
 			case 1:
-				optimizers.put(new NearestNeighborOptimizer(), -1.0);
+				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
+				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
 				break;
 			case 2:
-				//optimizers.put(new BruteForceOptimizer(), -1.0);
-				break;
-			case 3:
-				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
-				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
-				break;
-			case 4:
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
 				break;
-			case 5:
+			case 3:
 				//optimizers.put(new SavingsOptimizer(), -1.0);
+				break;
+			case 4:
+				optimizers.put(new BruteForceOptimizer(), -1.0);
 				break;
 			default:
 				optimizers.put(new PheromoneOptimizer(), -1.0);
-				optimizers.put(new NearestNeighborOptimizer(), -1.0);
-				//optimizers.put(new BruteForceOptimizer(), -1);
+				optimizers.put(new BruteForceOptimizer(), -1.0);
 				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
 				//optimizers.put(new SavingsOptimizer(), -1);
