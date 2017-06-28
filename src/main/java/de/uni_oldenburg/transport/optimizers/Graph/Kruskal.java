@@ -33,8 +33,12 @@ public class Kruskal {
 	}
 
 	public TransportNetwork getLocationsMST() {
+		if (subGraphEdges.size() != 1) {
+			System.out.println("Graph not connected.");
+			return null;
+		}
 		for (Edge edge : notEdgesMST) {
-			//System.out.println("Removing Edge: " + edge.getVertex1().getName() + " to " + edge.getVertex2().getName() + " with " + edge.getWeight());
+			System.out.println("Removing Edge: " + edge.getVertex1().getName() + " to " + edge.getVertex2().getName() + " with " + edge.getWeight());
 			edge.getVertex1().getLocationReference().getNeighbouringLocations().remove(edge.getVertex2().getLocationReference(), edge.getWeight());
 			edge.getVertex2().getLocationReference().getNeighbouringLocations().remove(edge.getVertex1().getLocationReference(), edge.getWeight());
 		}
@@ -67,21 +71,27 @@ public class Kruskal {
 
 		for (ArrayList<Edge> subGraph : subGraphEdges) {
 			ArrayList<Vertex> vertices = new ArrayList<>();
-
 			for (Edge edge : subGraph) {
 				Vertex vertex = edge.getVertex1();
 				if (!vertexAlreadyGot(vertices, vertex)) vertices.add(vertex);
 				vertex = edge.getVertex2();
 				if (!vertexAlreadyGot(vertices, vertex)) vertices.add(vertex);
+				/*if (edge.getVertex1().getName().equals("Trier") && edge.getVertex2().getName().equals("Müsnter") || edge.getVertex2().getName().equals("Trier") && edge.getVertex1().getName().equals("Münster")) {
+					System.out.println(subGraphEdges.size() + " " + subGraph.size() + "" + " " + edge.getWeight() + " " + (subGraph.size() + 1 > vertices.size()));
+				}*/
+				if (edge.getVertex1().getName().equals("Trier") && edge.getVertex2().getName().equals("Frankfurt") || edge.getVertex2().getName().equals("Trier") && edge.getVertex1().getName().equals("Frankfurt")) {
+					System.out.println(subGraphEdges.size() + " " + subGraph.size() + "" + " " + edge.getWeight() + " " + (subGraph.size() + 1 > vertices.size()));
+				}
 			}
 			if (subGraph.size() + 1 > vertices.size()) {
-				return subGraph.remove(edgeByWeight); // remove it again
+				subGraph.remove(edgeByWeight); // remove it again
+				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean isConnected(Edge edgeByWeight) {
+	private void isConnected(Edge edgeByWeight) {
 
 		ArrayList<ArrayList<Edge>> subGraphsMathed = new ArrayList<>();
 
@@ -101,14 +111,13 @@ public class Kruskal {
 			subGraphsMathed.get(0).add(edgeByWeight);
 			subGraphsMathed.get(0).addAll(subGraphsMathed.get(1));
 			subGraphEdges.remove(subGraphsMathed.get(1));
-			return true;
 		} else if (subGraphsMathed.size() == 1) {
-			return subGraphsMathed.get(0).add(edgeByWeight);
+			subGraphsMathed.get(0).add(edgeByWeight);
 		} else {
 			// else not connected
 			ArrayList<Edge> subGraph = new ArrayList<>();
 			subGraph.add(edgeByWeight);
-			return subGraphEdges.add(subGraph);
+			subGraphEdges.add(subGraph);
 		}
 	}
 
