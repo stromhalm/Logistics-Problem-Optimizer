@@ -113,8 +113,10 @@ public class Tour {
 
 		// Verify truck returned to start
 		Location lastDestination = tourDestinations.get(tourDestinations.size() - 1).getDestination();
+
 		if (lastDestination != startLocation) {
 			// Error Service
+			System.out.print(tourDestinations.get(tourDestinations.size()-1).getDestination().getName() + " ");
 			System.out.println("Truck did not return to " + startLocation.getName() + " but stayed in " + lastDestination.getName());
 			return false;
 		}
@@ -139,8 +141,10 @@ public class Tour {
 		int kilometersToDrive = 0;
 		Location currentLocation = startLocation;
 		for (TourDestination tourDestination : tourDestinations) {
-			kilometersToDrive += currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
-			currentLocation = tourDestination.getDestination();
+
+				kilometersToDrive += currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
+				currentLocation = tourDestination.getDestination();
+
 		}
 		return kilometersToDrive;
 	}

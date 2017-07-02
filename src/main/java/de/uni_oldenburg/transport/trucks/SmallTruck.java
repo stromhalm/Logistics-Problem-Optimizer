@@ -1,7 +1,7 @@
 package de.uni_oldenburg.transport.trucks;
 
 /**
- * A truck of large size (type 1)
+ * A truck of small size (type 1)
  */
 public class SmallTruck extends AbstractTruck {
 
