@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>de.uni_oldenburg.transport.optimizers.PheromoneOptimizer</OriginalElement>
+  <nodes>
+    <node x="1618.821729864786" y="625.0">de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader</node>
+    <node x="663.625" y="496.0">de.uni_oldenburg.transport.optimizers.SavingsOptimizer</node>
+    <node x="1222.3653120713307" y="357.0">de.uni_oldenburg.transport.optimizers.Graph.Edge</node>
+    <node x="1166.0421884185782" y="0.0">de.uni_oldenburg.transport.Location</node>
+    <node x="476.625" y="496.0">de.uni_oldenburg.transport.optimizers.ShortestPathOptimizer</node>
+    <node x="1228.958855085245" y="496.0">de.uni_oldenburg.transport.optimizers.Graph.Kruskal</node>
+    <node x="1046.625" y="357.0">de.uni_oldenburg.transport.optimizers.Graph.Graph</node>
+    <node x="998.875" y="724.0">de.uni_oldenburg.transport.AppStarter</node>
+    <node x="545.5" y="625.0">de.uni_oldenburg.transport.optimizers.NorthWestCornerOwnOptimizer</node>
+    <node x="0.0" y="109.0">de.uni_oldenburg.transport.trucks.SmallTruck</node>
+    <node x="978.875" y="625.0">de.uni_oldenburg.transport.optimizers.SolutionOptimizer</node>
+    <node x="1093.125" y="198.0">de.uni_oldenburg.transport.optimizers.Graph.Vertex</node>
+    <node x="867.8653120713308" y="496.0">de.uni_oldenburg.transport.optimizers.PheromoneOptimizer</node>
+    <node x="1152.6041666666667" y="625.0">de.uni_oldenburg.transport.optimizers.NorthWestCornerKruskalOptimizer</node>
+    <node x="226.80187634724757" y="496.0">de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer</node>
+    <node x="270.0" y="109.0">de.uni_oldenburg.transport.trucks.LargeTruck</node>
+    <node x="127.0" y="109.0">de.uni_oldenburg.transport.trucks.MediumTruck</node>
+    <node x="1457.0935430139143" y="198.0">de.uni_oldenburg.transport.TransportNetwork</node>
+    <node x="351.0" y="198.0">de.uni_oldenburg.transport.Tour</node>
+    <node x="934.625" y="357.0">de.uni_oldenburg.transport.Solution</node>
+    <node x="713.875" y="357.0">de.uni_oldenburg.transport.optimizers.Optimizer</node>
+    <node x="1445.571729864786" y="625.0">de.uni_oldenburg.transport.csv.DeliveryCSVLoader</node>
+    <node x="160.87254556143546" y="0.0">de.uni_oldenburg.transport.trucks.AbstractTruck</node>
+    <node x="1492.821729864786" y="496.0">de.uni_oldenburg.transport.csv.CSVLoader</node>
+    <node x="436.53601557907166" y="109.0">de.uni_oldenburg.transport.TourDestination</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="82.71428571428578" y="-14.5" />
+      <point x="406.01616206153335" y="446.0" />
+      <point x="723.875" y="446.0" />
+      <point x="-40.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.optimizers.ShortestPathOptimizer">
+      <point x="-46.22222222222217" y="-14.5" />
+      <point x="1004.6527777777778" y="704.0" />
+      <point x="387.59545855379224" y="704.0" />
+      <point x="387.59545855379224" y="605.0" />
+      <point x="560.125" y="605.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="-25.125" y="-14.5" />
+      <point x="1694.196729864786" y="327.0" />
+      <point x="1592.0935430139143" y="327.0" />
+      <point x="63.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerKruskalOptimizer" target="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer">
+      <point x="-86.625" y="-14.5" />
+      <point x="1181.4791666666667" y="555.0" />
+      <point x="371.55187634724757" y="555.0" />
+      <point x="48.25" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer" target="de.uni_oldenburg.transport.TourDestination">
+      <point x="27.57142857142867" y="-14.5" />
+      <point x="350.87330491867624" y="416.0" />
+      <point x="496.08928571428567" y="416.0" />
+      <point x="496.08928571428567" y="178.0" />
+      <point x="503.03601557907166" y="178.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.Graph.Kruskal" target="de.uni_oldenburg.transport.optimizers.Graph.Edge">
+      <point x="-7.166666666666629" y="-14.5" />
+      <point x="1264.7921884185782" y="416.0" />
+      <point x="1240.8653120713307" y="416.0" />
+      <point x="-18.5" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Solution" target="de.uni_oldenburg.transport.Tour">
+      <point x="-23.0" y="-14.5" />
+      <point x="957.625" y="247.0" />
+      <point x="414.875" y="247.0" />
+      <point x="27.375" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader" target="de.uni_oldenburg.transport.csv.CSVLoader">
+      <point x="-75.375" y="-14.5" />
+      <point x="1643.946729864786" y="605.0" />
+      <point x="1571.571729864786" y="605.0" />
+      <point x="26.25" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.PheromoneOptimizer" target="de.uni_oldenburg.transport.Tour">
+      <point x="-67.5" y="-14.5" />
+      <point x="881.3653120713308" y="436.0" />
+      <point x="687.4704585537922" y="436.0" />
+      <point x="687.4704585537922" y="257.0" />
+      <point x="396.625" y="257.0" />
+      <point x="9.125" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerKruskalOptimizer" target="de.uni_oldenburg.transport.Solution">
+      <point x="-28.875" y="-14.5" />
+      <point x="1239.2291666666667" y="545.0" />
+      <point x="1160.2921884185782" y="545.0" />
+      <point x="1160.2921884185782" y="446.0" />
+      <point x="1015.125" y="446.0" />
+      <point x="34.5" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.PheromoneOptimizer" target="de.uni_oldenburg.transport.Location">
+      <point x="13.5" y="-14.5" />
+      <point x="962.3653120713308" y="406.0" />
+      <point x="911.125" y="406.0" />
+      <point x="911.125" y="79.0" />
+      <point x="1192.1532995296893" y="79.0" />
+      <point x="-20.888888888888914" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Tour" target="de.uni_oldenburg.transport.trucks.SmallTruck">
+      <point x="-31.28571428571422" y="-14.5" />
+      <point x="356.2142857142858" y="178.0" />
+      <point x="80.25" y="178.0" />
+      <point x="26.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer" target="de.uni_oldenburg.transport.trucks.MediumTruck">
+      <point x="-55.14285714285711" y="-14.5" />
+      <point x="268.15901920439046" y="466.0" />
+      <point x="157.75" y="466.0" />
+      <point x="-30.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer" target="de.uni_oldenburg.transport.trucks.LargeTruck">
+      <point x="-27.57142857142844" y="-14.5" />
+      <point x="295.73044777581913" y="476.0" />
+      <point x="296.75" y="476.0" />
+      <point x="-26.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerKruskalOptimizer" target="de.uni_oldenburg.transport.optimizers.Graph.Kruskal">
+      <point x="28.875" y="-14.5" />
+      <point x="1296.9791666666667" y="585.0" />
+      <point x="1271.958855085245" y="585.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.Graph.Graph" target="de.uni_oldenburg.transport.optimizers.Graph.Vertex">
+      <point x="0.0" y="-14.5" />
+      <point x="1086.625" y="277.0" />
+      <point x="1117.125" y="277.0" />
+      <point x="-16.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.Graph.Kruskal" target="de.uni_oldenburg.transport.Location">
+      <point x="21.5" y="-14.5" />
+      <point x="1293.458855085245" y="456.0" />
+      <point x="1351.3444787379974" y="456.0" />
+      <point x="1351.3444787379974" y="89.0" />
+      <point x="1213.0421884185782" y="89.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Tour" target="de.uni_oldenburg.transport.Location">
+      <point x="10.428571428571331" y="-14.5" />
+      <point x="397.92857142857133" y="158.0" />
+      <point x="426.03601557907166" y="158.0" />
+      <point x="426.03601557907166" y="59.0" />
+      <point x="1171.2644106408004" y="59.0" />
+      <point x="-41.77777777777783" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.optimizers.NorthWestCornerOwnOptimizer">
+      <point x="-34.66666666666663" y="-14.5" />
+      <point x="1016.2083333333335" y="694.0" />
+      <point x="654.5" y="694.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.PheromoneOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="-40.5" y="-14.5" />
+      <point x="908.3653120713308" y="426.0" />
+      <point x="803.875" y="426.0" />
+      <point x="40.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.Graph.Kruskal" target="de.uni_oldenburg.transport.optimizers.Graph.Vertex">
+      <point x="-35.83333333333337" y="-14.5" />
+      <point x="1236.1255217519115" y="436.0" />
+      <point x="1137.125" y="436.0" />
+      <point x="1137.125" y="277.0" />
+      <point x="1133.125" y="277.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.TransportNetwork" target="de.uni_oldenburg.transport.Location">
+      <point x="36.0" y="-14.5" />
+      <point x="1565.0935430139143" y="178.0" />
+      <point x="1534.5935430139143" y="178.0" />
+      <point x="1534.5935430139143" y="69.0" />
+      <point x="1233.9310773074671" y="69.0" />
+      <point x="20.888888888888914" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.PheromoneOptimizer" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="67.5" y="-14.5" />
+      <point x="1016.3653120713308" y="466.0" />
+      <point x="1362.3444787379974" y="466.0" />
+      <point x="1362.3444787379974" y="297.0" />
+      <point x="1484.0935430139143" y="297.0" />
+      <point x="-45.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.optimizers.SolutionOptimizer">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.trucks.SmallTruck" target="de.uni_oldenburg.transport.trucks.AbstractTruck">
+      <point x="0.0" y="-14.5" />
+      <point x="53.5" y="89.0" />
+      <point x="176.12254556143546" y="89.0" />
+      <point x="-45.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.PheromoneOptimizer" target="de.uni_oldenburg.transport.Solution">
+      <point x="40.5" y="-14.5" />
+      <point x="989.3653120713308" y="476.0" />
+      <point x="969.125" y="476.0" />
+      <point x="-11.5" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.SolutionOptimizer" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="48.0" y="-14.5" />
+      <point x="1098.875" y="595.0" />
+      <point x="1404.5944787379974" y="595.0" />
+      <point x="1404.5944787379974" y="317.0" />
+      <point x="1520.0935430139143" y="317.0" />
+      <point x="-9.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.SolutionOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="-48.0" y="-14.5" />
+      <point x="1002.875" y="575.0" />
+      <point x="857.3653120713308" y="575.0" />
+      <point x="857.3653120713308" y="466.0" />
+      <point x="783.875" y="466.0" />
+      <point x="20.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="34.66666666666663" y="-14.5" />
+      <point x="1085.5416666666667" y="694.0" />
+      <point x="1608.321729864786" y="694.0" />
+      <point x="1608.321729864786" y="337.0" />
+      <point x="1574.0935430139143" y="337.0" />
+      <point x="45.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerKruskalOptimizer" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="86.625" y="-14.5" />
+      <point x="1354.7291666666667" y="605.0" />
+      <point x="1467.6758965314527" y="605.0" />
+      <point x="1467.6758965314527" y="327.0" />
+      <point x="1538.0935430139143" y="327.0" />
+      <point x="9.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.ShortestPathOptimizer" target="de.uni_oldenburg.transport.Solution">
+      <point x="62.625" y="-14.5" />
+      <point x="622.75" y="476.0" />
+      <point x="946.125" y="476.0" />
+      <point x="-34.5" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Tour" target="de.uni_oldenburg.transport.trucks.LargeTruck">
+      <point x="-10.428571428571331" y="-14.5" />
+      <point x="377.07142857142867" y="158.0" />
+      <point x="350.25" y="158.0" />
+      <point x="26.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.TourDestination" target="de.uni_oldenburg.transport.Location">
+      <point x="0.0" y="-14.5" />
+      <point x="503.03601557907166" y="69.0" />
+      <point x="1181.7088550852447" y="69.0" />
+      <point x="-31.33333333333337" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.Graph.Edge" target="de.uni_oldenburg.transport.optimizers.Graph.Vertex">
+      <point x="0.0" y="-14.5" />
+      <point x="1259.3653120713307" y="277.0" />
+      <point x="1165.125" y="277.0" />
+      <point x="32.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.trucks.MediumTruck" target="de.uni_oldenburg.transport.trucks.AbstractTruck">
+      <point x="0.0" y="-14.5" />
+      <point x="188.5" y="89.0" />
+      <point x="206.62254556143546" y="89.0" />
+      <point x="-15.25" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer" target="de.uni_oldenburg.transport.optimizers.Graph.Vertex">
+      <point x="55.14285714285711" y="-14.5" />
+      <point x="378.4447334901047" y="436.0" />
+      <point x="557.196729864786" y="436.0" />
+      <point x="557.196729864786" y="267.0" />
+      <point x="1101.125" y="267.0" />
+      <point x="-32.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.csv.DeliveryCSVLoader">
+      <point x="23.111111111111086" y="-14.5" />
+      <point x="1073.986111111111" y="684.0" />
+      <point x="1519.071729864786" y="684.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.optimizers.NorthWestCornerKruskalOptimizer">
+      <point x="11.555555555555543" y="-14.5" />
+      <point x="1062.4305555555557" y="674.0" />
+      <point x="1268.1041666666667" y="674.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.ShortestPathOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="20.875" y="-14.5" />
+      <point x="581.0" y="456.0" />
+      <point x="743.875" y="456.0" />
+      <point x="-20.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Tour" target="de.uni_oldenburg.transport.trucks.AbstractTruck">
+      <point x="0.0" y="-14.5" />
+      <point x="387.5" y="79.0" />
+      <point x="267.62254556143546" y="79.0" />
+      <point x="45.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.trucks.LargeTruck" target="de.uni_oldenburg.transport.trucks.AbstractTruck">
+      <point x="0.0" y="-14.5" />
+      <point x="323.5" y="89.0" />
+      <point x="237.12254556143546" y="89.0" />
+      <point x="15.25" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.ShortestPathOptimizer" target="de.uni_oldenburg.transport.Tour">
+      <point x="-62.625" y="-14.5" />
+      <point x="497.5" y="426.0" />
+      <point x="507.08928571428567" y="426.0" />
+      <point x="507.08928571428567" y="337.0" />
+      <point x="378.375" y="337.0" />
+      <point x="-9.125" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader" target="de.uni_oldenburg.transport.Location">
+      <point x="25.125" y="-14.5" />
+      <point x="1744.446729864786" y="605.0" />
+      <point x="1705.196729864786" y="605.0" />
+      <point x="1705.196729864786" y="59.0" />
+      <point x="1244.3755217519115" y="59.0" />
+      <point x="31.33333333333337" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.Graph.Kruskal" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="35.83333333333337" y="-14.5" />
+      <point x="1307.7921884185782" y="476.0" />
+      <point x="1373.3444787379974" y="476.0" />
+      <point x="1373.3444787379974" y="307.0" />
+      <point x="1502.0935430139143" y="307.0" />
+      <point x="-27.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.optimizers.SavingsOptimizer">
+      <point x="-23.111111111111086" y="-14.5" />
+      <point x="1027.763888888889" y="684.0" />
+      <point x="920.196729864786" y="684.0" />
+      <point x="920.196729864786" y="595.0" />
+      <point x="733.625" y="595.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader">
+      <point x="46.22222222222217" y="-14.5" />
+      <point x="1097.0972222222222" y="704.0" />
+      <point x="1719.321729864786" y="704.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOwnOptimizer" target="de.uni_oldenburg.transport.Solution">
+      <point x="54.5" y="-14.5" />
+      <point x="709.0" y="605.0" />
+      <point x="1061.8653120713307" y="605.0" />
+      <point x="1061.8653120713307" y="456.0" />
+      <point x="992.125" y="456.0" />
+      <point x="11.5" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.optimizers.PheromoneOptimizer">
+      <point x="-11.555555555555543" y="-14.5" />
+      <point x="1039.3194444444446" y="674.0" />
+      <point x="968.375" y="674.0" />
+      <point x="968.375" y="585.0" />
+      <point x="908.3653120713308" y="585.0" />
+      <point x="-40.5" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer" target="de.uni_oldenburg.transport.trucks.SmallTruck">
+      <point x="-82.71428571428578" y="-14.5" />
+      <point x="240.5875906329618" y="476.0" />
+      <point x="26.75" y="476.0" />
+      <point x="-26.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.SavingsOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="0.0" y="-14.5" />
+      <point x="733.625" y="466.0" />
+      <point x="763.875" y="466.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer" target="de.uni_oldenburg.transport.Tour">
+      <point x="0.0" y="-14.5" />
+      <point x="323.30187634724757" y="406.0" />
+      <point x="360.125" y="406.0" />
+      <point x="-27.375" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.Graph.Vertex" target="de.uni_oldenburg.transport.Location">
+      <point x="0.0" y="-14.5" />
+      <point x="1133.125" y="89.0" />
+      <point x="1202.5977439741337" y="89.0" />
+      <point x="-10.444444444444457" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Tour" target="de.uni_oldenburg.transport.TourDestination">
+      <point x="31.28571428571422" y="-14.5" />
+      <point x="418.7857142857142" y="178.0" />
+      <point x="476.43601557907175" y="178.0" />
+      <point x="-26.59999999999991" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Solution" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="23.0" y="-14.5" />
+      <point x="1003.625" y="287.0" />
+      <point x="1466.0935430139143" y="287.0" />
+      <point x="-63.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Tour" target="de.uni_oldenburg.transport.trucks.MediumTruck">
+      <point x="-20.85714285714289" y="-14.5" />
+      <point x="366.6428571428571" y="168.0" />
+      <point x="219.25" y="168.0" />
+      <point x="30.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.PheromoneOptimizer" target="de.uni_oldenburg.transport.TourDestination">
+      <point x="-13.5" y="-14.5" />
+      <point x="935.3653120713308" y="416.0" />
+      <point x="893.7250000000001" y="416.0" />
+      <point x="893.7250000000001" y="178.0" />
+      <point x="556.2360155790717" y="178.0" />
+      <point x="53.200000000000045" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOwnOptimizer" target="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer">
+      <point x="-54.5" y="-14.5" />
+      <point x="600.0" y="595.0" />
+      <point x="275.05187634724757" y="595.0" />
+      <point x="-48.25" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.csv.DeliveryCSVLoader" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="-36.75" y="-14.5" />
+      <point x="1482.321729864786" y="337.0" />
+      <point x="1556.0935430139143" y="337.0" />
+      <point x="27.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.SolutionOptimizer" target="de.uni_oldenburg.transport.optimizers.PheromoneOptimizer">
+      <point x="0.0" y="-14.5" />
+      <point x="1050.875" y="565.0" />
+      <point x="989.3653120713308" y="565.0" />
+      <point x="40.5" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.csv.DeliveryCSVLoader" target="de.uni_oldenburg.transport.csv.CSVLoader">
+      <point x="36.75" y="-14.5" />
+      <point x="1555.821729864786" y="605.0" />
+      <point x="1519.071729864786" y="605.0" />
+      <point x="-26.25" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.ShortestPathOptimizer" target="de.uni_oldenburg.transport.TourDestination">
+      <point x="-20.875" y="-14.5" />
+      <point x="539.25" y="178.0" />
+      <point x="529.6360155790716" y="178.0" />
+      <point x="26.59999999999991" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.6081632653061226" x="808.6510067114091" y="338.43664777672484" />
+  <SelectedNodes>
+    <node>de.uni_oldenburg.transport.optimizers.PheromoneOptimizer</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
