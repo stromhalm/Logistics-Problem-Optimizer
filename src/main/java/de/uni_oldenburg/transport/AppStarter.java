@@ -73,7 +73,7 @@ public class AppStarter {
 		for (Map.Entry<Optimizer, Double> optimizerEntry : optimizers.entrySet()) {
 			System.out.println("Running \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\"");
 			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocationsDeepCopy()));
-			if (solution.isValid()) {
+			if (solution.isValid(true)) {
 				System.out.println("Solution found:");
 				System.out.println(solution.toString());
 				optimizerEntry.setValue(solution.getTotalConsumption()); // update the consumption

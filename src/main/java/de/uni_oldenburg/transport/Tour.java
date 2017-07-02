@@ -100,24 +100,27 @@ public class Tour {
 	/**
 	 * Checks if the tour is valid for this type of truck
 	 *
-	 * @return True if valid, else false
+	 * @param print Print the error message iff false
+	 * @return True iff false
 	 */
-	public boolean isValid() {
+	public boolean isValid(boolean print) {
 
 		// Verify truck load
 		if (getTourLoad() > getTruck().getCapacity()) {
 			// Error Service
-			System.out.println("Truck was overloaded with a load of " + getTourLoad() + " (maximum capacity " + getTruck().getCapacity() + ")");
+			if (print) {
+				System.out.println("Truck was overloaded with a load of " + getTourLoad() + " (maximum capacity " + getTruck().getCapacity() + ")");
+			}
 			return false;
 		}
 
 		// Verify truck returned to start
 		Location lastDestination = tourDestinations.get(tourDestinations.size() - 1).getDestination();
-
 		if (lastDestination != startLocation) {
 			// Error Service
-			System.out.print(tourDestinations.get(tourDestinations.size()-1).getDestination().getName() + " ");
-			System.out.println("Truck did not return to " + startLocation.getName() + " but stayed in " + lastDestination.getName());
+			if (print) {
+				System.out.println("Truck did not return to " + startLocation.getName() + " but stayed in " + lastDestination.getName());
+			}
 			return false;
 		}
 		return true;
@@ -141,10 +144,8 @@ public class Tour {
 		int kilometersToDrive = 0;
 		Location currentLocation = startLocation;
 		for (TourDestination tourDestination : tourDestinations) {
-
-				kilometersToDrive += currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
-				currentLocation = tourDestination.getDestination();
-
+			kilometersToDrive += currentLocation.getNeighbouringLocations().get(tourDestination.getDestination());
+			currentLocation = tourDestination.getDestination();
 		}
 		return kilometersToDrive;
 	}
