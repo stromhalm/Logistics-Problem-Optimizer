@@ -69,7 +69,7 @@ public class AppStarter {
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
 				break;
 			case 3:
-				//optimizers.put(new SavingsOptimizer(), -1.0);
+				optimizers.put(new SavingsOptimizer(), -1.0);
 				break;
 			case 4:
 				optimizers.put(new ShortestPathOptimizer(), -1.0);
@@ -79,7 +79,7 @@ public class AppStarter {
 				optimizers.put(new ShortestPathOptimizer(), -1.0);
 				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
-				//optimizers.put(new SavingsOptimizer(), -1);
+				optimizers.put(new SavingsOptimizer(), -1.0);
 		}
 
 
