@@ -10,7 +10,7 @@ public class NorthWestCornerOwnOptimizer extends NorthWestCornerOptimizer {
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
 		this.spanningNetwork = Graph.getSpanningNetwork(transportNetwork.getLocations(), transportNetwork.getStartLocation());
-		System.out.print(toString());
+		//System.out.print(toString());
 		Solution solution = new Solution(transportNetwork);
 		transportNetwork.computeShortestPaths();
 
