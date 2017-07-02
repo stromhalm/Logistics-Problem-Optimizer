@@ -23,6 +23,7 @@ public class SolutionOptimizer implements Optimizer {
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
 
 		this.transportNetwork = transportNetwork;
+
 		Solution solution = getGoodSolution();
 		double consumptionBefore = solution.getConsumption();
 
@@ -31,7 +32,7 @@ public class SolutionOptimizer implements Optimizer {
 		for (Tour tour : allTours) {
 			solution.removeTour(tour);
 
-			if (solution.isValid(false) && solution.getConsumption() < consumptionBefore) { // TODO: WTF?!
+			if (solution.isValid(false) && solution.getConsumption() < consumptionBefore) {
 				break;
 			}
 
@@ -47,19 +48,8 @@ public class SolutionOptimizer implements Optimizer {
 	 * @return A valid solution
 	 */
 	private Solution getGoodSolution() {
-		// Save original amounts
-		int[] originalAmounts = new int[transportNetwork.getLocations().length];
-		for (int i = 0; i < transportNetwork.getLocations().length; i++) {
-			originalAmounts[i] = transportNetwork.getLocations()[i].getAmount();
-		}
-
 		Optimizer pheromoneOptimizer = new PheromoneOptimizer();
 		Solution solution = pheromoneOptimizer.optimizeTransportNetwork(transportNetwork);
-
-		// Rebuild original amounts
-		for (int i = 0; i < transportNetwork.getLocations().length; i++) {
-			transportNetwork.getLocations()[i].setAmount(originalAmounts[i]);
-		}
 		return solution;
 	}
 }

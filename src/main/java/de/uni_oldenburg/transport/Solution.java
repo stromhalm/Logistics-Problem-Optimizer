@@ -65,16 +65,22 @@ public class Solution {
 			}
 		}
 		for (Location location : transportNetwork.getLocations()) {
+
+			System.out.println(location + ": " + location.getAmount());
+
 			if (location.getAmount() != 0) {
 				if (!deliveries.containsKey(location) || location.getAmount() != deliveries.get(location)) {
 					// error message servicing
 					if (print) {
-						System.out.println(location.getName() + " needs " + location.getAmount() + " but gets " + deliveries.get(location) + " delivered.");
+						int amountDelivered = 0;
+						if (deliveries.containsKey(location)) amountDelivered = deliveries.get(location);
+						System.out.println(location.getName() + " needs " + location.getAmount() + " but gets " + amountDelivered + " delivered.");
 					}
 					return false;
 				}
 			}
 		}
+		System.out.println();
 		return true;
 	}
 

@@ -17,6 +17,7 @@ public class PheromoneOptimizer implements Optimizer {
 
 	TransportNetwork transportNetwork;
 	Location startLocation;
+	HashMap<Location, Integer> deliveries = new HashMap<>();
 
 	/**
 	 *
@@ -56,8 +57,8 @@ public class PheromoneOptimizer implements Optimizer {
 				}
 
 				// Calculate amounts
-				int nextLocationUnload = Math.min(bestNeighbor.getAmount(), maximumTruckCapacity - tourload);
-				bestNeighbor.setAmount(bestNeighbor.getAmount() - nextLocationUnload);
+				int nextLocationUnload = Math.min(getAmountLeft(bestNeighbor), maximumTruckCapacity - tourload);
+				deliverAmount(bestNeighbor, nextLocationUnload);
 				tourload += nextLocationUnload;
 
 				// Add destination
@@ -81,7 +82,7 @@ public class PheromoneOptimizer implements Optimizer {
 	 */
 	private HashMap<Location, Double> getSummedScentMap(double driftToStart) {
 
-		HashMap<Location, Double> summedScentMap = new HashMap();
+		HashMap<Location, Double> summedScentMap = new HashMap<>();
 
 		// Sum scents for all the locations
 		for (Location scentSource : transportNetwork.getLocations()) {
@@ -91,7 +92,7 @@ public class PheromoneOptimizer implements Optimizer {
 			if (scentSource == startLocation) {
 				scent = START_SCENT*driftToStart;
 			} else {
-				scent = scentSource.getAmount();
+				scent = getAmountLeft(scentSource);
 			}
 
 			HashMap<Location, Double> locationScentMap = markRecursively(new HashMap<>(), scentSource, scent);
@@ -142,8 +143,29 @@ public class PheromoneOptimizer implements Optimizer {
 	 */
 	private Location getLocationWithPositiveAmount() {
 		for (Location location : transportNetwork.getLocations()) {
-			if (location.getAmount() > 0) return location;
+			if (getAmountLeft(location) > 0) return location;
 		}
 		return null;
+	}
+
+	private int getAmountLeft(Location location) {
+		if (deliveries.containsKey(location)) {
+			return (location.getAmount() - deliveries.get(location));
+		} else {
+			try {
+				return location.getAmount();
+			} catch (NullPointerException e) {
+				System.out.println();
+			}
+		}
+		return 0;
+	}
+
+	private void deliverAmount(Location location, int amount) {
+		if (deliveries.containsKey(location)) {
+			deliveries.put(location, deliveries.get(location) + amount);
+		} else {
+			deliveries.put(location, amount);
+		}
 	}
 }
