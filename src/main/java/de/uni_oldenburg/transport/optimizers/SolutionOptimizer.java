@@ -37,7 +37,7 @@ public class SolutionOptimizer implements Optimizer {
 
 				Solution filledUpSolution = getFilledUpSolution(solution);
 
-				if (filledUpSolution.isValid(true)) {
+				if (filledUpSolution.isValid(false)) {
 					double consumptionAfter = filledUpSolution.getConsumption();
 					if (consumptionAfter < consumptionBefore) {
 						return filledUpSolution;
