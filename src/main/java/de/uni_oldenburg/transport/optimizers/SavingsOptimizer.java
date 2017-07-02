@@ -102,7 +102,7 @@ public class SavingsOptimizer implements Optimizer {
         }
         for (int i = 0; i < allTours.size(); i++) {
             for (int j = 0; j < allTours.get(i).size(); j++) {
-                if (allTours.get(i).get(j).isValid())
+                if (allTours.get(i).get(j).isValid(true))
                     solution.addTour(allTours.get(i).get(j));
             }
         }
@@ -550,4 +550,3 @@ public class SavingsOptimizer implements Optimizer {
 
 
 }
-

@@ -43,9 +43,10 @@ public class Solution {
 	/**
 	 * Checks if all delivery targets have been fulfilled and is omitted.
 	 *
-	 * @return
+	 * @param print print error messages
+	 * @return true iff valid
 	 */
-	public boolean isValid() {
+	public boolean isValid(boolean print) {
 
 		HashMap<Location, Integer> deliveries = new HashMap<>();
 
@@ -53,7 +54,7 @@ public class Solution {
 		for (Tour tour : truckTours) {
 
 			// ckeck if truck was overloaded and returned to start
-			if (!tour.isValid()) return false;
+			if (!tour.isValid(print)) return false;
 
 			for (TourDestination tourDestination : tour.getTourDestinations()) {
 				if (deliveries.containsKey(tourDestination.getDestination())) {
@@ -64,12 +65,15 @@ public class Solution {
 			}
 		}
 		for (Location location : transportNetwork.getLocations()) {
-			if (deliveries.containsKey(location) && location.getAmount() != 0)
-				if (location.getAmount() != deliveries.get(location)) {
+			if (location.getAmount() != 0) {
+				if (!deliveries.containsKey(location) || location.getAmount() != deliveries.get(location)) {
 					// error message servicing
-					System.out.println(location.getName() + " needs " + location.getAmount() + " but gets " + deliveries.get(location) + " delivered.");
+					if (print) {
+						System.out.println(location.getName() + " needs " + location.getAmount() + " but gets " + deliveries.get(location) + " delivered.");
+					}
 					return false;
 				}
+			}
 		}
 		return true;
 	}
