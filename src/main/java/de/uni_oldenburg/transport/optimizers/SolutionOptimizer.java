@@ -31,7 +31,7 @@ public class SolutionOptimizer implements Optimizer {
 		for (Tour tour : allTours) {
 			solution.removeTour(tour);
 
-			if (solution.isValid() && solution.getConsumption() < consumptionBefore) { // TODO: WTF?!
+			if (solution.isValid(false) && solution.getConsumption() < consumptionBefore) { // TODO: WTF?!
 				break;
 			}
 
