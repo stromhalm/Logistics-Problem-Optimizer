@@ -9,6 +9,6 @@ import de.uni_oldenburg.transport.TransportNetwork;
 public class SavingsOptimizer implements Optimizer {
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
-		return null;
+		return new Solution(transportNetwork);
 	}
 }
