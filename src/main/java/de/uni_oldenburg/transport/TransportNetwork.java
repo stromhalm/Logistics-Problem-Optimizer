@@ -19,6 +19,11 @@ public class TransportNetwork {
 	 */
 	private LinkedHashMap<Location, Integer>[][] shortestPaths;
 
+	/**
+	 * Default constructor
+	 *
+	 * @param network Array of locations
+	 */
 	public TransportNetwork(Location[] network) {
 		this.network = network;
 	}
