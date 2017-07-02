@@ -12,6 +12,9 @@ import java.util.Map;
  */
 public class AppStarter {
 
+	static String networkFile = "src/main/resources/Logistiknetz.csv";
+	static String deliveryFile = "src/main/resources/Lieferliste.csv";
+
 	/**
 	 * The app's main method
 	 *
@@ -19,9 +22,6 @@ public class AppStarter {
 	 */
 	public static void main(String[] args) {
 
-		TransportNetwork transportNetwork = null;
-		String networkFile;
-		String deliveryFile;
 		int optimizerId;
 
 		if (args.length > 0) {
@@ -37,22 +37,6 @@ public class AppStarter {
 			deliveryFile = args[2];
 		} else {
 			System.out.println("No data files passed. Using default resources.");
-			networkFile = "src/main/resources/Logistiknetz.csv";
-			deliveryFile = "src/main/resources/Lieferliste.csv";
-		}
-
-		try {
-
-			TransportNetworkCSVLoader transportNetworkCSVLoader = new TransportNetworkCSVLoader(networkFile);
-			transportNetwork = transportNetworkCSVLoader.getTransportNetwork();
-
-			DeliveryCSVLoader deliveryCSVLoader = new DeliveryCSVLoader(deliveryFile, transportNetwork);
-			transportNetwork = deliveryCSVLoader.getTransportNetworkWithDeliveries();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error when reading the input files");
-			System.exit(1);
 		}
 
 		HashMap<Optimizer, Double> optimizers = new HashMap<>();
@@ -79,20 +63,24 @@ public class AppStarter {
 				optimizers.put(new ShortestPathOptimizer(), -1.0);
 				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
-				//optimizers.put(new SavingsOptimizer(), -1);
+				optimizers.put(new SolutionOptimizer(), -1.0);
+				//optimizers.put(new SavingsOptimizer(), -1.0);
 		}
 
+		TransportNetwork transportNetwork = readFromFiles();
 
+		// Print solutions
 		for (Map.Entry<Optimizer, Double> optimizerEntry : optimizers.entrySet()) {
 			System.out.println("Running \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\"");
 			Solution solution = optimizerEntry.getKey().optimizeTransportNetwork(new TransportNetwork(transportNetwork.getLocationsDeepCopy()));
 			if (solution.isValid()) {
-				// Print solution
 				System.out.println("Solution found:");
 				System.out.println(solution.toString());
 				optimizerEntry.setValue(solution.getTotalConsumption()); // update the consumption
 			}
 		}
+
+		// Print ranking
 		System.out.println("\nRanking:");
 		for (Map.Entry<Optimizer, Double> optimizerEntry : optimizers.entrySet()) {
 			if (optimizerEntry.getValue() < 0) {
@@ -101,5 +89,30 @@ public class AppStarter {
 				System.out.println("Optimizer \"" + optimizerEntry.getKey().getClass().getSimpleName() + "\": " + optimizerEntry.getValue() + " consumed");
 			}
 		}
+	}
+
+	/**
+	 * Read transport network from files
+	 *
+	 * @return
+	 */
+	private static TransportNetwork readFromFiles() {
+
+		TransportNetwork transportNetwork = null;
+
+		try {
+			TransportNetworkCSVLoader transportNetworkCSVLoader = new TransportNetworkCSVLoader(networkFile);
+			transportNetwork = transportNetworkCSVLoader.getTransportNetwork();
+
+			DeliveryCSVLoader deliveryCSVLoader = new DeliveryCSVLoader(deliveryFile, transportNetwork);
+			return deliveryCSVLoader.getTransportNetworkWithDeliveries();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error when reading the input files");
+			System.exit(1);
+		}
+
+		return transportNetwork;
 	}
 }
