@@ -47,7 +47,6 @@ public class AppStarter {
 				break;
 			case 1:
 				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
-				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
 				break;
 			case 2:
 				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
