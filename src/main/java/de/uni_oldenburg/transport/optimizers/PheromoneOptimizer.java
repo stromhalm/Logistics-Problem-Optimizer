@@ -35,16 +35,16 @@ public class PheromoneOptimizer implements Optimizer {
 		int maximumTruckCapacity = LargeTruck.CAPACITY;
 
 		// While work to do
-		while (getLocationWithPositiveAmount() != null) {
+		while (solution.getOpenDeliveries().size() > 0) {
 
 			Tour tour = new Tour(startLocation);
-			int tourload = 0;
+			int tourLoad = 0;
 
 			// Go to highest scent
 			do {
 
 				// Get scentMap
-				HashMap<Location, Double> scentMap = getSummedScentMap((double) tourload/maximumTruckCapacity);
+				HashMap<Location, Double> scentMap = getSummedScentMap((double) tourLoad/maximumTruckCapacity);
 
 				// Find neighbor with highest scent
 				Location bestNeighbor = null;
@@ -57,9 +57,9 @@ public class PheromoneOptimizer implements Optimizer {
 				}
 
 				// Calculate amounts
-				int nextLocationUnload = Math.min(getAmountLeft(bestNeighbor), maximumTruckCapacity - tourload);
+				int nextLocationUnload = Math.min(getAmountLeft(bestNeighbor), maximumTruckCapacity - tourLoad);
 				deliverAmount(bestNeighbor, nextLocationUnload);
-				tourload += nextLocationUnload;
+				tourLoad += nextLocationUnload;
 
 				// Add destination
 				TourDestination nextDestination = new TourDestination(bestNeighbor, nextLocationUnload);
@@ -137,28 +137,12 @@ public class PheromoneOptimizer implements Optimizer {
 		return scentMap;
 	}
 
-	/**
-	 * Finds a location that has an amount > 0
-	 * @return Any location with amount > 0 else null
-	 */
-	private Location getLocationWithPositiveAmount() {
-		for (Location location : transportNetwork.getLocations()) {
-			if (getAmountLeft(location) > 0) return location;
-		}
-		return null;
-	}
-
 	private int getAmountLeft(Location location) {
 		if (deliveries.containsKey(location)) {
 			return (location.getAmount() - deliveries.get(location));
 		} else {
-			try {
-				return location.getAmount();
-			} catch (NullPointerException e) {
-				System.out.println();
-			}
+			return location.getAmount();
 		}
-		return 0;
 	}
 
 	private void deliverAmount(Location location, int amount) {
