@@ -214,17 +214,6 @@ public class SavingsOptimizer implements Optimizer {
         }
 
 
-        System.out.println("Anzahl Touren: " + routeList.size());
-        for (int j = 0; j < routeList.size(); j++) {
-            ArrayList<Location> route1 = routeList.get(j);
-            System.out.print("Route mit " + route1.size() + " destinations: ");
-            for (int i = 0; i < route1.size(); i++) {
-                System.out.print(route1.get(i).getName() + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-
         return routeList;
     }
 
@@ -257,15 +246,7 @@ public class SavingsOptimizer implements Optimizer {
             }
         });
 
-        System.out.println("Savings: ");
-        for (Object e : o) {
-            sortedSav.add(e);
-            sorted.put(((Map.Entry<String, Integer>) e).getKey(), ((Map.Entry<String, Integer>) e).getValue());
-            System.out.println(((Map.Entry<String, Integer>) e).getKey() + " : "
-                    + ((Map.Entry<String, Integer>) e).getValue());
-        }
 
-        System.out.println();
 
         for (int i = 0; i < transportNetwork.getLocations().length; i++) {
             locations.add(transportNetwork.getLocations()[i]);
@@ -537,11 +518,7 @@ public class SavingsOptimizer implements Optimizer {
                 actLocation = visitedLocations.get(i);
             }
         }
-        System.out.println("Entfernungen zum Depot: ");
-        for (Map.Entry<Location, Integer> entry : depotDistanceHashMap.entrySet()) {
-            System.out.println(entry.getKey().getName() + " ist " + entry.getValue() + " km von Hamburg entfernt.");
-        }
-        System.out.println();
+
         return depotDistanceHashMap;
     }
 
