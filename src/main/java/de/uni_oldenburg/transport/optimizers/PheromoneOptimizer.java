@@ -28,6 +28,16 @@ public class PheromoneOptimizer implements Optimizer {
 	 */
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
+		return optimizeTransportNetwork(transportNetwork, true);
+	}
+
+	/**
+	 * Optimize the given network with a pheromone approach
+	 *
+	 * @param transportNetwork  A transport network for which the transport problem has to be optimized.
+	 * @return                  The solution found by this optimizer
+	 */
+	private Solution optimizeTransportNetwork(TransportNetwork transportNetwork, boolean minimizeNearby) {
 
 		this.transportNetwork = transportNetwork;
 		this.startLocation = transportNetwork.getStartLocation();
@@ -38,6 +48,7 @@ public class PheromoneOptimizer implements Optimizer {
 		while (solution.getOpenDeliveries().size() > 0) {
 
 			Tour tour = new Tour(startLocation);
+			HashMap <Location, Integer> tourLocationVisits = new HashMap<>();
 			int tourLoad = 0;
 
 			// Go to highest scent
@@ -50,9 +61,15 @@ public class PheromoneOptimizer implements Optimizer {
 				Location bestNeighbor = null;
 				double bestScent = 0;
 				for (HashMap.Entry<Location, Integer> neighbor : currentLocation.getNeighbouringLocations().entrySet()) {
-					double neighborScent = scentMap.get(neighbor.getKey())*Math.pow(SCENT_FADE, neighbor.getValue());
+
+					Location neighborLocation = neighbor.getKey();
+					double neighborScent = scentMap.get(neighborLocation);
+					if (minimizeNearby) {
+						neighborScent = scentMap.get(neighborLocation)*Math.pow(SCENT_FADE, neighbor.getValue());
+					}
+
 					if (neighborScent > bestScent) {
-						bestNeighbor = neighbor.getKey();
+						bestNeighbor = neighborLocation;
 						bestScent = neighborScent;
 					}
 				}
@@ -65,9 +82,14 @@ public class PheromoneOptimizer implements Optimizer {
 				// Add destination
 				TourDestination nextDestination = new TourDestination(bestNeighbor, nextLocationUnload);
 				tour.addDestination(nextDestination);
-
 				currentLocation = bestNeighbor;
 
+				// When the tour gets too long, try again without nearby minimization
+				if (tour.getTourDestinations().length > transportNetwork.getLocations().length) {
+					System.out.println("Trying again without nearby minimization");
+					PheromoneOptimizer pheromoneOptimizer = new PheromoneOptimizer();
+					return pheromoneOptimizer.optimizeTransportNetwork(transportNetwork, false);
+				}
 			} while (startLocation != currentLocation);
 
 			solution.addTour(tour);
