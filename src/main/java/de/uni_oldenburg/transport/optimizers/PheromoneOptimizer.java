@@ -21,13 +21,25 @@ public class PheromoneOptimizer implements Optimizer {
 	HashMap<Location, Integer> deliveries = new HashMap<>();
 
 	/**
-	 * Optimize the given network with a pheromone approach
+	 * Optimize the given network with a pheromone approach.
+	 * Try minimizing nearby destinations if possible.
 	 *
 	 * @param transportNetwork  A transport network for which the transport problem has to be optimized.
 	 * @return                  The solution found by this optimizer
 	 */
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
+		return optimizeTransportNetwork(transportNetwork, true);
+	}
+
+	/**
+	 * Optimize the given network with a pheromone approach.
+	 *
+	 * @param transportNetwork  A transport network for which the transport problem has to be optimized.
+	 * @param minimizeNearby    Should try to minimize nearby destinations
+	 * @return                  The solution found by this optimizer
+	 */
+	private Solution optimizeTransportNetwork(TransportNetwork transportNetwork, boolean minimizeNearby) {
 
 		this.transportNetwork = transportNetwork;
 		this.startLocation = transportNetwork.getStartLocation();
@@ -50,9 +62,15 @@ public class PheromoneOptimizer implements Optimizer {
 				Location bestNeighbor = null;
 				double bestScent = 0;
 				for (HashMap.Entry<Location, Integer> neighbor : currentLocation.getNeighbouringLocations().entrySet()) {
-					double neighborScent = scentMap.get(neighbor.getKey())*Math.pow(SCENT_FADE, neighbor.getValue());
+
+					Location neighborLocation = neighbor.getKey();
+					double neighborScent = scentMap.get(neighborLocation);
+					if (minimizeNearby) {
+						neighborScent = scentMap.get(neighborLocation)*Math.pow(SCENT_FADE, neighbor.getValue());
+					}
+
 					if (neighborScent > bestScent) {
-						bestNeighbor = neighbor.getKey();
+						bestNeighbor = neighborLocation;
 						bestScent = neighborScent;
 					}
 				}
@@ -65,9 +83,13 @@ public class PheromoneOptimizer implements Optimizer {
 				// Add destination
 				TourDestination nextDestination = new TourDestination(bestNeighbor, nextLocationUnload);
 				tour.addDestination(nextDestination);
-
 				currentLocation = bestNeighbor;
 
+				// When the tour gets too long, try again without nearby minimization
+				if (tour.getTourDestinations().length > transportNetwork.getLocations().length) {
+					PheromoneOptimizer pheromoneOptimizer = new PheromoneOptimizer();
+					return pheromoneOptimizer.optimizeTransportNetwork(transportNetwork, false);
+				}
 			} while (startLocation != currentLocation);
 
 			solution.addTour(tour);

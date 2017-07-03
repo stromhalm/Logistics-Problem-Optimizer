@@ -291,21 +291,4 @@ public class Graph {
 		}
 		return false;
 	}
-
-	/**
-	 * Checks whether a location has already been visited.
-	 *
-	 * @param location
-	 * @param alreadyVisitedList
-	 * @return
-	 */
-	private static boolean alreadyVisited(ArrayList<Location> alreadyVisitedList, Location location) {
-		for (Location visitedLocation : alreadyVisitedList) {
-			if (location.getName().equals(visitedLocation.getName())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 }
