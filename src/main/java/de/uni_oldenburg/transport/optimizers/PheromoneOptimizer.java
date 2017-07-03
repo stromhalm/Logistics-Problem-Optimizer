@@ -17,6 +17,7 @@ public class PheromoneOptimizer implements Optimizer {
 
 	TransportNetwork transportNetwork;
 	Location startLocation;
+	HashMap<Location, Integer> deliveries = new HashMap<>();
 
 	/**
 	 *
@@ -34,16 +35,16 @@ public class PheromoneOptimizer implements Optimizer {
 		int maximumTruckCapacity = LargeTruck.CAPACITY;
 
 		// While work to do
-		while (getLocationWithPositiveAmount() != null) {
+		while (solution.getOpenDeliveries().size() > 0) {
 
 			Tour tour = new Tour(startLocation);
-			int tourload = 0;
+			int tourLoad = 0;
 
 			// Go to highest scent
 			do {
 
 				// Get scentMap
-				HashMap<Location, Double> scentMap = getSummedScentMap((double) tourload/maximumTruckCapacity);
+				HashMap<Location, Double> scentMap = getSummedScentMap((double) tourLoad/maximumTruckCapacity);
 
 				// Find neighbor with highest scent
 				Location bestNeighbor = null;
@@ -56,9 +57,9 @@ public class PheromoneOptimizer implements Optimizer {
 				}
 
 				// Calculate amounts
-				int nextLocationUnload = Math.min(bestNeighbor.getAmount(), maximumTruckCapacity - tourload);
-				bestNeighbor.setAmount(bestNeighbor.getAmount() - nextLocationUnload);
-				tourload += nextLocationUnload;
+				int nextLocationUnload = Math.min(getAmountLeft(bestNeighbor), maximumTruckCapacity - tourLoad);
+				deliverAmount(bestNeighbor, nextLocationUnload);
+				tourLoad += nextLocationUnload;
 
 				// Add destination
 				TourDestination nextDestination = new TourDestination(bestNeighbor, nextLocationUnload);
@@ -81,7 +82,7 @@ public class PheromoneOptimizer implements Optimizer {
 	 */
 	private HashMap<Location, Double> getSummedScentMap(double driftToStart) {
 
-		HashMap<Location, Double> summedScentMap = new HashMap();
+		HashMap<Location, Double> summedScentMap = new HashMap<>();
 
 		// Sum scents for all the locations
 		for (Location scentSource : transportNetwork.getLocations()) {
@@ -91,7 +92,7 @@ public class PheromoneOptimizer implements Optimizer {
 			if (scentSource == startLocation) {
 				scent = START_SCENT*driftToStart;
 			} else {
-				scent = scentSource.getAmount();
+				scent = getAmountLeft(scentSource);
 			}
 
 			HashMap<Location, Double> locationScentMap = markRecursively(new HashMap<>(), scentSource, scent);
@@ -136,14 +137,19 @@ public class PheromoneOptimizer implements Optimizer {
 		return scentMap;
 	}
 
-	/**
-	 * Finds a location that has an amount > 0
-	 * @return Any location with amount > 0 else null
-	 */
-	private Location getLocationWithPositiveAmount() {
-		for (Location location : transportNetwork.getLocations()) {
-			if (location.getAmount() > 0) return location;
+	private int getAmountLeft(Location location) {
+		if (deliveries.containsKey(location)) {
+			return (location.getAmount() - deliveries.get(location));
+		} else {
+			return location.getAmount();
 		}
-		return null;
+	}
+
+	private void deliverAmount(Location location, int amount) {
+		if (deliveries.containsKey(location)) {
+			deliveries.put(location, deliveries.get(location) + amount);
+		} else {
+			deliveries.put(location, amount);
+		}
 	}
 }

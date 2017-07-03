@@ -65,17 +65,44 @@ public class Solution {
 			}
 		}
 		for (Location location : transportNetwork.getLocations()) {
+
 			if (location.getAmount() != 0) {
 				if (!deliveries.containsKey(location) || location.getAmount() != deliveries.get(location)) {
 					// error message servicing
 					if (print) {
-						System.out.println(location.getName() + " needs " + location.getAmount() + " but gets " + deliveries.get(location) + " delivered.");
+						int amountDelivered = 0;
+						if (deliveries.containsKey(location)) amountDelivered = deliveries.get(location);
+						System.out.println(location.getName() + " needs " + location.getAmount() + " but gets " + amountDelivered + " delivered.");
 					}
 					return false;
 				}
 			}
 		}
 		return true;
+	}
+
+	public HashMap<Location, Integer> getOpenDeliveries() {
+
+		HashMap<Location, Integer> openDeliveries = new HashMap<>();
+
+		// Build demand
+		for (Location location : transportNetwork.getLocations()) {
+			openDeliveries.put(location, location.getAmount());
+		}
+
+		// Fill demand
+		for (Tour tour : truckTours) {
+			for (TourDestination tourDestination : tour.getTourDestinations()) {
+				openDeliveries.put(tourDestination.getDestination(), openDeliveries.get(tourDestination.getDestination()) - tourDestination.getUnload());
+			}
+		}
+
+		// Remove empty destinations
+		for (Location location : transportNetwork.getLocations()) {
+			if (openDeliveries.get(location) == 0) openDeliveries.remove(location);
+		}
+
+		return openDeliveries;
 	}
 
 	/**
