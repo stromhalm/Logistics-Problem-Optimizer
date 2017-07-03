@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>de.uni_oldenburg.transport.optimizers.SolutionOptimizer</OriginalElement>
+  <nodes>
+    <node x="638.0" y="231.0">de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader</node>
+    <node x="746.0" y="79.0">de.uni_oldenburg.transport.optimizers.SavingsOptimizer</node>
+    <node x="351.0" y="79.0">de.uni_oldenburg.transport.optimizers.PheromoneOptimizer</node>
+    <node x="164.0" y="79.0">de.uni_oldenburg.transport.optimizers.ShortestPathOptimizer</node>
+    <node x="533.0" y="79.0">de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer</node>
+    <node x="270.0" y="232.0">de.uni_oldenburg.transport.trucks.LargeTruck</node>
+    <node x="127.0" y="232.0">de.uni_oldenburg.transport.trucks.MediumTruck</node>
+    <node x="382.0" y="0.0">de.uni_oldenburg.transport.optimizers.Optimizer</node>
+    <node x="471.0" y="231.0">de.uni_oldenburg.transport.csv.DeliveryCSVLoader</node>
+    <node x="0.0" y="232.0">de.uni_oldenburg.transport.trucks.SmallTruck</node>
+    <node x="127.5" y="153.0">de.uni_oldenburg.transport.trucks.AbstractTruck</node>
+    <node x="589.0" y="152.0">de.uni_oldenburg.transport.csv.CSVLoader</node>
+    <node x="0.0" y="79.0">de.uni_oldenburg.transport.optimizers.SolutionOptimizer</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="de.uni_oldenburg.transport.optimizers.SolutionOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="0.0" y="-14.5" />
+      <point x="72.0" y="49.0" />
+      <point x="392.0" y="49.0" />
+      <point x="-40.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.PheromoneOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.NorthWestCornerOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="0.0" y="-14.5" />
+      <point x="629.5" y="59.0" />
+      <point x="452.0" y="59.0" />
+      <point x="20.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.trucks.MediumTruck" target="de.uni_oldenburg.transport.trucks.AbstractTruck">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.SavingsOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="0.0" y="-14.5" />
+      <point x="816.0" y="49.0" />
+      <point x="472.0" y="49.0" />
+      <point x="40.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.trucks.SmallTruck" target="de.uni_oldenburg.transport.trucks.AbstractTruck">
+      <point x="0.0" y="-14.5" />
+      <point x="53.5" y="207.0" />
+      <point x="147.83333333333334" y="207.0" />
+      <point x="-40.66666666666666" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.optimizers.ShortestPathOptimizer" target="de.uni_oldenburg.transport.optimizers.Optimizer">
+      <point x="0.0" y="-14.5" />
+      <point x="247.5" y="59.0" />
+      <point x="412.0" y="59.0" />
+      <point x="-20.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.csv.DeliveryCSVLoader" target="de.uni_oldenburg.transport.csv.CSVLoader">
+      <point x="0.0" y="-14.5" />
+      <point x="544.5" y="206.0" />
+      <point x="615.25" y="206.0" />
+      <point x="-26.25" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.csv.TransportNetworkCSVLoader" target="de.uni_oldenburg.transport.csv.CSVLoader">
+      <point x="0.0" y="-14.5" />
+      <point x="738.5" y="206.0" />
+      <point x="667.75" y="206.0" />
+      <point x="26.25" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.trucks.LargeTruck" target="de.uni_oldenburg.transport.trucks.AbstractTruck">
+      <point x="0.0" y="-14.5" />
+      <point x="323.5" y="207.0" />
+      <point x="229.16666666666666" y="207.0" />
+      <point x="40.66666666666666" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="443.0" y="207.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

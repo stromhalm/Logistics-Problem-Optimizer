@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>de.uni_oldenburg.transport.AppStarter</OriginalElement>
+  <nodes>
+    <node x="296.0" y="79.0">de.uni_oldenburg.transport.TransportNetwork</node>
+    <node x="284.75" y="298.0">de.uni_oldenburg.transport.AppStarter</node>
+    <node x="85.125" y="158.0">de.uni_oldenburg.transport.Tour</node>
+    <node x="210.17361111111111" y="237.0">de.uni_oldenburg.transport.Solution</node>
+    <node x="174.0" y="298.0">de.uni_oldenburg.transport.optimizers.Optimizer</node>
+    <node x="192.875" y="0.0">de.uni_oldenburg.transport.Location</node>
+    <node x="154.0" y="79.0">de.uni_oldenburg.transport.trucks.AbstractTruck</node>
+    <node x="0.0" y="79.0">de.uni_oldenburg.transport.TourDestination</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="de.uni_oldenburg.transport.AppStarter" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="0.0" y="-14.5" />
+      <point x="336.75" y="133.0" />
+      <point x="332.0" y="133.0" />
+      <point x="-36.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.TourDestination" target="de.uni_oldenburg.transport.Location">
+      <point x="0.0" y="-14.5" />
+      <point x="66.5" y="49.0" />
+      <point x="204.625" y="49.0" />
+      <point x="-35.25" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.TransportNetwork" target="de.uni_oldenburg.transport.Location">
+      <point x="-36.0" y="-14.5" />
+      <point x="332.0" y="59.0" />
+      <point x="251.625" y="59.0" />
+      <point x="11.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Solution" target="de.uni_oldenburg.transport.Tour">
+      <point x="-23.0" y="-14.5" />
+      <point x="233.17361111111111" y="212.0" />
+      <point x="121.625" y="212.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Tour" target="de.uni_oldenburg.transport.trucks.AbstractTruck">
+      <point x="27.375" y="-14.5" />
+      <point x="149.0" y="133.0" />
+      <point x="215.0" y="133.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Tour" target="de.uni_oldenburg.transport.Location">
+      <point x="9.125" y="-14.5" />
+      <point x="130.75" y="133.0" />
+      <point x="143.5" y="133.0" />
+      <point x="143.5" y="59.0" />
+      <point x="228.125" y="59.0" />
+      <point x="-11.75" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Solution" target="de.uni_oldenburg.transport.TransportNetwork">
+      <point x="23.0" y="-14.5" />
+      <point x="279.17361111111114" y="212.0" />
+      <point x="399.25" y="212.0" />
+      <point x="399.25" y="133.0" />
+      <point x="404.0" y="133.0" />
+      <point x="36.0" y="14.5" />
+    </edge>
+    <edge source="de.uni_oldenburg.transport.Tour" target="de.uni_oldenburg.transport.TourDestination">
+      <point x="-9.125" y="-14.5" />
+      <point x="112.5" y="133.0" />
+      <point x="99.75" y="133.0" />
+      <point x="33.25" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="220.0" y="190.5" />
+  <SelectedNodes>
+    <node>de.uni_oldenburg.transport.optimizers.Optimizer</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
