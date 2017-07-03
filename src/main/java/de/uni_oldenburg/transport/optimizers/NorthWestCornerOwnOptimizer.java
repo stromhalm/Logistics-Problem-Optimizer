@@ -6,6 +6,9 @@ import de.uni_oldenburg.transport.TransportNetwork;
 import de.uni_oldenburg.transport.optimizers.Graph.Graph;
 
 
+/**
+ * Extends {@link NorthWestCornerOptimizer}.
+ */
 public class NorthWestCornerOwnOptimizer extends NorthWestCornerOptimizer {
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {

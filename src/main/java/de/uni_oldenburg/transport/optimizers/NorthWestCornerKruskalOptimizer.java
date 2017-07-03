@@ -7,7 +7,9 @@ import de.uni_oldenburg.transport.optimizers.Graph.Vertex;
 
 import java.util.ArrayList;
 
-
+/**
+ * Extends {@link NorthWestCornerOptimizer} and modifies the {@link TransportNetwork} with the {@link Kruskal} algorithm.
+ */
 public class NorthWestCornerKruskalOptimizer extends NorthWestCornerOptimizer {
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
@@ -30,14 +32,11 @@ public class NorthWestCornerKruskalOptimizer extends NorthWestCornerOptimizer {
 			}
 		}
 
-
 		Solution solution = new Solution(transportNetwork);
-
 
 		for (Tour tour : doNorthWestCornerMethod(transportNetwork.getStartLocation(), transportNetwork)) {
 			solution.addTour(tour);
 		}
-
 
 		return solution;
 	}

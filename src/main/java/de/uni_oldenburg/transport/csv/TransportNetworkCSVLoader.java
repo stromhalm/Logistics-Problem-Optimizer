@@ -25,6 +25,12 @@ public class TransportNetworkCSVLoader extends CSVLoader {
 		super(file);
 	}
 
+	/**
+	 * Gets the transportnetwork without the delivery amount set to each location.
+	 *
+	 * @return The {@link TransportNetwork} with the location connections.
+	 * @throws IOException If the csv file could not be load or any other error occurs.
+	 */
 	public TransportNetwork getTransportNetwork() throws IOException {
 
 		String entry;
@@ -48,7 +54,7 @@ public class TransportNetworkCSVLoader extends CSVLoader {
 			} else if (locationHashMap.containsKey(locationName2) && !locationHashMap.containsKey(locationName1)) {
 				// create new start
 				locationHashMap.put(locationName1, new Location(locationName1));
-			} else if ( !locationHashMap.containsKey(locationName1) && !locationHashMap.containsKey(locationName2)){
+			} else if (!locationHashMap.containsKey(locationName1) && !locationHashMap.containsKey(locationName2)) {
 				// create new start
 				locationHashMap.put(locationName1, new Location(locationName1));
 				// create new destination

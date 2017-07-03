@@ -5,8 +5,6 @@ import de.uni_oldenburg.transport.TransportNetwork;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Extends and implements {@link CSVLoader}.
@@ -26,6 +24,12 @@ public class DeliveryCSVLoader extends CSVLoader {
 		this.transportNetwork = transportNetwork;
 	}
 
+	/**
+	 * Gets the network and sets the amount to deliver for each {@link Location}.
+	 *
+	 * @return the {@link TransportNetwork} with the locations amount.
+	 * @throws Exception If any error occurs.
+	 */
 	public TransportNetwork getTransportNetworkWithDeliveries() throws Exception {
 
 		String entry = this.bufferedReader.readLine(); // skips the first line containing just the column information.

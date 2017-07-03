@@ -88,6 +88,11 @@ public class Tour {
 		return tourDestinations.toArray(new TourDestination[0]);
 	}
 
+	/**
+	 * Gets the amount delivered on this tour.
+	 *
+	 * @return The tour load.
+	 */
 	public int getTourLoad() {
 		int load = 0;
 		for (TourDestination tourDestination : tourDestinations) {
@@ -126,10 +131,20 @@ public class Tour {
 		return true;
 	}
 
+	/**
+	 * Gets the consumption of the tour.
+	 *
+	 * @return The consumption in liters.
+	 */
 	public double getConsumption() {
 		return getKilometersToDrive() * (getTruck().getConsumption()) / 100;
 	}
 
+	/**
+	 * Gets the start location of the tour.
+	 *
+	 * @return The start location of the tour.
+	 */
 	public Location getStartLocation() {
 		return startLocation;
 	}

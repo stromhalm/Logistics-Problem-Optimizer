@@ -7,30 +7,37 @@ import de.uni_oldenburg.transport.trucks.LargeTruck;
 import de.uni_oldenburg.transport.trucks.MediumTruck;
 import de.uni_oldenburg.transport.trucks.SmallTruck;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Implements the North-Wester-Corner method to solve the transport problem and optimize it. See VL 6 for further information. The method can be improved if the table organization is optimized, too.
+ * Implements the North-West-Corner method to solve the transport problem and optimize it. See VL 6 for further information. The method can be improved if the table organization is optimized, too.
  *
  * @see NorthWestCornerKruskalOptimizer
  * @see NorthWestCornerOwnOptimizer
  */
 public abstract class NorthWestCornerOptimizer implements Optimizer {
 
-	protected ArrayList<ArrayList<Vertex>> spanningNetwork;
+	ArrayList<ArrayList<Vertex>> spanningNetwork;
 
 	@Override
 	public abstract Solution optimizeTransportNetwork(TransportNetwork transportNetwork);
 
-	public ArrayList<Tour> doNorthWestCornerMethod(Location startLocation, TransportNetwork transportNetwork) {
+	/**
+	 * Creates the North-West-Corner table implicitly and solves the problem for each tour. Optimizes the returning tour by using Dijkstra and selecting the Trucks intelligently.
+	 *
+	 * @param startLocation    Is the start location.
+	 * @param transportNetwork Is the transportnetwork for which the transportation problem is to be optimized/solved.
+	 * @return An ArrayList of {@link Tour}s which are to be added to the {@link Solution}.
+	 */
+	ArrayList<Tour> doNorthWestCornerMethod(Location startLocation, TransportNetwork transportNetwork) {
 		int[] kmToDriveOnRoute = new int[spanningNetwork.size()];
 		int[] amountToDeliverOnRoute = new int[spanningNetwork.size()];
 
 		ArrayList<Location> locationsDelivered = new ArrayList<>();
 
+		// determine the amount to deliver
 		for (int route = 0; route < spanningNetwork.size(); route++) {
 			Vertex leaf = spanningNetwork.get(route).get(spanningNetwork.get(route).size() - 1);
 
@@ -46,6 +53,7 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 
 		ArrayList<Tour> tours = new ArrayList<>();
 		locationsDelivered = new ArrayList<>();
+		// Determine the different set of trucks to be used on the Tour.
 		for (int route = 0; route < spanningNetwork.size(); route++) {
 			ArrayList<SmallTruck> smallTrucks = new ArrayList<>();
 			ArrayList<MediumTruck> mediumTrucks = new ArrayList<>();
@@ -74,6 +82,7 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 
 			AbstractTruck lastTruck = null;
 			Tour lastTour = null;
+			// solve the problem
 			for (Vertex vertex : vertices) {
 				int locationAmount = (locationDeliveredAlready(locationsDelivered, vertex) ? 0 : vertex.getLocationReference().getAmount());
 				while (locationAmount != 0) {
