@@ -12,17 +12,19 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class PheromoneOptimizer implements Optimizer {
 
-	final double START_SCENT = 200;
-	final double SCENT_FADE = 0.993;
+	// Parameters for the optimizer (found by brute force)
+	final double START_SCENT = 200;  // The amount of scent that the startLocation sends at most
+	final double SCENT_FADE = 0.993; // The fade of scent per km
 
 	TransportNetwork transportNetwork;
 	Location startLocation;
 	HashMap<Location, Integer> deliveries = new HashMap<>();
 
 	/**
+	 * Optimize the given network with a pheromone approach
 	 *
-	 * @param transportNetwork A transport network for which the transport problem has to be optimized.
-	 * @return The solution found by this optimizer
+	 * @param transportNetwork  A transport network for which the transport problem has to be optimized.
+	 * @return                  The solution found by this optimizer
 	 */
 	@Override
 	public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
@@ -30,9 +32,7 @@ public class PheromoneOptimizer implements Optimizer {
 		this.transportNetwork = transportNetwork;
 		this.startLocation = transportNetwork.getStartLocation();
 		Solution solution = new Solution(transportNetwork);
-
 		Location currentLocation = startLocation;
-		int maximumTruckCapacity = LargeTruck.CAPACITY;
 
 		// While work to do
 		while (solution.getOpenDeliveries().size() > 0) {
@@ -44,20 +44,21 @@ public class PheromoneOptimizer implements Optimizer {
 			do {
 
 				// Get scentMap
-				HashMap<Location, Double> scentMap = getSummedScentMap((double) tourLoad/maximumTruckCapacity);
+				HashMap<Location, Double> scentMap = getSummedScentMap((double) tourLoad/LargeTruck.CAPACITY);
 
 				// Find neighbor with highest scent
 				Location bestNeighbor = null;
 				double bestScent = 0;
-				for (HashMap.Entry neighbor : currentLocation.getNeighbouringLocations().entrySet()) {
-					if (scentMap.get(neighbor.getKey()) > bestScent) {
-						bestNeighbor = (Location) neighbor.getKey();
-						bestScent = scentMap.get(neighbor.getKey());
+				for (HashMap.Entry<Location, Integer> neighbor : currentLocation.getNeighbouringLocations().entrySet()) {
+					double neighborScent = scentMap.get(neighbor.getKey())*Math.pow(SCENT_FADE, neighbor.getValue());
+					if (neighborScent > bestScent) {
+						bestNeighbor = neighbor.getKey();
+						bestScent = neighborScent;
 					}
 				}
 
 				// Calculate amounts
-				int nextLocationUnload = Math.min(getAmountLeft(bestNeighbor), maximumTruckCapacity - tourLoad);
+				int nextLocationUnload = Math.min(getAmountLeft(bestNeighbor), LargeTruck.CAPACITY - tourLoad);
 				deliverAmount(bestNeighbor, nextLocationUnload);
 				tourLoad += nextLocationUnload;
 
@@ -77,8 +78,9 @@ public class PheromoneOptimizer implements Optimizer {
 
 	/**
 	 * Calculate a scent map with a driven drift to the start location
-	 * @param driftToStart Drift to start location [0..1]. The higher the higher is the drift
-	 * @return A scent map
+	 *
+	 * @param driftToStart  Drift to start location [0..1]. The higher the higher is the drift
+	 * @return              A scent map
 	 */
 	private HashMap<Location, Double> getSummedScentMap(double driftToStart) {
 
@@ -98,31 +100,32 @@ public class PheromoneOptimizer implements Optimizer {
 			HashMap<Location, Double> locationScentMap = markRecursively(new HashMap<>(), scentSource, scent);
 
 			// Add to summedScentMap
-			for (HashMap.Entry singleScentSource : locationScentMap.entrySet()) {
+			for (HashMap.Entry<Location, Double> singleScentSource : locationScentMap.entrySet()) {
 				double currentScent = 0;
 				if (summedScentMap.get(singleScentSource.getKey()) != null) {
 					currentScent = summedScentMap.get(singleScentSource.getKey());
 				}
 
-				double additionalScent = (Double) singleScentSource.getValue();
+				double additionalScent = singleScentSource.getValue();
 
 				// Drift to start
 				if (scentSource != startLocation) {
 					additionalScent = (1-driftToStart)*additionalScent;
 				}
 
-				summedScentMap.put((Location) singleScentSource.getKey(), currentScent + additionalScent);
+				summedScentMap.put(singleScentSource.getKey(), currentScent + additionalScent);
 			}
 		}
 		return summedScentMap;
 	}
 
 	/**
-	 * Recursive function to calculate the recursive scents on the map
-	 * @param scentMap The initial scent map
-	 * @param location The location with a new scent
-	 * @param scent The new scents value
-	 * @return The refreshed scent map
+	 * Recursive function to calculate the scents on the map
+	 *
+	 * @param scentMap  The initial scent map
+	 * @param location  The location with a new scent
+	 * @param scent     The new scents value
+	 * @return          The refreshed scent map
 	 */
 	private HashMap<Location, Double> markRecursively(HashMap<Location, Double> scentMap, Location location, double scent) {
 
@@ -130,13 +133,19 @@ public class PheromoneOptimizer implements Optimizer {
 		if (scentMap.get(location) == null || scentMap.get(location) < scent) {
 			scentMap.put(location, scent);
 
-			for (HashMap.Entry neighbor : location.getNeighbouringLocations().entrySet()) {
-				scentMap = markRecursively(scentMap, (Location) neighbor.getKey(), scent*Math.pow(SCENT_FADE, (int) neighbor.getValue()));
+			for (HashMap.Entry<Location, Integer> neighbor : location.getNeighbouringLocations().entrySet()) {
+				scentMap = markRecursively(scentMap, neighbor.getKey(), scent*Math.pow(SCENT_FADE, neighbor.getValue()));
 			}
 		}
 		return scentMap;
 	}
 
+	/**
+	 * Get the amount of open deliveries for a given location
+	 *
+	 * @param location The location in this problems transportNetwork
+	 * @return The amount of open deliveries for the location
+	 */
 	private int getAmountLeft(Location location) {
 		if (deliveries.containsKey(location)) {
 			return (location.getAmount() - deliveries.get(location));
@@ -145,6 +154,14 @@ public class PheromoneOptimizer implements Optimizer {
 		}
 	}
 
+	/**
+	 * Substracts the given amount from the open deliveries in this problems network
+	 * without changing the transportNetwork object itself. Use getAmountLeft() to get
+	 * the open amount.
+	 *
+	 * @param location  The location in this problems transportNetwork
+	 * @param amount    The amount of deliveries to substract from the location
+	 */
 	private void deliverAmount(Location location, int amount) {
 		if (deliveries.containsKey(location)) {
 			deliveries.put(location, deliveries.get(location) + amount);
