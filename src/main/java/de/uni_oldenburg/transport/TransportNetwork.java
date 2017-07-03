@@ -56,7 +56,7 @@ public class TransportNetwork {
 	/**
 	 * If in need of a fresh copy.
 	 *
-	 * @return
+	 * @return A fresh copy of this Location network array.
 	 */
 	public Location[] getLocationsDeepCopy() {
 		Location[] locations = new Location[network.length];

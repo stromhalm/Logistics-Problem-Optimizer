@@ -27,6 +27,8 @@ public class Vertex {
 		this.predecessor = predecessor;
 	}
 
+
+	/* Getter and setter */
 	public Vertex getParentLocation() {
 		return parentLocation;
 	}

@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Provides static method and functions to get spanning networks (aka spanning graphs).
+ * Provides static method and functions to get spanning networks (aka spanning graphs) and more.
  */
 public class Graph {
 
@@ -26,9 +26,9 @@ public class Graph {
 	/**
 	 * Compute Dijkstra recursively;
 	 *
-	 * @param from
-	 * @param to
-	 * @return
+	 * @param from Location at which to start.
+	 * @param to   Destination Location.
+	 * @return The Minimal-Spanning-Tree (MST) for each combination of from and to locations.
 	 */
 	private static LinkedHashMap<Location, Integer> doDijkstra(Location from, Location to) {
 		LinkedHashMap<Location, Integer> path = new LinkedHashMap<>();
@@ -101,8 +101,8 @@ public class Graph {
 	/**
 	 * Get the minimized spanning network. Have not to be the minimum spanning tree as it allows loops if it improves the solution.
 	 *
-	 * @param locations
-	 * @param startLocation
+	 * @param locations     Locations array from which the spanning network is to be got.
+	 * @param startLocation Location to start at.
 	 * @return minimized spanning network.
 	 */
 	public static ArrayList<ArrayList<Vertex>> getSpanningNetwork(Location[] locations, Location startLocation) {
@@ -146,9 +146,9 @@ public class Graph {
 	/**
 	 * Minimizes a given set of routes.
 	 *
-	 * @param spanningTree
-	 * @param vertices
-	 * @param spanningTreesOut
+	 * @param spanningTree     The spanning tree which is to be minimized by a new set of vertices.
+	 * @param vertices         The vertices that are to be checked checked.
+	 * @param spanningTreesOut The output new spanning tree.
 	 */
 	private static void minimize(ArrayList<Vertex> spanningTree, ArrayList<Vertex> vertices, ArrayList<ArrayList<Vertex>> spanningTreesOut) {
 		boolean replacable = true;
@@ -195,7 +195,7 @@ public class Graph {
 					findNewSpanningTree(spanningTreesTmp, new ArrayList<Vertex>(spanningTree) /*Create a copy*/, new ArrayList<>(alreadyVisitedList), location, startLocationName, depth - 1);
 				} else {
 					// cycle
-					//spanningTreesTmp.add(spanningTree); // TODO imlement cycle detection?!
+					//spanningTreesTmp.add(spanningTree); // TODO implement cycle detection?!
 				}
 			}
 		} else {
@@ -208,10 +208,10 @@ public class Graph {
 	/**
 	 * Checks whether a new tree is new or cheaper than one already found.
 	 *
-	 * @param spanningTree
-	 * @param spanningTrees
-	 * @param startLocationName
-	 * @return
+	 * @param spanningTree      The spanning tree which is possibly to be added.
+	 * @param spanningTrees     The currently found spanning trees.
+	 * @param startLocationName The start locations name to ident
+	 * @return A boolean value whether the new spanning tree must be added to the currently set of spanning trees.
 	 */
 	private static boolean spanningTreeIsCheaperOrNew(ArrayList<Vertex> spanningTree, ArrayList<ArrayList<Vertex>> spanningTrees, String startLocationName) {
 
@@ -246,9 +246,9 @@ public class Graph {
 	/**
 	 * Checks whether all vertices are delivered or reached by the routes found.
 	 *
-	 * @param locations
-	 * @param spanningTrees
-	 * @return
+	 * @param locations     Location array to be checked.
+	 * @param spanningTrees The spanning trees which reorganized the locations array with graph elements.
+	 * @return A boolean value whether all locations have a vertex equivalent.
 	 */
 	private static boolean allVerticesGot(Location[] locations, ArrayList<ArrayList<Vertex>> spanningTrees) {
 		boolean[] locationsGot = new boolean[locations.length];
@@ -279,9 +279,9 @@ public class Graph {
 	/**
 	 * Checks whether a location has already been visited and checked by a route of vertices.
 	 *
-	 * @param location
-	 * @param alreadyVisitedList
-	 * @return
+	 * @param location           The location to be checked as a {@link Vertex}.
+	 * @param alreadyVisitedList The already vistied vertices.
+	 * @return boolean value whether the location is already added.
 	 */
 	private static boolean alreadyVisited(Vertex location, ArrayList<Vertex> alreadyVisitedList) {
 		for (Vertex vertex : alreadyVisitedList) {

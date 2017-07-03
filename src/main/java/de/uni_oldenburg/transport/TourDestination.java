@@ -8,8 +8,6 @@ public class TourDestination {
 	private Location destination;
 	private int unload;
 
-	private int expense;
-
 	public TourDestination(Location destination, int unload) {
 		this.destination = destination;
 		this.unload = unload;

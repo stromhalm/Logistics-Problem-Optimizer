@@ -81,6 +81,11 @@ public class Solution {
 		return true;
 	}
 
+	/**
+	 * Gets the locations which are not delivered in full yet.
+	 *
+	 * @return A HashMap of those locations with the location as the key and the difference needed as the value.
+	 */
 	public HashMap<Location, Integer> getOpenDeliveries() {
 
 		HashMap<Location, Integer> openDeliveries = new HashMap<>();
@@ -132,6 +137,11 @@ public class Solution {
 		return output;
 	}
 
+	/**
+	 * Returns all {@link Tour}s of this Solution.
+	 *
+	 * @return The tours.
+	 */
 	public ArrayList<Tour> getTruckTours() {
 		return truckTours;
 	}
