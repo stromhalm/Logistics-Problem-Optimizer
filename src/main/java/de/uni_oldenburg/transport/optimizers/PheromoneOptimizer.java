@@ -88,7 +88,6 @@ public class PheromoneOptimizer implements Optimizer {
 
 				// When the tour gets too long, try again without nearby minimization
 				if (tour.getTourDestinations().length > transportNetwork.getLocations().length) {
-					System.out.println("Trying again without nearby minimization");
 					PheromoneOptimizer pheromoneOptimizer = new PheromoneOptimizer();
 					return pheromoneOptimizer.optimizeTransportNetwork(transportNetwork, false);
 				}
