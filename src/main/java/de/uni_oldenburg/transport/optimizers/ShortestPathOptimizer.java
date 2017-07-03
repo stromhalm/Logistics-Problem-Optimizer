@@ -69,9 +69,6 @@ public class ShortestPathOptimizer implements Optimizer {
 					alreadyServed.add(subPath.getKey());
 					driveHome(tour, transportNetwork.getShortestPath(subPath.getKey(), start));
 					tours.add(tour);
-					if (!start.getNeighbouringLocations().containsKey(tour.getTourDestinations()[0].getDestination())) {
-						System.exit(1);
-					}
 					tour = newTour;
 				}
 

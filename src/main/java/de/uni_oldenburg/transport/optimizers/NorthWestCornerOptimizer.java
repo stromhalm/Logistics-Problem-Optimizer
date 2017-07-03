@@ -151,42 +151,4 @@ public abstract class NorthWestCornerOptimizer implements Optimizer {
 		}
 		return false;
 	}
-
-	private int computeExpense(Vertex vertex) {
-		int expense = 0;
-		while (vertex.getParentLocation() != null) {
-			expense += vertex.getExpenseToParentLocation();
-			vertex = vertex.getParentLocation();
-		}
-		return expense;
-	}
-
-	private LinkedHashMap<TourDestination, Integer> computePathToVertex(Vertex vertex) {
-		LinkedHashMap<TourDestination, Integer> path = new LinkedHashMap<>();
-		ArrayList<Map.Entry<TourDestination, Integer>> paths = new ArrayList<>();
-		vertex = vertex.getParentLocation(); // skip the vertex itself because we do not know how much is unloaded
-		while (vertex.getParentLocation() != null) {
-			paths.add(new AbstractMap.SimpleEntry<TourDestination, Integer>(new TourDestination(vertex.getLocationReference(), 0), vertex.getExpenseToParentLocation()));
-			vertex = vertex.getParentLocation();
-		}
-
-		for (int i = paths.size() - 1; i >= 0; i--) {
-			path.put(paths.get(i).getKey(), paths.get(i).getValue());
-		}
-		return path;
-	}
-
-	@Override
-	public String toString() {
-		String spanningNetworkString = "";
-		for (ArrayList<Vertex> tours : spanningNetwork) {
-			spanningNetworkString += "Tour: ";
-			for (Vertex vertex : tours) {
-				spanningNetworkString += vertex.getName() + " to ";
-			}
-			spanningNetworkString += "\n";
-		}
-		return spanningNetworkString;
-	}
-
 }

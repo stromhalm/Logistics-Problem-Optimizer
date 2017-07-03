@@ -57,13 +57,19 @@ public class AppStarter {
 			case 4:
 				optimizers.put(new ShortestPathOptimizer(), -1.0);
 				break;
+			case 5:
+				optimizers.put(new SolutionOptimizer(), -1.0);
+				break;
+			case 6:
+				optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
+				break;
 			default:
 				optimizers.put(new PheromoneOptimizer(), -1.0);
 				optimizers.put(new ShortestPathOptimizer(), -1.0);
 				optimizers.put(new NorthWestCornerKruskalOptimizer(), -1.0);
+				optimizers.put(new SavingsOptimizer(), -1.0);
 				//optimizers.put(new NorthWestCornerOwnOptimizer(), -1.0);
 				//optimizers.put(new SolutionOptimizer(), -1.0);
-				optimizers.put(new SavingsOptimizer(), -1.0);
 		}
 
 		TransportNetwork transportNetwork = readFromFiles();
@@ -93,7 +99,7 @@ public class AppStarter {
 	/**
 	 * Read transport network from files
 	 *
-	 * @return
+	 * @return A valid TransportNetwork read from the input files
 	 */
 	private static TransportNetwork readFromFiles() {
 

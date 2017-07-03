@@ -23,6 +23,24 @@ public class AppStarterTest {
 	public void main_chooseOptimzer() throws Exception {
 		String[] args = {"0"};
 		AppStarter.main(args);
+
+		args[0] = "1";
+		AppStarter.main(args);
+
+		args[0] = "2";
+		AppStarter.main(args);
+
+		args[0] = "3";
+		AppStarter.main(args);
+
+		args[0] = "4";
+		AppStarter.main(args);
+
+		args[0] = "5";
+		AppStarter.main(args);
+
+		args[0] = "6";
+		AppStarter.main(args);
 	}
 
 	@Test

@@ -33,10 +33,7 @@ public class Kruskal {
 	}
 
 	public TransportNetwork getLocationsMST() {
-		if (subGraphEdges.size() != 1) {
-			System.out.println("Graph not connected.");
-			return null;
-		}
+		if (subGraphEdges.size() != 1) return null;
 		for (Edge edge : notEdgesMST) {
 			//System.out.println("Removing Edge: " + edge.getVertex1().getName() + " to " + edge.getVertex2().getName() + " with " + edge.getWeight());
 			edge.getVertex1().getLocationReference().getNeighbouringLocations().remove(edge.getVertex2().getLocationReference(), edge.getWeight());

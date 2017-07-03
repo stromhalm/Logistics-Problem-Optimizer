@@ -85,16 +85,6 @@ public class Location {
 	}
 
 	/**
-	 * Decides whether this location has a neighbouring location equally to the passes location.
-	 *
-	 * @param location The location to check for neighbourhood.
-	 * @return Boolean value whether the location is a neighbour or not.
-	 */
-	public boolean hasNeigbouringLocationLocation(Location location) {
-		return getNeighbouringLocations().containsKey(location);
-	}
-
-	/**
 	 * Return this locations name
 	 *
 	 * @return this locations name
