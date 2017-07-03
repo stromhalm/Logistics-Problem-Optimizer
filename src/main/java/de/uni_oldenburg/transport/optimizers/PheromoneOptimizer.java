@@ -21,7 +21,8 @@ public class PheromoneOptimizer implements Optimizer {
 	HashMap<Location, Integer> deliveries = new HashMap<>();
 
 	/**
-	 * Optimize the given network with a pheromone approach
+	 * Optimize the given network with a pheromone approach.
+	 * Try minimizing nearby destinations if possible.
 	 *
 	 * @param transportNetwork  A transport network for which the transport problem has to be optimized.
 	 * @return                  The solution found by this optimizer
@@ -32,9 +33,10 @@ public class PheromoneOptimizer implements Optimizer {
 	}
 
 	/**
-	 * Optimize the given network with a pheromone approach
+	 * Optimize the given network with a pheromone approach.
 	 *
 	 * @param transportNetwork  A transport network for which the transport problem has to be optimized.
+	 * @param minimizeNearby    Should try to minimize nearby destinations
 	 * @return                  The solution found by this optimizer
 	 */
 	private Solution optimizeTransportNetwork(TransportNetwork transportNetwork, boolean minimizeNearby) {
