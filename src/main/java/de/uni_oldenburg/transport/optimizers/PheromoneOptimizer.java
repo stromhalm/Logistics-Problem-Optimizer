@@ -50,7 +50,6 @@ public class PheromoneOptimizer implements Optimizer {
 		while (solution.getOpenDeliveries().size() > 0) {
 
 			Tour tour = new Tour(startLocation);
-			HashMap <Location, Integer> tourLocationVisits = new HashMap<>();
 			int tourLoad = 0;
 
 			// Go to highest scent
