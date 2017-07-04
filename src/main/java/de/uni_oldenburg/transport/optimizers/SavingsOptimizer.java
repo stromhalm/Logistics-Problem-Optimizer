@@ -182,11 +182,11 @@ public class SavingsOptimizer implements Optimizer {
         ArrayList<ArrayList<Location>> routeList = new ArrayList<>();
         ArrayList<Location> routeLocation = new ArrayList<>();
         ArrayList<Location> visitedLocations = new ArrayList<>();
+        ArrayList<Location> visitedLocations3 = new ArrayList<>();
         Location[] locations = transportNetwork.getLocations();
         LinkedHashMap<String, Integer> sorted = savings;
         Location actLocation = startLocation;
         routeLocation.add(startLocation);
-        visitedLocations.add(startLocation);
 
 
 
@@ -196,13 +196,14 @@ public class SavingsOptimizer implements Optimizer {
             routeList.add(routing1);
             for(Location visited : routing1) {
                 if(!visitedLocations.contains(visited)) {
-                    visitedLocations.add(visited);
+                    visitedLocations3.add(visited);
                 }
             }
         }
-            while(visitedLocations.size() < locations.length+3) {
+
+            while(visitedLocations3.size() < locations.length) {
                 for (Location visitedL : locations) {
-                    if (!visitedLocations.contains(visitedL)) {
+                    if (!visitedLocations3.contains(visitedL)) {
                         actLocation = visitedL;
                         break;
                     }
@@ -211,10 +212,13 @@ public class SavingsOptimizer implements Optimizer {
                 for (ArrayList<Location> routing2 : routesPart2) {
                     if (!routeList.contains(routing2))
                         routeList.add(routing2);
-
+                    for (Location visited : routing2) {
+                        if (!visitedLocations3.contains(visited)) {
+                            visitedLocations3.add(visited);
+                        }
+                    }
                 }
             }
-
 
         return routeList;
     }
@@ -231,14 +235,14 @@ public class SavingsOptimizer implements Optimizer {
     private ArrayList<ArrayList<Location>> computeRoutes(Location actLocation, TransportNetwork transportNetwork, LinkedHashMap<String, Integer> savings, ArrayList<Location> visitedLocation) {
 
         ArrayList<Location> routeLocation = new ArrayList<>();
-        ArrayList<Location> visitedLocations = visitedLocation;
+        ArrayList<Location> visitedLocations2 = visitedLocation;
         ArrayList<Location> locations = new ArrayList<>();
         ArrayList<Object> sortedSav = new ArrayList<>();
         boolean[] savingsCheck = new boolean[savings.size()];
         LinkedHashMap<String, Integer> sorted = savings;
         Location actLocation2 = actLocation;
         routeLocation.add(startLocation);
-        visitedLocations.add(startLocation);
+        visitedLocations2.add(startLocation);
         Object[] o = sorted.entrySet().toArray();
 
         Arrays.sort(o, new Comparator() {
@@ -247,7 +251,6 @@ public class SavingsOptimizer implements Optimizer {
                         .compareTo(((Map.Entry<String, Integer>) o1).getValue());
             }
         });
-
 
 
         for (int i = 0; i < transportNetwork.getLocations().length; i++) {
@@ -268,7 +271,6 @@ public class SavingsOptimizer implements Optimizer {
                 }
             }
 
-
         if(!saving && !actLocation.equals(startLocation)) {
             LinkedHashMap<Location, Integer> route = transportNetwork.getShortestPath(startLocation, actLocation);
             LinkedHashMap<Location, Integer> route2 = transportNetwork.getShortestPath(actLocation, startLocation);
@@ -277,8 +279,8 @@ public class SavingsOptimizer implements Optimizer {
             for (Map.Entry<Location, Integer> entry : route.entrySet()) {
                 if (!entry.getKey().equals(startLocation))
                     firstRoute.add(entry.getKey());
-                if (!visitedLocations.contains(entry.getKey())) {
-                    visitedLocations.add(entry.getKey());
+                if (!visitedLocations2.contains(entry.getKey())) {
+                    visitedLocations2.add(entry.getKey());
                     actLocation = entry.getKey();
                 }
             }
@@ -286,11 +288,14 @@ public class SavingsOptimizer implements Optimizer {
                 if(!firstRoute.contains(entry.getKey())) {
                     firstRoute.add(entry.getKey());
                 }
-                if (!visitedLocations.contains(entry.getKey())) {
-                    visitedLocations.add(entry.getKey());
+                if (!visitedLocations2.contains(entry.getKey())) {
+                    visitedLocations2.add(entry.getKey());
                     actLocation = entry.getKey();
                 }
             }
+
+
+
             routeList.add(firstRoute);
         }
 
@@ -316,8 +321,6 @@ public class SavingsOptimizer implements Optimizer {
                     }
                 }
 
-
-
                 if (startRouting) {
                     for (Location loc : locations) {
                         if (((Map.Entry<String, Integer>) e).getKey().contains(loc.getName())) {
@@ -331,10 +334,13 @@ public class SavingsOptimizer implements Optimizer {
                         LinkedHashMap<Location, Integer> route = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
 
                         for (Map.Entry<Location, Integer> entry : route.entrySet()) {
-                            if (!entry.getKey().equals(startLocation))
-                                firstRoute.add(entry.getKey());
-                            if (!visitedLocations.contains(entry.getKey())) {
-                                visitedLocations.add(entry.getKey());
+
+                            if (!entry.getKey().equals(startLocation)) {
+                                if (!firstRoute.contains(entry.getKey()))
+                                    firstRoute.add(entry.getKey());
+                            }
+                            if (!visitedLocations2.contains(entry.getKey())) {
+                                visitedLocations2.add(entry.getKey());
                                 actLocation = entry.getKey();
                             }
                         }
@@ -343,9 +349,18 @@ public class SavingsOptimizer implements Optimizer {
 
                         for (Map.Entry<Location, Integer> entry : route2.entrySet()) {
                             firstRoute.add(entry.getKey());
-                            if (!visitedLocations.contains(entry.getKey())) {
-                                visitedLocations.add(entry.getKey());
+                            if (!visitedLocations2.contains(entry.getKey())) {
+                                visitedLocations2.add(entry.getKey());
                                 actLocation = entry.getKey();
+                            }
+                        }
+
+                        ArrayList<Location> checkLocations = firstRoute;
+                        for(int i = 0; i < firstRoute.size()-1; i++) {
+
+                            if(!firstRoute.get(i).getNeighbouringLocations().containsKey(firstRoute.get(i+1))) {
+                                checkLocations.remove(firstRoute.get(i+1));
+
                             }
                         }
                         routeList.add(firstRoute);
@@ -393,23 +408,31 @@ public class SavingsOptimizer implements Optimizer {
                                     }
                                     LinkedHashMap<Location, Integer> route = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
                                     ArrayList<Location> routePart = new ArrayList<>();
-                                    if (!visitedLocations.contains(savingsLocations.get(0))) {
+                                    if (!visitedLocations2.contains(savingsLocations.get(0))) {
                                         for (Map.Entry<Location, Integer> entry : route.entrySet()) {
-                                            if (!entry.getKey().equals(startLocation))
-                                                singleRoute.add(entry.getKey());
+                                            if (!entry.getKey().equals(startLocation)) {
+                                                if(!singleRoute.contains(entry.getKey())) {
+                                                    singleRoute.add(entry.getKey());
+                                                    actLocation = entry.getKey();
+                                                }break;
+                                            }
+
                                             routePart.add(entry.getKey());
                                             actLocation = entry.getKey();
-                                            if (!visitedLocations.contains(entry.getKey())) {
-                                                visitedLocations.add(entry.getKey());
+
+                                            if (!visitedLocations2.contains(entry.getKey())) {
+                                                visitedLocations2.add(entry.getKey());
+
                                             }
                                         }
 
                                         int count = singleRoute.size();
 
                                         while (count < list.size() + 1) {
+
                                             singleRoute.add(list.get(count - 1));
-                                            if (!visitedLocations.contains(list.get(count - 1))) {
-                                                visitedLocations.add(list.get(count - 1));
+                                            if (!visitedLocations2.contains(list.get(count - 1))) {
+                                                visitedLocations2.add(list.get(count - 1));
                                             }
                                             count++;
                                         }
@@ -430,21 +453,24 @@ public class SavingsOptimizer implements Optimizer {
                                     }
                                     LinkedHashMap<Location, Integer> route2 = transportNetwork.getShortestPath(startLocation, savingsLocations.get(1));
                                     ArrayList<Location> routePart = new ArrayList<>();
-                                    if (!visitedLocations.contains(savingsLocations.get(1))) {
+                                    if (!visitedLocations2.contains(savingsLocations.get(1))) {
                                         for (Map.Entry<Location, Integer> entry : route2.entrySet()) {
-                                            routePart.add(entry.getKey());
-                                            actLocation = entry.getKey();
-                                            if (!visitedLocations.contains(entry.getKey())) {
-                                                visitedLocations.add(entry.getKey());
+                                            if(!routePart.contains(entry.getKey())) {
+                                                routePart.add(entry.getKey());
+                                                actLocation = entry.getKey();
+                                            }
+                                            if (!visitedLocations2.contains(entry.getKey())) {
+                                                visitedLocations2.add(entry.getKey());
                                             }
                                         }
                                         int count = 0;
+
                                         for (int i = 0; i < routePart.size(); i++) {
                                             if (!routePart.get(i).equals(startLocation)) {
-                                                if (routePart.get(i).equals(list.get(i))) {
-                                                    singleRoute.add(list.get(i));
-                                                    if (!visitedLocations.contains(list.get(i))) {
-                                                        visitedLocations.add(list.get(i));
+                                                if(list.contains(routePart.get(i))) {
+                                                    singleRoute.add(routePart.get(i));
+                                                    if (!visitedLocations2.contains(list.get(i))) {
+                                                        visitedLocations2.add(list.get(i));
                                                     }
                                                     count++;
                                                 } else {
@@ -453,6 +479,8 @@ public class SavingsOptimizer implements Optimizer {
                                                 }
                                             }
                                         }
+
+
                                         while (count < list.size() + 1) {
                                             singleRoute.add(list.get(count - 1));
                                             count++;
@@ -463,7 +491,7 @@ public class SavingsOptimizer implements Optimizer {
                                     }
                                 } else {
                                     LinkedHashMap<Location, Integer> route = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
-                                    if (!visitedLocations.contains(savingsLocations.get(0))) {
+                                    //if (!visitedLocations2.contains(savingsLocations.get(0))) {
                                         for (Map.Entry<Location, Integer> entry : route.entrySet()) {
                                             if (!entry.getKey().equals(startLocation)) {
                                                 if (!singleRoute.contains(entry.getKey())) {
@@ -471,20 +499,21 @@ public class SavingsOptimizer implements Optimizer {
                                                     actLocation = entry.getKey();
                                                 }
                                             }
-                                            if (!visitedLocations.contains(entry.getKey())) {
-                                                visitedLocations.add(entry.getKey());
+                                            if (!visitedLocations2.contains(entry.getKey())) {
+                                                visitedLocations2.add(entry.getKey());
                                             }
                                         }
 
                                         LinkedHashMap<Location, Integer> route2 = transportNetwork.getShortestPath(savingsLocations.get(1), startLocation);
 
                                         for (Map.Entry<Location, Integer> entry : route2.entrySet()) {
-                                            if (!entry.getKey().equals(visitedLocations.get(visitedLocations.size() - 1))) {
+                                            if (!entry.getKey().equals(visitedLocations2.get(visitedLocations2.size() - 1))) {
+
                                                 singleRoute.add(entry.getKey());
                                                 actLocation = entry.getKey();
                                             }
-                                            if (!visitedLocations.contains(entry.getKey())) {
-                                                visitedLocations.add(entry.getKey());
+                                            if (!visitedLocations2.contains(entry.getKey())) {
+                                                visitedLocations2.add(entry.getKey());
                                             }
                                         }
                                         savingsCheck[checkCounter] = true;
@@ -492,7 +521,7 @@ public class SavingsOptimizer implements Optimizer {
                                     }
                                 }
                             }
-                        }
+                       // }
                     }
 
                 }
@@ -510,6 +539,14 @@ public class SavingsOptimizer implements Optimizer {
 
                 }
 
+                ArrayList<Location> checkLocations = singleRoute;
+                for(int i = 0; i < singleRoute.size()-1; i++) {
+
+                    if(!singleRoute.get(i).getNeighbouringLocations().containsKey(singleRoute.get(i+1))) {
+                        checkLocations.remove(singleRoute.get(i+1));
+                    i--;
+                    }
+                }
 
                 if (singleRoute.size() != 0 && check == true) {
                     routeList.add(singleRoute);
