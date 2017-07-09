@@ -32,8 +32,18 @@ public class SavingsOptimizer implements Optimizer {
         for (int i = 0; i < getRoutes.size(); i++) {
             ArrayList<Location> tourLocations = getRoutes.get(i);
             tours = new ArrayList<>();
+
+            ArrayList<Location> sortedTourLocations = new ArrayList<>();
+
+            for(Location tourDestination : tourLocations) {
+                if(!sortedTourLocations.contains(tourDestination)) {
+                    sortedTourLocations.add(tourDestination);
+                }
+            }
+
+            
             int totalAmount = 0;
-            for (Location tourDestination : tourLocations) {
+            for (Location tourDestination : sortedTourLocations) {
                 totalAmount += tourDestination.getAmount();
             }
             int totalsAmountCopy = totalAmount;
@@ -51,7 +61,7 @@ public class SavingsOptimizer implements Optimizer {
 
                     do {
                         tours.add(new Tour(new LargeTruck(), startLocation));
-                        totalsAmountCopy -= LargeTruck.CAPACITY;
+                        totalsAmountCopy -= LargeTruck.CAPACITY ;
                     } while (totalsAmountCopy > MediumTruck.CAPACITY);
                 }
             }
@@ -392,16 +402,12 @@ public class SavingsOptimizer implements Optimizer {
 
                         while (iter.hasNext()) {
                             ArrayList<Location> list = iter.next();
-                            if (list.contains(savingsLocations.get(0)) && list.contains(savingsLocations.get(1))) {
-                                break;
-                            } else if (checkSaving == true) {
+                           if (checkSaving == true) {
+                               LinkedHashMap<Location, Integer> routeLocation1 = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
+                               LinkedHashMap<Location, Integer> routeLocation2 = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
 
-                                if (list.contains(savingsLocations.get(1))) {
-                                    for (ArrayList<Location> list2 : routeList) {
-                                        if (list2.contains(savingsLocations.get(0))) {
-                                            break;
-                                        }
-                                    }
+                               if (list.contains(savingsLocations.get(1)) && list.size() < routeLocation2.size()-1) {
+
                                     LinkedHashMap<Location, Integer> route = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
                                     ArrayList<Location> routePart = new ArrayList<>();
                                     if (!visitedLocations2.contains(savingsLocations.get(0))) {
@@ -442,12 +448,8 @@ public class SavingsOptimizer implements Optimizer {
                                         routeList.remove(list);
                                         break;
                                     }
-                                } else if (list.contains(savingsLocations.get(0))) {
-                                    for (ArrayList<Location> list2 : routeList) {
-                                        if (list2.contains(savingsLocations.get(1))) {
-                                            break;
-                                        }
-                                    }
+                                } else if (list.contains(savingsLocations.get(0))&& list.size() < routeLocation1.size()-1) {
+
                                     LinkedHashMap<Location, Integer> route2 = transportNetwork.getShortestPath(startLocation, savingsLocations.get(1));
                                     ArrayList<Location> routePart = new ArrayList<>();
                                     if (!visitedLocations2.contains(savingsLocations.get(1))) {
