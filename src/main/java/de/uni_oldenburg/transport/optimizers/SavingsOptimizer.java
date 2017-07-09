@@ -20,10 +20,8 @@ public class SavingsOptimizer implements Optimizer {
     public Solution optimizeTransportNetwork(TransportNetwork transportNetwork) {
         startLocation = transportNetwork.getStartLocation();
         Solution solution = new Solution(transportNetwork);
-
         HashMap<Location, Integer> shortestWays = depotDistance(transportNetwork);
         LinkedHashMap<String, Integer> savings = getSavings(shortestWays, transportNetwork);
-
         ArrayList<ArrayList<Location>> getRoutes = getRoutes(savings, transportNetwork);
         ArrayList<Tour> tours = null;
         ArrayList<ArrayList<Tour>> allTours = new ArrayList<>();
@@ -35,18 +33,20 @@ public class SavingsOptimizer implements Optimizer {
 
             ArrayList<Location> sortedTourLocations = new ArrayList<>();
 
-            for(Location tourDestination : tourLocations) {
-                if(!sortedTourLocations.contains(tourDestination)) {
+            for (Location tourDestination : tourLocations) {
+                if (!sortedTourLocations.contains(tourDestination)) {
                     sortedTourLocations.add(tourDestination);
                 }
             }
 
-            
+
             int totalAmount = 0;
             for (Location tourDestination : sortedTourLocations) {
                 totalAmount += tourDestination.getAmount();
             }
             int totalsAmountCopy = totalAmount;
+
+            //selects the trucks for the route
             while (totalsAmountCopy > 0) {
                 if (totalsAmountCopy > MediumTruck.CAPACITY && totalsAmountCopy <= LargeTruck.CAPACITY) {
                     tours.add(new Tour(new LargeTruck(), startLocation));
@@ -61,7 +61,7 @@ public class SavingsOptimizer implements Optimizer {
 
                     do {
                         tours.add(new Tour(new LargeTruck(), startLocation));
-                        totalsAmountCopy -= LargeTruck.CAPACITY ;
+                        totalsAmountCopy -= LargeTruck.CAPACITY;
                     } while (totalsAmountCopy > MediumTruck.CAPACITY);
                 }
             }
@@ -94,7 +94,6 @@ public class SavingsOptimizer implements Optimizer {
                         }
                         tour.addDestination(tourDestination);
                         amountPossible -= unload;
-                        startTourLocation = actLocation;
                         emptyTruckLocation = actLocation;
                     } else if (k < tourLocations.size()) {
 
@@ -128,7 +127,7 @@ public class SavingsOptimizer implements Optimizer {
      * Gets the savings for the distances between the Locations and the Depot
      *
      * @param depotDistance    HashMap with the distances to the depot
-     * @param transportNetwork
+     * @param transportNetwork A transport network for which the transport problem has to be optimized
      * @return
      */
     private LinkedHashMap<String, Integer> getSavings(HashMap<Location, Integer> depotDistance, TransportNetwork transportNetwork) {
@@ -185,7 +184,7 @@ public class SavingsOptimizer implements Optimizer {
      * Computes the routes with multiple destinations.
      *
      * @param savings          HashMap with each saving for two locations
-     * @param transportNetwork
+     * @param transportNetwork A transport network for which the transport problem has to be optimized
      * @return
      */
     private ArrayList<ArrayList<Location>> getRoutes(LinkedHashMap<String, Integer> savings, TransportNetwork transportNetwork) {
@@ -234,10 +233,10 @@ public class SavingsOptimizer implements Optimizer {
     /**
      * Computes the Routes between the Depot an the Locations.
      *
-     * @param actLocation
-     * @param transportNetwork
-     * @param savings
-     * @param visitedLocation
+     * @param actLocation      The current location
+     * @param transportNetwork A transport network for which the transport problem has to be optimized.
+     * @param savings          LinkedHashMap with the computed savings
+     * @param visitedLocation  ArrayList with the locations already visited
      * @return
      */
 
@@ -253,6 +252,8 @@ public class SavingsOptimizer implements Optimizer {
         visitedLocations2.add(startLocation);
         Object[] o = sorted.entrySet().toArray();
 
+
+        //sorts the savings, begins with the largest
         Arrays.sort(o, new Comparator() {
             public int compare(Object o1, Object o2) {
                 return ((Map.Entry<String, Integer>) o2).getValue()
@@ -279,6 +280,7 @@ public class SavingsOptimizer implements Optimizer {
             }
         }
 
+        //creates the first route
         if (!saving && !actLocation.equals(startLocation)) {
             LinkedHashMap<Location, Integer> route = transportNetwork.getShortestPath(startLocation, actLocation);
             LinkedHashMap<Location, Integer> route2 = transportNetwork.getShortestPath(actLocation, startLocation);
@@ -301,13 +303,12 @@ public class SavingsOptimizer implements Optimizer {
                     actLocation = entry.getKey();
                 }
             }
-
-
             routeList.add(firstRoute);
         }
 
+        //creates the routes after the first route is created
         while (k < 1) {
-
+            //goes thrue the savings and creates a route if the saving contains the selected location
             for (Object e : o) {
 
                 ArrayList<Location> savingsLocations = new ArrayList<>();
@@ -316,7 +317,7 @@ public class SavingsOptimizer implements Optimizer {
                 Location destination = new Location("");
                 boolean startRouting = false;
 
-
+                //checks if the location has neighbours
                 if (!actLocation.getNeighbouringLocations().isEmpty()) {
                     for (Map.Entry<Location, Integer> entry : actLocation2.getNeighbouringLocations().entrySet()) {
                         destination = entry.getKey();
@@ -328,6 +329,7 @@ public class SavingsOptimizer implements Optimizer {
                 }
 
                 if (startRouting) {
+                    //goes through the locations and adds location to the ArrayList, if saving contains the location name
                     for (Location loc : locations) {
                         if (((Map.Entry<String, Integer>) e).getKey().contains(loc.getName())) {
                             if (!savingsLocations.contains(loc)) {
@@ -336,6 +338,7 @@ public class SavingsOptimizer implements Optimizer {
                         }
                     }
 
+                    //creates the route from depot to the first location of the saving, to the second location of the saving and back to the depot
                     if (routeList.size() == 0) {
                         LinkedHashMap<Location, Integer> route = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
 
@@ -375,6 +378,7 @@ public class SavingsOptimizer implements Optimizer {
                         k++;
 
                     } else {
+                        //check if the saving is already included in a route
                         boolean checkSaving = true;
                         for (ArrayList<Location> list : routeList) {
 
@@ -402,11 +406,12 @@ public class SavingsOptimizer implements Optimizer {
 
                         while (iter.hasNext()) {
                             ArrayList<Location> list = iter.next();
-                           if (checkSaving == true) {
-                               LinkedHashMap<Location, Integer> routeLocation1 = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
-                               LinkedHashMap<Location, Integer> routeLocation2 = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
+                            if (checkSaving == true) {
+                                LinkedHashMap<Location, Integer> routeLocation1 = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
+                                LinkedHashMap<Location, Integer> routeLocation2 = transportNetwork.getShortestPath(startLocation, savingsLocations.get(1));
 
-                               if (list.contains(savingsLocations.get(1)) && list.size() < routeLocation2.size()-1) {
+                                //creates the route when the second location of the saving is already included in a route
+                                if (list.contains(savingsLocations.get(1)) && list.size() < routeLocation2.size() - 1) {
 
                                     LinkedHashMap<Location, Integer> route = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
                                     ArrayList<Location> routePart = new ArrayList<>();
@@ -448,8 +453,9 @@ public class SavingsOptimizer implements Optimizer {
                                         routeList.remove(list);
                                         break;
                                     }
-                                } else if (list.contains(savingsLocations.get(0))&& list.size() < routeLocation1.size()-1) {
+                                } else if (list.contains(savingsLocations.get(0)) && list.size() < routeLocation1.size() - 1) {
 
+                                    //creates the route when the first location of the saving is already included in a route
                                     LinkedHashMap<Location, Integer> route2 = transportNetwork.getShortestPath(startLocation, savingsLocations.get(1));
                                     ArrayList<Location> routePart = new ArrayList<>();
                                     if (!visitedLocations2.contains(savingsLocations.get(1))) {
@@ -489,6 +495,8 @@ public class SavingsOptimizer implements Optimizer {
                                         break;
                                     }
                                 } else {
+
+                                    //creates the route when the locations of the saving are not included in a route
                                     LinkedHashMap<Location, Integer> route = transportNetwork.getShortestPath(startLocation, savingsLocations.get(0));
                                     for (Map.Entry<Location, Integer> entry : route.entrySet()) {
                                         if (!entry.getKey().equals(startLocation)) {
@@ -523,7 +531,7 @@ public class SavingsOptimizer implements Optimizer {
 
                 }
 
-
+                //checks if the locations of the route are valid
                 boolean check = false;
 
                 for (int g = 0; g < singleRoute.size(); g++) {
@@ -538,7 +546,6 @@ public class SavingsOptimizer implements Optimizer {
 
                 ArrayList<Location> checkLocations = singleRoute;
                 for (int i = 0; i < singleRoute.size() - 1; i++) {
-
                     if (!singleRoute.get(i).getNeighbouringLocations().containsKey(singleRoute.get(i + 1))) {
                         checkLocations.remove(singleRoute.get(i + 1));
                         i--;
@@ -561,7 +568,7 @@ public class SavingsOptimizer implements Optimizer {
     /**
      * Finds out the shortest way from the startLocation to each Location.
      *
-     * @param network
+     * @param network A transport network for which the transport problem has to be optimized
      * @return
      */
     private HashMap depotDistance(TransportNetwork network) {
@@ -599,36 +606,6 @@ public class SavingsOptimizer implements Optimizer {
         }
 
         return depotDistanceHashMap;
-    }
-
-    /**
-     * @param shortestWays
-     * @param location
-     * @return
-     */
-    private int getExpense(HashMap<Location, Integer> shortestWays, Location startLocation, Location location) {
-        int expense = 0;
-
-        if (startLocation.equals(this.startLocation)) {
-            for (Map.Entry<Location, Integer> entry : shortestWays.entrySet()) {
-                if (entry.getKey().equals(location)) {
-                    expense = entry.getValue();
-                }
-            }
-        } else if (location.equals(this.startLocation)) {
-            for (Map.Entry<Location, Integer> entry : shortestWays.entrySet()) {
-                if (entry.getKey().equals(startLocation)) {
-                    expense = entry.getValue();
-                }
-            }
-        } else {
-            for (Map.Entry<Location, Integer> neighbour : startLocation.getNeighbouringLocations().entrySet()) {
-                if (neighbour.getKey().equals(location)) {
-                    expense = neighbour.getValue();
-                }
-            }
-        }
-        return expense;
     }
 
 
