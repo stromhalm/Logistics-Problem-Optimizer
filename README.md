@@ -39,8 +39,8 @@ Algorithm 3 and 6 are in test mode only.
 java -jar target/optimizer-1.0.jar 7 src/main/resources/LogistiknetzMoreComplex.csv src/main/resources/LieferlisteMoreComplex.csv
 ```
 This command starts the more complex transportation problem with all algorithms.
-## Commit conventions
-Please use the [Karma commit message conventions](http://karma-runner.github.io/0.10/dev/git-commit-msg.html) in order to simplify navigating through the repository.
 
-## Developer notes
-Please write in english (commit messages also).
+## UML Diagrams
+![](UMLDiagram.png)
+![](AuxiliaryClasses.png)
+
