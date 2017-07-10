@@ -1,12 +1,12 @@
 [![build status](https://gitlab.uni-oldenburg.de/transportsysteme-semesteraufgabe/Optimizer/badges/master/build.svg)](https://gitlab.uni-oldenburg.de/transportsysteme-semesteraufgabe/Optimizer/commits/master) [![coverage report](https://gitlab.uni-oldenburg.de/transportsysteme-semesteraufgabe/Optimizer/badges/master/coverage.svg)](https://gitlab.uni-oldenburg.de/transportsysteme-semesteraufgabe/Optimizer/commits/master)
 
 # Logistics Optimizer
-This logistics optimizer provides multiple algorithms to solve a giben transportation problem. In detail those are:
+This logistics optimizer provides multiple algorithms to solve a given transportation problem. In detail those are:
 
-* NortWestCornerKruskalOptimizer using the NorthWestCorner method and the Kruskal algorithm to fill the table with the ways to the leaf of the minimal spanning tree.
-* NorthWestCornerOwnOptimizer uses the NorthWestCorner-Method and an own implementation relative to the Kruskal algorithm which tries to further optimize a problem by allowing circles in the transportation network if it increases the solution.
-* SavingsOptimizer uses the Savings Algorithm.
-* PheromoneOptimizer which sets a pheromone scent to each location. The intensity of the scent depends on the remaining locations delivery amount needed. As much as the truck gets more empty the pheromone scent of the start location or the home location gets higher. This ensures the trucks get home and do not run in circles infinitely. 
+* __ShortestPathOptimizer__ uses the Dijkstra algorithm to find small tours in the graph.
+* __NortWestCornerKruskalOptimizer__ uses the NorthWestCorner method and the Kruskal algorithm to fill the table with the ways to the leaf of the minimal spanning tree.
+* __SavingsOptimizer__ uses the savings algorithm.
+* __PheromoneOptimizer__ which sets a pheromone scent to each location. The intensity of the scent depends on the remaining locations delivery amount needed. Now the trucks only have to drive towards the location with the highest scent and return to the start location.
 
 ## Installation guide
 ```bash
@@ -14,7 +14,6 @@ git clone git@gitlab.uni-oldenburg.de:transportsysteme-semesteraufgabe/Optimizer
 cd Optimizer
 mvn clean install
 ```
-In case of any errors follow the stacktrace or check your maven or java installation.
 
 ## Usage guide
 To start the application use the following command pattern from within the project root dir.
