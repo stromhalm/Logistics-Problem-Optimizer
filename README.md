@@ -8,7 +8,7 @@ This logistics optimizer provides multiple algorithms to solve a given transport
 
 ## Installation guide
 ```bash
-git clone git@gitlab.uni-oldenburg.de:transportsysteme-semesteraufgabe/Optimizer.git
+git clone https://github.com/stromhalm/Logistics-Problem-Optimizer.git
 cd Optimizer
 mvn clean install
 ```
